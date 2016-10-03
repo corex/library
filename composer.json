@@ -1,0 +1,23 @@
+{
+    "name": "corex/support",
+    "type": "project",
+    "description": "Support classes and helpers.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CoRex",
+            "email": "dev@corex.dk",
+            "homepage": "http://corex.dk",
+            "role": "Project Founder"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoRex\\Support\\": "src/"
+        }
+    }
+}
