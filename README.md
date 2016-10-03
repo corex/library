@@ -1,2 +1,2 @@
-# library
-Various classes and helpers.
+# CoRex Support
+Support classes and helpers.
