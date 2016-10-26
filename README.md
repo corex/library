@@ -9,3 +9,9 @@ Basic configuration class/helper which works the same way as Laravel, but with a
 - Support for dot notation on configuration values.
 - Support for getting complete section (values) of configuration.
 - Support for default config-path at {root}/config.
+
+### Path
+Basic path getters.
+- Support for getting root (option to add segments).
+- Support for getting package (option to add segments).
+- Support for getting vendor-name and package-name (requires overriding getPackagePath()).
