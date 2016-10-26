@@ -2,6 +2,8 @@
 
 namespace CoRex\Support\Config;
 
+use CoRex\Support\System\Path;
+
 class Config
 {
     private static $app;
@@ -15,6 +17,7 @@ class Config
      */
     public static function registerApp($path, $app = null)
     {
+        self::initialize();
         if ($app === null) {
             $app = '*';
         }
@@ -35,6 +38,7 @@ class Config
      */
     public static function getObject($section, $class, $app = null)
     {
+        self::initialize();
         if (!class_exists($class)) {
             throw new ConfigException('Class ' . $class . ' does not exist.');
         }
@@ -52,6 +56,7 @@ class Config
      */
     public static function getClosure($section, $closure, $app = null)
     {
+        self::initialize();
         if (!is_callable($closure)) {
             throw new ConfigException('Closure specified is not callable.');
         }
@@ -71,6 +76,7 @@ class Config
      */
     public static function get($path, $defaultValue = null, $throwException = false, $app = null)
     {
+        self::initialize();
         // Extract section from path.
         $pathSegments = explode('.', $path);
         $section = $pathSegments[0];
@@ -131,6 +137,7 @@ class Config
      */
     public static function getApps()
     {
+        self::initialize();
         return self::$app;
     }
 
@@ -141,6 +148,7 @@ class Config
      */
     public static function getData()
     {
+        self::initialize();
         return self::$data;
     }
 
@@ -178,6 +186,9 @@ class Config
         }
         if (!is_array(self::$app)) {
             self::$app = [];
+        }
+        if (!isset(self::$app['*'])) {
+            self::$app['*'] = Path::getRoot(['config']);
         }
     }
 }
