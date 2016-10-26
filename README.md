@@ -8,3 +8,4 @@ Basic configuration class/helper which works the same way as Laravel, but with a
 - Support for getting configuration as closure.
 - Support for dot notation on configuration values.
 - Support for getting complete section (values) of configuration.
+- Support for default config-path at {root}/config.
