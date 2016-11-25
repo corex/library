@@ -6,3 +6,4 @@ Support classes and helpers.
 - Arr - Various array helpers.
 - Str (multi-byte) - Various string helpers.
 - File - Various file helpers (i.e. stub, json, etc.)
+- Container - Container to help with data manipulation ie. array/json.
