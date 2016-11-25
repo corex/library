@@ -49,7 +49,7 @@ class Path
     }
 
     /**
-      Get vendor name.
+     * Get vendor name.
      *
      * @return string
      */
