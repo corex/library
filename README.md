@@ -15,3 +15,11 @@ Basic path getters.
 - Support for getting root (option to add segments).
 - Support for getting package (option to add segments).
 - Support for getting vendor-name and package-name (requires overriding getPackagePath()).
+
+### Arr
+Various array helpers.
+- Support for getting value from data.
+- Support for getting last element of array.
+- Support for removing last element from array.
+- Support for checking if array is list (0..n).
+- Support for converting array to associative array.
