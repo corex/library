@@ -5,3 +5,4 @@ Support classes and helpers.
 - Path - Basic path getters (can be used in other packages by overriding getPackagePath()).
 - Arr - Various array helpers.
 - Str (multi-byte) - Various string helpers.
+- File - Various file helpers (i.e. stub, json, etc.)
