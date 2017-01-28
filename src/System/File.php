@@ -2,6 +2,8 @@
 
 namespace CoRex\Support\System;
 
+use CoRex\Support\Str;
+
 class File
 {
     /**
@@ -19,15 +21,32 @@ class File
      * Load.
      *
      * @param string $filename
-     * @param mixed $defaultValue Default null.
+     * @param mixed $defaultValue Default ''.
      * @return string
      */
-    public static function load($filename, $defaultValue = null)
+    public static function load($filename, $defaultValue = '')
     {
         if (!self::exist($filename)) {
             return $defaultValue;
         }
         return file_get_contents($filename);
+    }
+
+    /**
+     * Load as lines.
+     *
+     * @param string $filename
+     * @param array $defaultValue Default [].
+     * @return array
+     */
+    public static function loadLines($filename, array $defaultValue = [])
+    {
+        $content = self::load($filename);
+        $content = str_replace("\r", '', $content);
+        if (trim($content) != '') {
+            return explode("\n", $content);
+        }
+        return $defaultValue;
     }
 
     /**
@@ -42,28 +61,54 @@ class File
     }
 
     /**
+     * Save lines.
+     *
+     * @param string $filename
+     * @param array $lines
+     * @param string $separator Default "\n".
+     */
+    public static function saveLines($filename, array $lines, $separator = "\n")
+    {
+        self::save($filename, implode($separator, $lines));
+    }
+
+    /**
      * Get stub.
      *
      * @param string $filename
-     * @param array $tokens Default []. Format ['token' => 'value'].
+     * @param array $tokens Default []. Format ['token' => 'value']. Replaces {token} with value.
      * @param mixed $defaultContent Default ''.
      * @return string
      */
     public static function getStub($filename, $tokens = [], $defaultContent = '')
     {
-        if (substr($filename, -5) != '.stub') {
-            $filename .= '.stub';
+        return self::getTemplate($filename, $tokens, $defaultContent, '.stub');
+    }
+
+    /**
+     * Get template.
+     *
+     * @param string $filename
+     * @param array $tokens Default []. Format ['token' => 'value']. Replaces {token} with value.
+     * @param mixed $defaultContent Default ''.
+     * @param string $extension Default 'tpl'.
+     * @return string
+     */
+    public static function getTemplate($filename, $tokens = [], $defaultContent = '', $extension = 'tpl')
+    {
+        if (!Str::endsWith($filename, '.' . $extension)) {
+            $filename .= '.' . $extension;
         }
         if (!self::exist($filename)) {
             return $defaultContent;
         }
-        $stub = self::load($filename, $defaultContent);
-        if ($stub !== null && count($tokens) > 0) {
+        $template = self::load($filename, $defaultContent);
+        if ($template != '' && count($tokens) > 0) {
             foreach ($tokens as $token => $value) {
-                $stub = str_replace('{' . $token . '}', $value, $stub);
+                $template = str_replace('{' . $token . '}', $value, $template);
             }
         }
-        return $stub;
+        return $template;
     }
 
     /**
@@ -75,9 +120,12 @@ class File
      */
     public static function loadJson($filename, $defaultValue = [])
     {
+        if (!Str::endsWith($filename, '.json')) {
+            $filename .= '.json';
+        }
         $data = self::load($filename);
-        if ($data === null) {
-            $data = $defaultValue;
+        if ($data == '') {
+            return $defaultValue;
         }
         $data = json_decode($data, true);
         if (is_null($data) || $data === false) {
@@ -95,6 +143,9 @@ class File
      */
     public static function saveJson($filename, array $data, $prettyPrint = true)
     {
+        if (!Str::endsWith($filename, '.json')) {
+            $filename .= '.json';
+        }
         $options = 0;
         if ($prettyPrint) {
             $options += JSON_PRETTY_PRINT;
