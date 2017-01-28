@@ -7,3 +7,4 @@ Support classes and helpers.
 - Str (multi-byte) - Various string helpers.
 - File - Various file helpers (i.e. stub, json, etc.)
 - Container - Container to help with data manipulation ie. array/json.
+- Directory - Various directory helpers.
