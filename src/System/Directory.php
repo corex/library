@@ -17,8 +17,9 @@ class Directory
 
     /**
      * Check if directory is writable.
-     * @param $path
-     * @return bool
+     *
+     * @param string $path
+     * @return boolean
      */
     public static function isWritable($path)
     {
@@ -33,16 +34,16 @@ class Directory
      */
     public static function make($path, $mode = 0777)
     {
-    	if (!is_dir($path)) {
-    		mkdir($path, $mode, true);
-		}
+        if (!is_dir($path)) {
+            mkdir($path, $mode, true);
+        }
     }
 
     /**
      * Get files in directory.
      *
      * @param string $path
-     * @param string $criteria.
+     * @param string $criteria
      * @param boolean $dirs
      * @param boolean $files
      * @param boolean $recursive Default false.
