@@ -42,7 +42,7 @@ class Directory
      * Get files in directory.
      *
      * @param string $path
-     * @param string $criteria Default '*.*'.
+     * @param string $criteria.
      * @param boolean $dirs
      * @param boolean $files
      * @param boolean $recursive Default false.
