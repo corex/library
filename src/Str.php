@@ -1,9 +1,10 @@
 <?php
-
 namespace CoRex\Support;
 
 class Str
 {
+    const LIMIT_SUFFIX = '...';
+
     /**
      * Get length of string.
      *
@@ -51,6 +52,30 @@ class Str
     }
 
     /**
+     * Left.
+     *
+     * @param string $string
+     * @param integer $count
+     * @return string
+     */
+    public static function left($string, $count)
+    {
+        return self::substr($string, 0, $count);
+    }
+
+    /**
+     * Right.
+     *
+     * @param string $string
+     * @param integer $count
+     * @return string
+     */
+    public static function right($string, $count)
+    {
+        return self::substr($string, -$count);
+    }
+
+    /**
      * Determine if a given string starts with a given substring.
      *
      * @param  string $haystack
@@ -93,7 +118,7 @@ class Str
      * @param string $end Default '...'.
      * @return string
      */
-    public static function limit($value, $limit = 50, $end = '...')
+    public static function limit($value, $limit = 50, $end = self::LIMIT_SUFFIX)
     {
         if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
@@ -238,7 +263,7 @@ class Str
      * Token: '{something}'.
      *
      * @param string $string
-     * @param array $data [$key => $value].
+     * @param array $data Must be specified as [$key => $value].
      * @return string
      */
     public static function replaceToken($string, array $data)
@@ -267,13 +292,64 @@ class Str
 
     /**
      * Get last part of string based on $separator.
-     * @param $string
-     * @param $separator
+     *
+     * @param string $string
+     * @param string $separator
      * @return string
      */
     public static function getLast($string, $separator)
     {
         $string = explode($separator, $string);
         return Arr::getLast($string);
+    }
+
+    /**
+     * Get part.
+     *
+     * @param string $string
+     * @param string $separator
+     * @param integer $index
+     * @return string
+     */
+    public static function getPart($string, $separator, $index)
+    {
+        if ($string != '') {
+            $string = explode($separator, $string);
+            if (isset($string[$index - 1])) {
+                return $string[$index - 1];
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Get CSV fields. Removes ' and ".
+     *
+     * @param string $line
+     * @param string $delimiter Default ','.
+     * @return array
+     */
+    public static function getCsvFields($line, $delimiter = ',')
+    {
+        if (trim($line) == '') {
+            return [];
+        }
+        $fields = [];
+        $parts = str_getcsv($line, $delimiter);
+        if ($parts !== null && count($parts) > 0) {
+            foreach ($parts as $part) {
+                $part = trim($part);
+                if (substr($part, 0, 1) == '"' || substr($part, 0, 1) == '\'') {
+                    $part = substr($part, 1);
+                }
+                if (substr($part, -1) == '"' || substr($part, -1) == '\'') {
+                    $part = substr($part, 0, -1);
+                }
+                if ($part != '') {
+                    $fields[] = $part;
+                }
+            }
+        }
+        return $fields;
     }
 }
