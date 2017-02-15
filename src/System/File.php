@@ -80,7 +80,7 @@ class File
      * @param mixed $defaultContent Default ''.
      * @return string
      */
-    public static function getStub($filename, $tokens = [], $defaultContent = '')
+    public static function getStub($filename, array $tokens = [], $defaultContent = '')
     {
         return self::getTemplate($filename, $tokens, $defaultContent, '.stub');
     }
@@ -94,7 +94,7 @@ class File
      * @param string $extension Default 'tpl'.
      * @return string
      */
-    public static function getTemplate($filename, $tokens = [], $defaultContent = '', $extension = 'tpl')
+    public static function getTemplate($filename, array $tokens = [], $defaultContent = '', $extension = 'tpl')
     {
         if (!Str::endsWith($filename, '.' . $extension)) {
             $filename .= '.' . $extension;
@@ -118,7 +118,7 @@ class File
      * @param array $defaultValue Default [].
      * @return array
      */
-    public static function loadJson($filename, $defaultValue = [])
+    public static function loadJson($filename, array $defaultValue = [])
     {
         if (!Str::endsWith($filename, '.json')) {
             $filename .= '.json';
