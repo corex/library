@@ -10,18 +10,25 @@ class Container
 
     /**
      * Constructor.
+     *
+     * @param array $data Default null.
      */
-    public function __construct()
+    public function __construct(array $data = null)
     {
-        $this->clear();
+        $this->clear($data);
     }
 
     /**
      * Clear.
+     *
+     * @param array $data Default null.
      */
-    public function clear()
+    public function clear(array $data = null)
     {
         $this->data = array();
+        if (is_array($data)) {
+            $this->data = $data;
+        }
     }
 
     /**
@@ -67,11 +74,8 @@ class Container
      *
      * @param array $data
      */
-    public function setArray($data)
+    public function setArray(array $data)
     {
-        if (!is_array($data)) {
-            return;
-        }
         if (is_array($data)) {
             foreach ($data as $key => $value) {
                 $this->set($key, $value);
@@ -119,7 +123,7 @@ class Container
     /**
      * To json.
      *
-     * @param boolean $prettyPrint Default true
+     * @param boolean $prettyPrint Default true.
      * @return mixed|string
      */
     public function toJson($prettyPrint = true)
@@ -155,10 +159,11 @@ class Container
      * Save data to json-file.
      *
      * @param string $filename
+     * @param boolean $prettyPrint Default true.
      */
-    public function saveJson($filename)
+    public function saveJson($filename, $prettyPrint = false)
     {
-        File::saveJson($filename, $this->data);
+        File::saveJson($filename, $this->data, $prettyPrint);
     }
 
     /**
