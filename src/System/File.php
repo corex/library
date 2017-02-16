@@ -82,7 +82,7 @@ class File
      */
     public static function getStub($filename, array $tokens = [], $defaultContent = '')
     {
-        return self::getTemplate($filename, $tokens, $defaultContent, '.stub');
+        return self::getTemplate($filename, $tokens, $defaultContent, 'stub');
     }
 
     /**
@@ -172,5 +172,20 @@ class File
             $tempFilename .= '.' . $extension;
         }
         return $tempFilename;
+    }
+
+    /**
+     * Delete file.
+     *
+     * @param string $filename
+     * @param boolean $defaultValue Default true.
+     * @return boolean
+     */
+    public static function delete($filename, $defaultValue = true)
+    {
+        if (file_exists($filename)) {
+            return @unlink($filename);
+        }
+        return $defaultValue;
     }
 }
