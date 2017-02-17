@@ -250,5 +250,4 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $this->collection->delete(2);
         $this->assertEquals($data, $this->collection->values());
     }
-
 }
