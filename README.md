@@ -122,7 +122,21 @@ File::delete($filename);
 
 
 ### System/Input
+Various input helpers to get information from environment.
+
+A few examples.
 ```php
+// Get base url.
+$baseUrl = Input::getBaseUrl();
+
+// Get user agent.
+$userAgent = Input::getUserAgent();
+
+// Get remote address.
+$remoteAddress = Input::getRemoteAddress();
+
+// Get headers.
+$headers = Input::getHeaders();
 ```
 
 
