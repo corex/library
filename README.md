@@ -234,5 +234,27 @@ $properties = new Properties([
 
 ### Str
 Various string helpers (multi-byte).
+
+A few examples.
+```php
+// Get first 4 characters of string.
+$left = Str::left($string, 4);
+
+// Check if string starts with 'Test'.
+$startsWith = Str::startsWith($string, 'Test');
+
+// Limit text to 20 characters with '...' at the end.
+$text = Str::limit($text, 20, '...');
+
+// Replace tokens.
+$text = Str::replaceToken($text, [
+    'firstname' => 'Roger',
+    'lastname' => 'Moore'
+]);
+```
+
+
+### StrList
+Various string helpers (multi-byte).
 ```php
 ```
