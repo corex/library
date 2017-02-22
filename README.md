@@ -176,7 +176,28 @@ $firstnames = Arr::pluck($actors, 'firstname');
 
 
 ### Collection
+Helper for manipulation of elements (collections).
+
 ```php
+// Update each element in collection.
+$collection = new Collection($actors);
+$collection->each(function (&$actor) {
+    $actor->firstname = 'Mr. ' . $actor->firstname;
+});
+
+// Get sum of value.
+$collection = new Collection($values);
+$sum = $collection->sum('amount');
+
+// Loop through actors.
+$collection = new Collection($actors);
+foreach ($collection => $actor) {
+    var_dump($actor->firstname);
+};
+
+// Get last element.
+$collection = new Collection($actors);
+$lastElement = $collection->last();
 ```
 
 
