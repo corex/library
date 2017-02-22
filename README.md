@@ -38,10 +38,24 @@ $data = Config::get('actor');
 ```
 
 
-### Development/Convention
-Helpers to convert from/to camelCase, PascalCase and snake_case.
+### Code/Convention
+Helpers to convert to studly-case, pascal-case, camel-case, snake-case and kebab-case.
+
 ```php
-$camelCase = Convention::getCamelCase('MyTest');
+// Convert to studly case.
+$data = Convention::studly($data);
+
+// Convert to pascal case.
+$data = Convention::pascal($data);
+
+// Convert to camel case.
+$data = Convention::camel($data);
+
+// Convert to snake case.
+$data = Convention::snake($data);
+
+// Convert to kebab case.
+$data = Convention::kebab($data);
 ```
 
 ### System/Directory
