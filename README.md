@@ -142,7 +142,20 @@ $headers = Input::getHeaders();
 
 ### System/Path
 Basic path getters (can be used in other packages by overriding getPackagePath()).
+
+A few examples.
 ```php
+// Get root of project.
+$pathRoot = Path::getRoot();
+
+// Get config-path of project-root.
+$pathConfig = Path::getRoot(['config']);
+
+// Get name of package.
+$package = Path::getPackageName();
+
+// Get name of vendor.
+$package = Path::getVendorName();
 ```
 
 
