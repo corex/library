@@ -16,18 +16,13 @@ class Config
      */
     public static function initialize($clear = false)
     {
-        if (!is_array(self::$data)) {
+        if (!is_array(self::$data) || $clear) {
             self::$data = [];
         }
-        if (!is_array(self::$app)) {
+        if (!is_array(self::$app) || $clear) {
             self::$app = [];
         }
-        if (!isset(self::$app['*'])) {
-            self::$app['*'] = Path::getRoot(['config']);
-        }
-        if ($clear) {
-            self::$data = [];
-            self::$app = [];
+        if (!isset(self::$app['*']) || $clear) {
             self::$app['*'] = Path::getRoot(['config']);
         }
     }
