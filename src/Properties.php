@@ -7,10 +7,13 @@ abstract class Properties
     /**
      * Data constructor.
      *
-     * @param array $data
+     * @param mixed $data
      */
-    public function __construct(array $data)
+    public function __construct($data)
     {
+        if (!is_array($data)) {
+            return;
+        }
         $reflectionClass = new \ReflectionClass(get_class($this));
         $properties = $reflectionClass->getProperties();
         if (count($properties) > 0) {

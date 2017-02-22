@@ -12,6 +12,17 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test constructor null.
+     */
+    public function testConstructorNull()
+    {
+        $properties = new PropertiesHelper(null);
+        $this->assertNull($properties->getPrivate());
+        $this->assertNull($properties->getProtected());
+        $this->assertNull($properties->publicValue);
+    }
+
+    /**
      * Test private value set.
      */
     public function testGetPrivateValue()
