@@ -203,7 +203,15 @@ $lastElement = $collection->last();
 
 ### Container
 Container to help with data manipulation ie. array/json.
+
+A few examples.
 ```php
+// Load json.
+$container = new Container();
+$container->loadJson($filename);
+
+// Get firstname of actor using dot notation.
+$firstname = $container->get('actor.firstname');
 ```
 
 
