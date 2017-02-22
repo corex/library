@@ -2,6 +2,27 @@
 Support classes and helpers.
 
 
+### Code/Convention
+Helpers to convert to studly-case, pascal-case, camel-case, snake-case and kebab-case.
+
+```php
+// Convert to studly case.
+$data = Convention::studly($data);
+
+// Convert to pascal case.
+$data = Convention::pascal($data);
+
+// Convert to camel case.
+$data = Convention::camel($data);
+
+// Convert to snake case.
+$data = Convention::snake($data);
+
+// Convert to kebab case.
+$data = Convention::kebab($data);
+```
+
+
 ### Config/Config
 Basic configuration class/helper which works almost the same way as Laravel.
 - Multiple locations are supported through apps.
@@ -38,35 +59,65 @@ $data = Config::get('actor');
 ```
 
 
-### Code/Convention
-Helpers to convert to studly-case, pascal-case, camel-case, snake-case and kebab-case.
-
-```php
-// Convert to studly case.
-$data = Convention::studly($data);
-
-// Convert to pascal case.
-$data = Convention::pascal($data);
-
-// Convert to camel case.
-$data = Convention::camel($data);
-
-// Convert to snake case.
-$data = Convention::snake($data);
-
-// Convert to kebab case.
-$data = Convention::kebab($data);
-```
-
 ### System/Directory
 Various directory helpers.
 ```php
+// Test if directory exists.
+$exist = Directory::exist('/my/path');
+
+// Check if directory is writeable.
+$isWriteable = Directory::isWritable('/my/path');
+
+// Make directory.
+Directory::make('/my/path');
+
+// Get entries of a directory.
+$entries = Directory::entries('/my/path', '*', true, true, true);
 ```
 
 
 ### System/File
 Various file helpers (i.e. stub, json, etc.)
+
 ```php
+// Check if file exists.
+$exist = File::exist($filename);
+
+// Load file.
+$content = File::load($filename);
+
+// Load lines.
+$lines = File::loadLines($filename);
+
+// Save content.
+File::save($filename, $content);
+
+// Save lines.
+File::saveLines($filename, $lines);
+
+// Get stub.
+$stub = File::getStub($filename, [
+    'firstname' => 'Roger',
+    'lastname' => 'Moore'
+]);
+
+// Get template.
+$template = File::getTemplate($filename, [
+    'firstname' => 'Roger',
+    'lastname' => 'Moore'
+]);
+
+// Load json.
+$array = File::loadJson($filename);
+
+// Save json.
+File::saveJson($filename, $array);
+
+// Get temp filename.
+$filename = File::getTempFilename();
+
+// Delete file.
+File::delete($filename);
 ```
 
 
