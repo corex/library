@@ -170,7 +170,7 @@ $firstname = Arr::get($array, 'actor.firstname');
 // Set firstname on array via dot notation.
 Arr::set($array, 'actor.firstname', $firstname);
 
-// Pluck firstname from list of actors.
+// Pluck firstnames from list of actors.
 $firstnames = Arr::pluck($actors, 'firstname');
 ```
 
