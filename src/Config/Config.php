@@ -10,6 +10,29 @@ class Config
     private static $data;
 
     /**
+     * Initialize.
+     *
+     * @param boolean $clear Default false.
+     */
+    public static function initialize($clear = false)
+    {
+        if (!is_array(self::$data)) {
+            self::$data = [];
+        }
+        if (!is_array(self::$app)) {
+            self::$app = [];
+        }
+        if (!isset(self::$app['*'])) {
+            self::$app['*'] = Path::getRoot(['config']);
+        }
+        if ($clear) {
+            self::$data = [];
+            self::$app = [];
+            self::$app['*'] = Path::getRoot(['config']);
+        }
+    }
+
+    /**
      * Register app.
      *
      * @param string $path
@@ -69,12 +92,12 @@ class Config
      *
      * @param string $path Uses dot notation.
      * @param mixed $defaultValue Default null.
-     * @param boolean $throwException Default false.
      * @param string $app Default null.
+     * @param boolean $throwException Default false.
      * @return mixed
      * @throws ConfigException
      */
-    public static function get($path, $defaultValue = null, $throwException = false, $app = null)
+    public static function get($path, $defaultValue = null, $app = null, $throwException = false)
     {
         self::initialize();
         // Extract section from path.
@@ -174,21 +197,5 @@ class Config
         }
         self::$data[$app][$section] = require($filename);
         return true;
-    }
-
-    /**
-     * Initialize.
-     */
-    private static function initialize()
-    {
-        if (!is_array(self::$data)) {
-            self::$data = [];
-        }
-        if (!is_array(self::$app)) {
-            self::$app = [];
-        }
-        if (!isset(self::$app['*'])) {
-            self::$app['*'] = Path::getRoot(['config']);
-        }
     }
 }
