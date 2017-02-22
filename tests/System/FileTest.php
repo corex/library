@@ -128,7 +128,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTempFilename()
     {
-        $this->assertNotEquals($this->getTempFilename(), $this->getTempFilename());
+        $this->assertNotEquals(File::getTempFilename(), File::getTempFilename());
     }
 
     /**
