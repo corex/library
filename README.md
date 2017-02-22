@@ -161,7 +161,17 @@ $package = Path::getVendorName();
 
 ### Arr
 Various array helpers.
+
+A few examples.
 ```php
+// Get firstname from array via dot notation.
+$firstname = Arr::get($array, 'actor.firstname');
+
+// Set firstname on array via dot notation.
+Arr::set($array, 'actor.firstname', $firstname);
+
+// Pluck firstname from list of actors.
+$firstnames = Arr::pluck($actors, 'firstname');
 ```
 
 
