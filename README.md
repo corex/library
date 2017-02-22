@@ -255,6 +255,16 @@ $text = Str::replaceToken($text, [
 
 
 ### StrList
-Various string helpers (multi-byte).
+Various string list helpers (multi-byte).
+
+A few examples.
 ```php
+// Add 'test' to string with separator '|'.
+$string = StrList::add($string, 'test', '|');
+
+// Remove 'test' from string.
+$string = StrList::remove($string, 'test', '|');
+
+// Check if 'test' exist in string.
+$exist = StrList::exist($string, 'test');
 ```
