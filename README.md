@@ -1,5 +1,7 @@
 # CoRex Support
 Support classes and helpers.
+The purpose of this package is to have one package with the most basic classes and helpers available.
+Some of the code is inspired by Laravel, Yii and other frameworks.
 
 
 ### Code/Convention
