@@ -352,4 +352,23 @@ class Str
         }
         return $fields;
     }
+
+    /**
+     * Slug.
+     * Standard separator characters '-', '_', ' ', '.'.
+     *
+     * @param string $string
+     * @param string $separator Default '.'.
+     * @return string
+     */
+    public static function slug($string, $separator = '.')
+    {
+        // Make sure standard characters has been replaced to separator.
+        $slug = str_replace(['-', '_', ' ', '.'], $separator, mb_strtolower($string));
+
+        // Remove all "funny" characters.
+        $slug = preg_replace('/[^a-z0-9' . preg_quote($separator) . ']/', '', $slug);
+
+        return $slug;
+    }
 }

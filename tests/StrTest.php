@@ -9,6 +9,8 @@ class StrTest extends PHPUnit_Framework_TestCase
     private $template = '{left}{right}';
     private $part1 = 'part1';
     private $part2 = 'part2';
+    private $slugTest = 'ThIs%is\a#certanly.test|with"funny-ChaRaCtErS/and^more$fun more+to_come';
+    private $slugTestValid = 'thisisacertanly.testwithfunny.charactersandmorefun.moreto.come';
 
     /**
      * Test length.
@@ -223,5 +225,20 @@ class StrTest extends PHPUnit_Framework_TestCase
     {
         $csv = '"' . $this->part1 . '","' . $this->part2 . '"';
         $this->assertEquals([$this->part1, $this->part2], Str::getCsvFields($csv));
+    }
+
+    /**
+     * Test slug.
+     */
+    public function testSlug()
+    {
+        // Test standard separator.
+        $this->assertEquals($this->slugTestValid, Str::slug($this->slugTest));
+
+        // Test not standard separator.
+        $this->assertEquals(
+            str_replace('.', '-', $this->slugTestValid),
+            Str::slug($this->slugTest, '-')
+        );
     }
 }
