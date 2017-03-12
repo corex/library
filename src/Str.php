@@ -371,4 +371,32 @@ class Str
 
         return $slug;
     }
+
+    /**
+     * Split into key/value array.
+     * Note: 'slice of' elements if keys and values are not the same length.
+     *
+     * @param string $string
+     * @param string $separator
+     * @param array $keys
+     * @return array
+     */
+    public static function splitIntoKeyValue($string, $separator, array $keys)
+    {
+        $parts = explode($separator, $string);
+        $result = [];
+        if (count($keys) > 0) {
+
+            // Make sure arrays has equal number of items.
+            if (count($parts) > count($keys)) {
+                $parts = array_slice($parts, 0, count($keys));
+            }
+            if (count($keys) > count($parts)) {
+                $keys = array_slice($keys, 0, count($parts));
+            }
+
+            $result = array_combine($keys, $parts);
+        }
+        return $result;
+    }
 }

@@ -241,4 +241,19 @@ class StrTest extends PHPUnit_Framework_TestCase
             Str::slug($this->slugTest, '-')
         );
     }
+
+    /**
+     * Test split into key value.
+     */
+    public function testSplitIntoKeyValue()
+    {
+        $uri = 'component/security/user/enable';
+        $keys = ['type', 'component', 'controller', 'action'];
+        $keyValues = Str::splitIntoKeyValue($uri, '/', $keys);
+        $this->assertEquals(4, count($keyValues));
+        $this->assertEquals('component', $keyValues['type']);
+        $this->assertEquals('security', $keyValues['component']);
+        $this->assertEquals('user', $keyValues['controller']);
+        $this->assertEquals('enable', $keyValues['action']);
+    }
 }
