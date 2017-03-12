@@ -2,6 +2,8 @@
 
 namespace CoRex\Support\System;
 
+use CoRex\Support\Str;
+
 class Input
 {
     /**
@@ -138,6 +140,20 @@ class Input
         $uri = preg_replace("/^\\/(.*)$/", "$1", $uri);
         $uri = preg_replace("/^(.*)\\/$/", "$1", $uri);
         return $uri;
+    }
+
+    /**
+     * Split uri into key/value.
+     *
+     * @param array $keys
+     * @return array
+     */
+    public static function getPathSegments(array $keys)
+    {
+        if (count($keys) == 0) {
+            return [];
+        }
+        return Str::splitIntoKeyValue(self::getPath(), '/', $keys);
     }
 
     /**

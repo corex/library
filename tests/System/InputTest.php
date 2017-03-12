@@ -1,5 +1,6 @@
 <?php
 
+use CoRex\Support\Str;
 use CoRex\Support\System\Input;
 
 class InputTest extends PHPUnit_Framework_TestCase
@@ -147,6 +148,21 @@ class InputTest extends PHPUnit_Framework_TestCase
     public function testGetPath()
     {
         $this->assertEquals(self::PATH, Input::getPath());
+    }
+
+    /**
+     * Test get path segments.
+     */
+    public function testGetPathSegments()
+    {
+        $uri = 'component/security/user/enable';
+        $keys = ['type', 'component', 'controller', 'action'];
+        $keyValues = Str::splitIntoKeyValue($uri, '/', $keys);
+        $this->assertEquals(4, count($keyValues));
+        $this->assertEquals('component', $keyValues['type']);
+        $this->assertEquals('security', $keyValues['component']);
+        $this->assertEquals('user', $keyValues['controller']);
+        $this->assertEquals('enable', $keyValues['action']);
     }
 
     /**
