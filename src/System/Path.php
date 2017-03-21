@@ -10,7 +10,7 @@ class Path
      * @param array $segments Default [].
      * @return string
      */
-    public static function getRoot(array $segments = [])
+    public static function root(array $segments = [])
     {
         $path = __DIR__;
         for ($c1 = 0; $c1 < 5; $c1++) {
@@ -29,9 +29,9 @@ class Path
      * @param array $segments Default [].
      * @return string
      */
-    public static function getPackageCurrent(array $segments = [])
+    public static function packageCurrent(array $segments = [])
     {
-        return self::getPackage(null, null, $segments);
+        return self::package(null, null, $segments);
     }
 
     /**
@@ -43,13 +43,13 @@ class Path
      * @param array $segments Default [].
      * @return string
      */
-    public static function getPackage($vendor = null, $package = null, array $segments = [])
+    public static function package($vendor = null, $package = null, array $segments = [])
     {
         if ($vendor === null & $package === null) {
-            $vendor = static::getVendorName();
-            $package = static::getPackageName();
+            $vendor = static::vendorName();
+            $package = static::packageName();
         }
-        $path = static::getRoot(['vendor']);
+        $path = static::root(['vendor']);
         if ($vendor !== null) {
             $path .= '/' . $vendor;
             if ($package !== null) {
@@ -67,9 +67,9 @@ class Path
      *
      * @return string
      */
-    public static function getVendorName()
+    public static function vendorName()
     {
-        $path = static::getPackagePath();
+        $path = static::packagePath();
         return basename(dirname($path));
     }
 
@@ -78,9 +78,9 @@ class Path
      *
      * @return string
      */
-    public static function getPackageName()
+    public static function packageName()
     {
-        $path = static::getPackagePath();
+        $path = static::packagePath();
         return basename($path);
     }
 
@@ -89,7 +89,7 @@ class Path
      *
      * @return string
      */
-    protected static function getPackagePath()
+    protected static function packagePath()
     {
         return dirname(dirname(__DIR__));
     }
