@@ -399,4 +399,23 @@ class Str
         }
         return $result;
     }
+
+    /**
+     * Create a unique string.
+     *
+     * @param string $prefix Default ''.
+     * @param string $suffix Default ''.
+     * @return string
+     */
+    public static function unique($prefix = '', $suffix = '')
+    {
+        $unique = md5(mt_rand());
+        if ($prefix != '') {
+            $unique = $prefix . $unique;
+        }
+        if ($suffix != '') {
+            $unique .= $suffix;
+        }
+        return $unique;
+    }
 }

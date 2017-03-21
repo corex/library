@@ -256,4 +256,33 @@ class StrTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('user', $keyValues['controller']);
         $this->assertEquals('enable', $keyValues['action']);
     }
+
+    /**
+     * Test unique.
+     */
+    public function testUnique()
+    {
+        // Test standard.
+        $unique1 = Str::unique();
+        $unique2 = Str::unique();
+        $this->assertNotEquals($unique1, $unique2);
+
+        // Test with prefix.
+        $uniquePrefix1 = Str::unique('test');
+        $uniquePrefix2 = Str::unique('test');
+        $this->assertNotEquals($uniquePrefix1, $uniquePrefix2);
+        $this->assertEquals('test', substr($uniquePrefix1, 0, 4));
+        $this->assertEquals('test', substr($uniquePrefix2, 0, 4));
+        $this->assertNotEquals('test', substr($uniquePrefix1, -4));
+        $this->assertNotEquals('test', substr($uniquePrefix2, -4));
+
+        // Test with prefix.
+        $uniqueSuffix1 = Str::unique('', 'test');
+        $uniqueSuffix2 = Str::unique('', 'test');
+        $this->assertNotEquals($uniqueSuffix1, $uniqueSuffix2);
+        $this->assertNotEquals('test', substr($uniqueSuffix1, 0, 4));
+        $this->assertNotEquals('test', substr($uniqueSuffix2, 0, 4));
+        $this->assertEquals('test', substr($uniqueSuffix1, -4));
+        $this->assertEquals('test', substr($uniqueSuffix2, -4));
+    }
 }
