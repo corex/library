@@ -1,16 +1,61 @@
 <?php
 
-use CoRex\Support\Str;
+use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
 
 class FileTest extends PHPUnit_Framework_TestCase
 {
+    private $tempDirectory;
+
+    /**
+     * Setup.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->tempDirectory = sys_get_temp_dir();
+        $this->tempDirectory .= '/' . str_replace('.', '', microtime(true));
+        Directory::make($this->tempDirectory);
+    }
+
+    /**
+     * Tear down.
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Directory::delete($this->tempDirectory);
+    }
+
+    /**
+     * Test get temp filename.
+     */
+    public function testGetTempFilename()
+    {
+        $filename1 = File::getTempFilename($this->tempDirectory);
+        $filename2 = File::getTempFilename($this->tempDirectory);
+        $this->assertNotEquals($filename1, $filename2);
+        $this->assertTrue(File::exist($filename1));
+        $this->assertTrue(File::exist($filename2));
+    }
+
+    /**
+     * Test touch.
+     */
+    public function testTouch()
+    {
+        $filename = $this->tempDirectory . '/test';
+        $this->assertFalse(File::exist($filename));
+        File::touch($filename);
+        $this->assertTrue(File::exist($filename));
+    }
+
     /**
      * Test exist.
      */
     public function testExist()
     {
-        $filename = $this->getTempFilename();
+        $filename = File::getTempFilename($this->tempDirectory);
         touch($filename);
         $this->assertTrue(File::exist($filename));
         File::delete($filename);
@@ -18,55 +63,129 @@ class FileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test load.
+     * Test get.
      */
-    public function testLoad()
+    public function testGet()
     {
         $test = 'test';
-        $filename = $this->getTempFilename();
-        File::save($filename, $test);
-        $this->assertEquals($test, File::load($filename));
-        File::delete($filename);
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::put($filename, $test);
+        $this->assertEquals($test, File::get($filename));
     }
 
     /**
-     * Test load lines.
+     * Test get lines.
      */
-    public function testLoadLines()
+    public function testGetLines()
     {
         $lines = ['test1', 'test2'];
 
         // Test load with "\n".
-        $filename = $this->getTempFilename();
-        File::save($filename, implode("\n", $lines));
-        $this->assertEquals($lines, File::loadLines($filename));
-        File::delete($filename);
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::put($filename, implode("\n", $lines));
+        $this->assertEquals($lines, File::getLines($filename));
 
         // Test load with "\r\n".
-        $filename = $this->getTempFilename();
-        File::save($filename, implode("\r\n", $lines));
-        $this->assertEquals($lines, File::loadLines($filename));
-        File::delete($filename);
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::put($filename, implode("\r\n", $lines));
+        $this->assertEquals($lines, File::getLines($filename));
     }
 
     /**
-     * Test save.
+     * Test put.
      */
-    public function testSave()
+    public function testPut()
     {
-        $this->testLoad();
+        $this->testGet();
     }
 
     /**
-     * Test save lines.
+     * Test prepend.
      */
-    public function testSaveLines()
+    public function testPrepend()
+    {
+        $test = 'test';
+
+        // Test when file does not exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::prepend($filename, $test . 'X');
+        $this->assertEquals($test . 'X', File::get($filename));
+
+        // Test when file exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::put($filename, $test);
+        File::prepend($filename, $test . 'X');
+        $this->assertEquals($test . 'X' . $test, File::get($filename));
+    }
+
+    /**
+     * Append.
+     */
+    public function testAppend()
+    {
+        $test = 'test';
+
+        // Test when file does not exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::append($filename, 'X' . $test);
+        $this->assertEquals('X' . $test, File::get($filename));
+
+        // Test when file exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::put($filename, $test);
+        File::append($filename, 'X' . $test);
+        $this->assertEquals($test . 'X' . $test, File::get($filename));
+    }
+
+    /**
+     * Test put lines.
+     */
+    public function testPutLines()
     {
         $lines = ['test1', 'test2'];
-        $filename = $this->getTempFilename();
-        File::saveLines($filename, $lines);
-        $this->assertEquals($lines, File::loadLines($filename));
-        File::delete($filename);
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::putLines($filename, $lines);
+        $this->assertEquals($lines, File::getLines($filename));
+    }
+
+    /**
+     * Test prepend lines.
+     */
+    public function testPrependLines()
+    {
+        $lines1 = ['test1', 'test2'];
+        $lines2 = ['test3', 'test4'];
+
+        // Test when file does not exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::prependLines($filename, $lines2);
+        $this->assertEquals($lines2, File::getLines($filename));
+
+        // Test when file exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::putLines($filename, $lines1);
+        File::prependLines($filename, $lines2);
+        $this->assertEquals(array_merge($lines2, $lines1), File::getLines($filename));
+    }
+
+    /**
+     * Test append lines.
+     */
+    public function testAppendLines()
+    {
+        $lines1 = ['test1', 'test2'];
+        $lines2 = ['test3', 'test4'];
+
+        // Test when file does not exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::prependLines($filename, $lines2);
+        $this->assertEquals($lines2, File::getLines($filename));
+
+        // Test when file exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        File::putLines($filename, $lines1);
+        File::appendLines($filename, $lines2);
+        $this->assertEquals(array_merge($lines1, $lines2), File::getLines($filename));
     }
 
     /**
@@ -77,13 +196,12 @@ class FileTest extends PHPUnit_Framework_TestCase
         $stub = '({firstname}/{lastname})';
         $result = str_replace('{firstname}', 'test1', $stub);
         $result = str_replace('{lastname}', 'test2', $result);
-        $filename = $this->getTempFilename('stub');
-        File::save($filename, $stub);
+        $filename = File::getTempFilename($this->tempDirectory, '', 'stub');
+        File::put($filename, $stub);
         $this->assertEquals($result, File::getStub($filename, [
             'firstname' => 'test1',
             'lastname' => 'test2'
         ]));
-        File::delete($filename);
     }
 
     /**
@@ -94,41 +212,31 @@ class FileTest extends PHPUnit_Framework_TestCase
         $template = '({firstname}/{lastname})';
         $result = str_replace('{firstname}', 'test1', $template);
         $result = str_replace('{lastname}', 'test2', $result);
-        $filename = $this->getTempFilename('tpl');
-        File::save($filename, $template);
+        $filename = File::getTempFilename($this->tempDirectory, '', 'tpl');
+        File::put($filename, $template);
         $this->assertEquals($result, File::getTemplate($filename, [
             'firstname' => 'test1',
             'lastname' => 'test2'
         ]));
-        File::delete($filename);
     }
 
     /**
-     * Test load json.
+     * Test get json.
      */
-    public function testLoadJson()
+    public function testGetJson()
     {
         $lines = ['firstname' => 'test1', 'lastname' => 'test2'];
-        $filename = $this->getTempFilename('json');
-        File::saveJson($filename, $lines);
-        $this->assertEquals($lines, File::loadJson($filename));
-        File::delete($filename);
+        $filename = File::getTempFilename($this->tempDirectory, '', 'json');
+        File::putJson($filename, $lines);
+        $this->assertEquals($lines, File::getJson($filename));
     }
 
     /**
-     * Test save json.
+     * Test put json.
      */
-    public function testSaveJson()
+    public function testPutJson()
     {
-        $this->testLoadJson();
-    }
-
-    /**
-     * Test get temp filename.
-     */
-    public function testGetTempFilename()
-    {
-        $this->assertNotEquals(File::getTempFilename(), File::getTempFilename());
+        $this->testGetJson();
     }
 
     /**
@@ -136,7 +244,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $filename = $this->getTempFilename();
+        $filename = File::getTempFilename($this->tempDirectory);
         touch($filename);
         $this->assertTrue(file_exists($filename));
         File::delete($filename);
@@ -144,17 +252,154 @@ class FileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get temp filename.
-     *
-     * @param string $extension Default ''.
-     * @return string
+     * Test copy.
      */
-    private function getTempFilename($extension = '')
+    public function testCopy()
     {
-        $filename = tempnam(sys_get_temp_dir(), '');
-        if ($extension != '' && !Str::endsWith($filename, '.' . $extension)) {
-            $filename .= '.' . $extension;
-        }
-        return $filename;
+        $filename = File::getTempFilename($this->tempDirectory, '', 'test');
+        $path = $this->tempDirectory . '/' . md5(microtime(true));
+
+        $this->assertTrue(File::exist($filename));
+
+        // Copy file to not-existent path.
+        $this->assertFalse(File::copy($filename, $path));
+        $this->assertFalse(File::exist($path . '/' . basename($filename)));
+
+        // Copy file.
+        Directory::make($path);
+        $this->assertTrue(File::copy($filename, $path));
+        $this->assertTrue(File::exist($path . '/' . basename($filename)));
+    }
+
+    /**
+     * Test move.
+     */
+    public function testMove()
+    {
+        $filename = File::getTempFilename($this->tempDirectory, '', 'test');
+        $path = $this->tempDirectory . '/' . md5(microtime(true));
+
+        $this->assertTrue(File::exist($filename));
+
+        // Copy file to not-existent path.
+        $this->assertFalse(File::move($filename, $path));
+        $this->assertFalse(File::exist($path . '/' . basename($filename)));
+
+        // Copy file.
+        Directory::make($path);
+        $this->assertTrue(File::move($filename, $path));
+        $this->assertFalse(File::exist($filename));
+        $this->assertTrue(File::exist($path . '/' . basename($filename)));
+    }
+
+    /**
+     * Test name.
+     */
+    public function testName()
+    {
+        $path = '/tmp/this-is-a-test.txt';
+        $this->assertEquals('this-is-a-test', File::name($path));
+    }
+
+    /**
+     * Test basename.
+     */
+    public function testBasename()
+    {
+        $path = '/tmp/this-is-a-test.txt';
+        $this->assertEquals('this-is-a-test.txt', File::basename($path));
+    }
+
+    /**
+     * Test dirname.
+     */
+    public function testDirname()
+    {
+        $path = '/tmp/this-is-a-test.txt';
+        $this->assertEquals('/tmp', File::dirname($path));
+    }
+
+    /**
+     * Test extension.
+     */
+    public function testExtension()
+    {
+        $path = '/tmp/this-is-a-test.txt';
+        $this->assertEquals('txt', File::extension($path));
+    }
+
+    /**
+     * Test type.
+     */
+    public function testType()
+    {
+        $path = $this->tempDirectory . '/this-is-a-test.txt';
+
+        // Check non-existent file.
+        $this->assertFalse(File::type($path));
+
+        // Check file.
+        touch($path);
+        $this->assertEquals('file', File::type($path));
+    }
+
+    /**
+     * Test mimetype.
+     */
+    public function testMimeType()
+    {
+        $path = $this->tempDirectory . '/this-is-a-test.txt';
+
+        // Check non-existent file.
+        $this->assertFalse(File::mimetype($path));
+
+        // Check file.
+        touch($path);
+        $this->assertEquals('inode/x-empty', File::mimetype($path));
+    }
+
+    /**
+     * Test size.
+     */
+    public function testSize()
+    {
+        $filename1 = File::getTempFilename($this->tempDirectory);
+        $filename2 = File::getTempFilename($this->tempDirectory);
+
+        // Create files.
+        touch($filename1);
+        File::put($filename2, 'test');
+
+        // Check file-sizes.
+        $this->assertEquals(0, File::size($filename1));
+        $this->assertEquals(4, File::size($filename2));
+    }
+
+    /**
+     * Test last modified.
+     */
+    public function testLastModified()
+    {
+        $filename = File::getTempFilename($this->tempDirectory);
+        $modifiedDatetime1 = File::lastModified($filename);
+        touch($filename, mktime(0, 0, 0, 4, 1, 2000));
+        $modifiedDatetime2 = File::lastModified($filename);
+        $this->assertNotEquals($modifiedDatetime1, $modifiedDatetime2);
+        $this->assertEquals('2000-04-01 00:00:00', date('Y-m-d H:i:s', $modifiedDatetime2));
+    }
+
+    /**
+     * Test is file.
+     */
+    public function testIsFile()
+    {
+        $path = $this->tempDirectory . '/this-is-a-test.txt';
+
+        // Check non-existent file.
+        $this->assertFalse(File::type($path));
+
+        // Check file.
+        touch($path);
+        $this->assertEquals('file', File::type($path));
     }
 }
