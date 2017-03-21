@@ -89,17 +89,17 @@ A few examples.
 // Check if file exists.
 $exist = File::exist($filename);
 
-// Load file.
-$content = File::load($filename);
+// Get from file.
+$content = File::get($filename);
 
 // Load lines.
-$lines = File::loadLines($filename);
+$lines = File::getLines($filename);
 
 // Save content.
-File::save($filename, $content);
+File::put($filename, $content);
 
 // Save lines.
-File::saveLines($filename, $lines);
+File::putLines($filename, $lines);
 
 // Get stub.
 $stub = File::getStub($filename, [
@@ -113,11 +113,11 @@ $template = File::getTemplate($filename, [
     'lastname' => 'Moore'
 ]);
 
-// Load json.
-$array = File::loadJson($filename);
+// Get json.
+$array = File::getJson($filename);
 
-// Save json.
-File::saveJson($filename, $array);
+// Put json.
+File::putJson($filename, $array);
 
 // Get temp filename.
 $filename = File::getTempFilename();
@@ -152,16 +152,16 @@ Basic path getters (can be used in other packages by overriding getPackagePath()
 A few examples.
 ```php
 // Get root of project.
-$pathRoot = Path::getRoot();
+$pathRoot = Path::root();
 
 // Get config-path of project-root.
-$pathConfig = Path::getRoot(['config']);
+$pathConfig = Path::root(['config']);
 
 // Get name of package.
-$package = Path::getPackageName();
+$package = Path::packageName();
 
 // Get name of vendor.
-$package = Path::getVendorName();
+$package = Path::vendorName();
 ```
 
 ### System/Session
@@ -241,9 +241,9 @@ Container to help with data manipulation ie. array/json.
 
 A few examples.
 ```php
-// Load json.
+// Get json.
 $container = new Container();
-$container->loadJson($filename);
+$container->getJson($filename);
 
 // Get firstname of actor using dot notation.
 $firstname = $container->get('actor.firstname');
@@ -286,6 +286,9 @@ $text = Str::replaceToken($text, [
     'firstname' => 'Roger',
     'lastname' => 'Moore'
 ]);
+
+// Create a unique string.
+$identifier = Str::unique();
 ```
 
 
