@@ -1,16 +1,39 @@
 <?php
 
 use CoRex\Support\Container;
+use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
 
 class ContainerTest extends PHPUnit_Framework_TestCase
 {
+    private $tempDirectory;
+
     private $data = [
         'actor' => [
             'firstname' => 'Roger',
             'lastname' => 'Moore'
         ]
     ];
+
+    /**
+     * Setup.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->tempDirectory = sys_get_temp_dir();
+        $this->tempDirectory .= '/' . str_replace('.', '', microtime(true));
+        Directory::make($this->tempDirectory);
+    }
+
+    /**
+     * Tear down.
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Directory::delete($this->tempDirectory);
+    }
 
     /**
      * Test constructor.
@@ -144,14 +167,11 @@ class ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadJson()
     {
-        $filename = File::getTempFilename('', 'json');
-        file_put_contents($filename, json_encode($this->data));
+        $filename = File::getTempFilename($this->tempDirectory, '', 'json');
+        File::put($filename, json_encode($this->data));
         $container = new Container();
-        $container->loadJson($filename);
+        $container->getJson($filename);
         $this->assertEquals($this->data, $container->toArray());
-        if (file_exists($filename)) {
-            unlink($filename);
-        }
     }
 
     /**
@@ -159,9 +179,9 @@ class ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveJson()
     {
-        $filename = File::getTempFilename('', 'json');
+        $filename = File::getTempFilename($this->tempDirectory, '', 'json');
         $container = new Container($this->data);
-        $container->saveJson($filename);
+        $container->putJson($filename);
         $this->assertEquals(json_encode($this->data), file_get_contents($filename));
     }
 }

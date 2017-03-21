@@ -146,24 +146,24 @@ class Container
     }
 
     /**
-     * Load data from json-file.
+     * Get data from json-file.
      *
      * @param string $filename
      */
-    public function loadJson($filename)
+    public function getJson($filename)
     {
-        $this->data = File::loadJson($filename);
+        $this->data = File::getJson($filename);
     }
 
     /**
-     * Save data to json-file.
+     * Put data to json-file.
      *
      * @param string $filename
      * @param boolean $prettyPrint Default true.
      */
-    public function saveJson($filename, $prettyPrint = false)
+    public function putJson($filename, $prettyPrint = false)
     {
-        File::saveJson($filename, $this->data, $prettyPrint);
+        File::putJson($filename, $this->data, $prettyPrint);
     }
 
     /**
