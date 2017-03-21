@@ -1,6 +1,6 @@
 <?php
 
-use CoRex\Support\Config\Config;
+use CoRex\Support\Config;
 use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
 use CoRex\Support\System\Path;
@@ -13,6 +13,8 @@ use CoRex\Support\System\Path;
  */
 class ConfigTest extends PHPUnit_Framework_TestCase
 {
+    private $tempDirectory;
+
     private $actor1 = ['firstname' => 'Sean', 'lastname' => 'Connery'];
     private $actor2 = ['firstname' => 'Roger', 'lastname' => 'Moore'];
     private $actor3 = ['firstname' => 'Timothy', 'lastname' => 'Dalton'];
@@ -29,6 +31,17 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         Config::initialize(true);
+        $this->tempDirectory = sys_get_temp_dir();
+        $this->tempDirectory .= '/' . str_replace('.', '', microtime(true));
+    }
+
+    /**
+     * Tear down.
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Directory::delete($this->tempDirectory);
     }
 
     /**
@@ -44,7 +57,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
         // Compare app registrations.
         $apps = Config::getApps();
-        $this->assertEquals(Path::getRoot(['config']), $apps['*']);
+        $this->assertEquals(Path::root(['config']), $apps['*']);
         $this->assertEquals($checkValue, $apps[$this->app1]);
         $this->assertEquals($checkValue, $apps[$this->app2]);
     }
@@ -57,11 +70,18 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $path = $this->getUniquePath();
         Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
-        require_once(__DIR__ . '/ConfigTestObject.php');
+        require_once(__DIR__ . '/Helpers/ConfigObjectHelper.php');
+
+        // Test when class exists.
         $this->assertEquals(
-            new ConfigTestObject(['actor' => $this->actor1]),
-            Config::getObject('test1', ConfigTestObject::class)
+            new ConfigObjectHelper(['actor' => $this->actor1]),
+            Config::getObject('test1', ConfigObjectHelper::class)
         );
+
+        // Test when class does not exists.
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Class test does not exist.');
+        Config::getObject('test1', 'test');
     }
 
     /**
@@ -72,7 +92,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $path = $this->getUniquePath();
         Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
-        require_once(__DIR__ . '/ConfigTestObject.php');
         $data = Config::getClosure('test1', function ($data) {
             return $data;
         });
@@ -150,7 +169,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $filename = $path . '/' . $appName . '.php';
         $varExport = "<" . "?php\nreturn " . var_export($data, true) . ";\n";
         if (Directory::isWritable($path)) {
-            File::save($filename, $varExport);
+            File::put($filename, $varExport);
         }
         return $path;
     }
@@ -164,7 +183,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     private function getUniquePath($suffix = '')
     {
         $microtime = microtime(true);
-        $path = sys_get_temp_dir() . '/' . $microtime . $suffix;
+        $path = $this->tempDirectory . '/' . $microtime . $suffix;
         Directory::make($path);
         return $path;
     }

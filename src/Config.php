@@ -1,6 +1,6 @@
 <?php
 
-namespace CoRex\Support\Config;
+namespace CoRex\Support;
 
 use CoRex\Support\System\Path;
 
@@ -23,7 +23,7 @@ class Config
             self::$app = [];
         }
         if (!isset(self::$app['*']) || $clear) {
-            self::$app['*'] = Path::getRoot(['config']);
+            self::$app['*'] = Path::root(['config']);
         }
     }
 
@@ -52,13 +52,13 @@ class Config
      * @param string $class
      * @param string $app Default null.
      * @return object
-     * @throws ConfigException
+     * @throws \Exception
      */
     public static function getObject($section, $class, $app = null)
     {
         self::initialize();
         if (!class_exists($class)) {
-            throw new ConfigException('Class ' . $class . ' does not exist.');
+            throw new \Exception('Class ' . $class . ' does not exist.');
         }
         $data = self::getSection($section, $app);
         return new $class($data);
@@ -70,13 +70,13 @@ class Config
      * @param string $section
      * @param callable $closure
      * @param string $app Default null.
-     * @throws ConfigException
+     * @throws \Exception
      */
-    public static function getClosure($section, $closure, $app = null)
+    public static function getClosure($section, callable $closure, $app = null)
     {
         self::initialize();
         if (!is_callable($closure)) {
-            throw new ConfigException('Closure specified is not callable.');
+            throw new \Exception('Closure specified is not callable.');
         }
         $data = self::getSection($section, $app);
         return $closure($data);
@@ -90,7 +90,7 @@ class Config
      * @param string $app Default null.
      * @param boolean $throwException Default false.
      * @return mixed
-     * @throws ConfigException
+     * @throws \Exception
      */
     public static function get($path, $defaultValue = null, $app = null, $throwException = false)
     {
@@ -105,7 +105,7 @@ class Config
         $data = self::getSection($section, $app);
         if ($data === null) {
             if ($throwException) {
-                throw new ConfigException('Section ' . $section . ' not found.');
+                throw new \Exception('Section ' . $section . ' not found.');
             }
             return $defaultValue;
         }
@@ -116,7 +116,7 @@ class Config
                 $data = &$data[$pathSegment];
             } else {
                 if ($throwException) {
-                    throw new ConfigException('Path ' . $path . ' not found.');
+                    throw new \Exception('Path ' . $path . ' not found.');
                 }
                 $data = $defaultValue;
             }
