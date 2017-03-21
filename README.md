@@ -3,7 +3,7 @@ Support classes and helpers.
 The purpose of this package is to have one package with the most basic classes and helpers available.
 Some of the code is heavily inspired by Laravel, Yii and other frameworks.
 
-_*Versioning for this package follows http://semver.org/. Backwards compatibility might break on upgrade to major versions.*_
+**_Versioning for this package follows http://semver.org/. Backwards compatibility might break on upgrade to major versions._**
 
 ### Code/Convention
 Helpers to convert to studly-case, pascal-case, camel-case, snake-case and kebab-case.
