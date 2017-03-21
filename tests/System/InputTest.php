@@ -38,6 +38,11 @@ class InputTest extends PHPUnit_Framework_TestCase
 
         // Make sure function getallheaders() exists for tests.
         if (!function_exists('getallheaders')) {
+            /**
+             * Get all headers.
+             *
+             * @return array
+             */
             function getallheaders()
             {
                 return [
