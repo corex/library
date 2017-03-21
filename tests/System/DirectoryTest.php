@@ -5,6 +5,8 @@ use CoRex\Support\System\Directory;
 class DirectoryTest extends PHPUnit_Framework_TestCase
 {
     private $tempDirectory;
+    private $filename1;
+    private $filename2;
 
     /**
      * Setup.
@@ -14,6 +16,20 @@ class DirectoryTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->tempDirectory = sys_get_temp_dir();
         $this->tempDirectory .= '/' . str_replace('.', '', microtime(true));
+
+        // Create unique filenames.
+        $uniqueCode = md5(str_replace('.', '', microtime(true)));
+        $this->filename1 = $uniqueCode . '1';
+        $this->filename2 = $uniqueCode . '2';
+    }
+
+    /**
+     * Tear down.
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Directory::delete($this->tempDirectory);
     }
 
     /**
@@ -21,11 +37,19 @@ class DirectoryTest extends PHPUnit_Framework_TestCase
      */
     public function testExist()
     {
+        $this->assertFalse(Directory::exist($this->tempDirectory));
         mkdir($this->tempDirectory);
         $this->assertTrue(Directory::exist($this->tempDirectory));
-        if (is_dir($this->tempDirectory)) {
-            rmdir($this->tempDirectory);
-        }
+    }
+
+    /**
+     * Test exist.
+     */
+    public function testIsDirectory()
+    {
+        $this->assertFalse(Directory::isDirectory($this->tempDirectory));
+        mkdir($this->tempDirectory);
+        $this->assertTrue(Directory::isDirectory($this->tempDirectory));
     }
 
     /**
@@ -36,9 +60,6 @@ class DirectoryTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(Directory::isWritable($this->tempDirectory));
         mkdir($this->tempDirectory);
         $this->assertTrue(Directory::isWritable($this->tempDirectory));
-        if (is_dir($this->tempDirectory)) {
-            rmdir($this->tempDirectory);
-        }
     }
 
     /**
@@ -46,12 +67,9 @@ class DirectoryTest extends PHPUnit_Framework_TestCase
      */
     public function testMake()
     {
-        $this->assertFalse(Directory::isWritable($this->tempDirectory));
+        $this->assertFalse(Directory::exist($this->tempDirectory));
         Directory::make($this->tempDirectory);
-        $this->assertTrue(Directory::isWritable($this->tempDirectory));
-        if (is_dir($this->tempDirectory)) {
-            rmdir($this->tempDirectory);
-        }
+        $this->assertTrue(Directory::exist($this->tempDirectory));
     }
 
     /**
@@ -59,39 +77,45 @@ class DirectoryTest extends PHPUnit_Framework_TestCase
      */
     public function testEntries()
     {
-        $uniqueCode = md5(str_replace('.', '', microtime(true)));
-        $filename1 = $uniqueCode . '1';
-        $filename2 = $uniqueCode . '2';
-
-        // Create entries on disk.
-        Directory::make($this->tempDirectory . '/test');
-        file_put_contents($this->tempDirectory . '/' . $filename1, 'test');
-        file_put_contents($this->tempDirectory . '/test/' . $filename2, 'test');
+        $this->createTestData('test');
 
         // Check entries.
-        $entries = Directory::entries($this->tempDirectory, '*', true, true, true);
+        $entries = Directory::entries($this->tempDirectory, '*', [], true);
         $checkEntries = [
-            $filename1,
-            'test/' . $filename2,
+            $this->filename1,
+            $this->filename2,
             'test'
         ];
         $this->assertCount(3, $entries);
         foreach ($entries as $entry) {
             $this->assertTrue(in_array($entry['name'], $checkEntries));
         }
+    }
 
-        // Clean up entries on disk.
-        if (file_exists($this->tempDirectory . '/test/' . $filename2)) {
-            unlink($this->tempDirectory . '/test/' . $filename2);
-        }
-        if (is_dir($this->tempDirectory . '/test')) {
-            rmdir($this->tempDirectory . '/test');
-        }
-        if (file_exists($this->tempDirectory . '/' . $filename1)) {
-            unlink($this->tempDirectory . '/' . $filename1);
-        }
-        if (is_dir($this->tempDirectory)) {
-            rmdir($this->tempDirectory);
-        }
+    /**
+     * Test delete.
+     */
+    public function testDeleteClean()
+    {
+        $this->createTestData('test');
+        $this->createTestData('test2');
+
+        Directory::clean($this->tempDirectory . '/test');
+        Directory::delete($this->tempDirectory . '/test2');
+
+        $this->assertTrue(Directory::exist($this->tempDirectory . '/test'));
+        $this->assertFalse(Directory::exist($this->tempDirectory . '/test2'));
+    }
+
+    /**
+     * Create data.
+     *
+     * @param string $subDirectory
+     */
+    private function createTestData($subDirectory)
+    {
+        Directory::make($this->tempDirectory . '/' . $subDirectory);
+        file_put_contents($this->tempDirectory . '/' . $this->filename1, 'test');
+        file_put_contents($this->tempDirectory . '/' . $subDirectory . '/' . $this->filename2, 'test');
     }
 }

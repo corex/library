@@ -4,6 +4,10 @@ namespace CoRex\Support\System;
 
 class Directory
 {
+    const TYPE_DIRECTORY = 'dir';
+    const TYPE_LINK = 'link';
+    const TYPE_FILE = 'file';
+
     /**
      * Check if directory exists.
      *
@@ -11,6 +15,17 @@ class Directory
      * @return boolean
      */
     public static function exist($path)
+    {
+        return is_dir($path);
+    }
+
+    /**
+     * Check if it is a directory entry.
+     *
+     * @param string $path
+     * @return boolean
+     */
+    public static function isDirectory($path)
     {
         return is_dir($path);
     }
@@ -40,17 +55,15 @@ class Directory
     }
 
     /**
-     * Get files in directory.
+     * Get entries in directory.
      *
      * @param string $path
      * @param string $criteria
-     * @param boolean $dirs
-     * @param boolean $files
+     * @param string|array $types List of types to return. Use constants Directory::TYPE_*. Default [] which means all.
      * @param boolean $recursive Default false.
-     * @param string $subPath Do not use. Used in recursion. Default ''.
      * @return array
      */
-    public static function entries($path, $criteria, $dirs, $files, $recursive = false, $subPath = '')
+    public static function entries($path, $criteria, $types = [], $recursive = false)
     {
         $entries = [];
         if (substr($path, -1) == '/') {
@@ -59,6 +72,11 @@ class Directory
         if (!is_dir($path)) {
             return $entries;
         }
+
+        if (count($types) == 0) {
+            $types = [self::TYPE_DIRECTORY, self::TYPE_LINK, self::TYPE_FILE];
+        }
+
         if ($handle = opendir($path)) {
             while ($entryName = readdir($handle)) {
 
@@ -70,32 +88,46 @@ class Directory
                     continue;
                 }
 
+                // Determine type.
+                if (is_dir($path . '/' . $entryName)) {
+                    $type = self::TYPE_DIRECTORY;
+                } elseif (is_link($path . '/' . $entryName)) {
+                    $type = self::TYPE_LINK;
+                } else {
+                    $type = self::TYPE_FILE;
+                }
+
+                // Get file modified time.
+                if ($type != Directory::TYPE_LINK) {
+                    $modified = filemtime($path . '/' . $entryName);
+                } else {
+                    $modified = 0;
+                }
+
                 // Prepare entry.
                 $info = pathinfo($path . '/' . $entryName);
                 $entry = [
-                    'name' => $subPath . $entryName,
+                    'name' => $entryName,
                     'path' => $path,
                     'basename' => isset($info['basename']) ? $info['basename'] : '',
                     'filename' => isset($info['filename']) ? $info['filename'] : '',
                     'extension' => isset($info['extension']) ? $info['extension'] : '',
-                    'modified' => filemtime($path . '/' . $entryName),
-                    'is_dir' => is_dir($path . '/' . $entryName)
+                    'modified' => $modified,
+                    'type' => $type
                 ];
 
                 // Add to list.
-                if ($dirs && $entry['is_dir'] || $files && !$entry['is_dir']) {
+                if (in_array($type, $types)) {
                     $entries[] = $entry;
                 }
 
                 // Recursive.
-                if ($recursive && $entry['is_dir']) {
+                if ($recursive && $type == self::TYPE_DIRECTORY) {
                     $recursiveEntries = static::entries(
                         $path . '/' . $entryName,
                         $criteria,
-                        $dirs,
-                        $files,
-                        $recursive,
-                        $entryName . '/'
+                        $types,
+                        $recursive
                     );
                     $entries = array_merge($entries, $recursiveEntries);
                 }
@@ -103,5 +135,56 @@ class Directory
             closedir($handle);
         }
         return $entries;
+    }
+
+    /**
+     * Delete.
+     *
+     * @param string $path
+     * @param boolean $preserveRoot Default false.
+     * @return boolean
+     */
+    public static function delete($path, $preserveRoot = false)
+    {
+        if (!self::isDirectory($path)) {
+            return false;
+        }
+
+        // Ensure that we are not doing something stupid.
+        if (!is_string($path) || trim($path) == '' || trim($path) == '/') {
+            return false;
+        }
+
+        // Loop through entries.
+        $entries = self::entries($path, '*', [], true);
+        foreach ($entries as $entry) {
+            $filename = $entry['path'] . '/' . $entry['name'];
+            if ($entry['type'] == self::TYPE_DIRECTORY) {
+                self::delete($filename);
+                @rmdir($filename);
+            } elseif ($entry['type'] == self::TYPE_LINK) {
+                File::delete($filename);
+            } elseif ($entry['type'] == self::TYPE_FILE) {
+                File::delete($filename);
+            }
+        }
+
+        // Remote root.
+        if (!$preserveRoot) {
+            @rmdir($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Clean directory.
+     *
+     * @param string $path
+     * @return boolean
+     */
+    public static function clean($path)
+    {
+        return self::delete($path, true);
     }
 }
