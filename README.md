@@ -1,8 +1,9 @@
 # CoRex Support
 Support classes and helpers.
 The purpose of this package is to have one package with the most basic classes and helpers available.
-Some of the code is inspired by Laravel, Yii and other frameworks.
+Some of the code is heavily inspired by Laravel, Yii and other frameworks.
 
+_Note: versioning for this package follows http://semver.org/ so there might be changes that breaks backwards compatibility on upgrade to a major version._
 
 ### Code/Convention
 Helpers to convert to studly-case, pascal-case, camel-case, snake-case and kebab-case.
@@ -25,7 +26,7 @@ $data = Convention::kebab($data);
 ```
 
 
-### Config/Config
+### Config
 Basic configuration class/helper which works almost the same way as Laravel.
 - Multiple locations are supported through apps.
 - Configuration files (sections) live in a directory named "config" in the root directory
@@ -63,6 +64,8 @@ $data = Config::get('actor');
 
 ### System/Directory
 Various directory helpers.
+
+A few examples.
 ```php
 // Test if directory exists.
 $exist = Directory::exist('/my/path');
@@ -81,6 +84,7 @@ $entries = Directory::entries('/my/path', '*', true, true, true);
 ### System/File
 Various file helpers (i.e. stub, json, etc.)
 
+A few examples.
 ```php
 // Check if file exists.
 $exist = File::exist($filename);
@@ -208,6 +212,7 @@ $firstnames = Arr::pluck($actors, 'firstname');
 ### Collection
 Helper for manipulation of elements (collections).
 
+A few examples.
 ```php
 // Update each element in collection.
 $collection = new Collection($actors);
