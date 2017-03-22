@@ -37,9 +37,9 @@ class PathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get package current.
+     * Test package current.
      */
-    public function testGetPackageCurrent()
+    public function testPackageCurrent()
     {
         $this->assertEquals(
             $this->rootDirectory . '/vendor/' . $this->currentVendor . '/' . $this->currentPackage,
@@ -48,9 +48,9 @@ class PathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get package.
+     * Test package.
      */
-    public function testGetPackage()
+    public function testPackage()
     {
         $this->assertEquals(
             $this->rootDirectory . '/vendor/test1/test2',
@@ -59,17 +59,17 @@ class PathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get vendor name.
+     * Test vendor name.
      */
-    public function testGetVendorName()
+    public function testVendorName()
     {
         $this->assertEquals($this->currentVendor, Path::vendorName());
     }
 
     /**
-     * Test get package name.
+     * Test package name.
      */
-    public function testGetPackageName()
+    public function testPackageName()
     {
         $this->assertEquals($this->currentPackage, Path::packageName());
     }

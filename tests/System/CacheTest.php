@@ -60,37 +60,71 @@ class CacheTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test lifetime.
+     * Test lifetime not set.
      */
-    public function testLifetime()
+    public function testLifetimeNotSet()
     {
-        // Test lifetime not set.
         $this->assertEquals(0, Cache::lifetime());
+    }
 
-        // Test lifetime set with seconds.
+    /**
+     * Test lifetime set with seconds.
+     */
+    public function testLifetimeSetWithSeconds()
+    {
         Cache::lifetime(4);
         $this->assertEquals(4, Cache::lifetime());
+    }
 
-        // Test lifetime set with minutes.
+    /**
+     * Test lifetime set with minutes.
+     */
+    public function testLifetimeSetWithMinutes()
+    {
         Cache::lifetime('4m');
         $this->assertEquals(240, Cache::lifetime());
+    }
 
-        // Test lifetime set with hours.
+    /**
+     * Test lifetime set with hours.
+     */
+    public function testLifetimeSetWithHours()
+    {
         Cache::lifetime('4h');
         $this->assertEquals(14400, Cache::lifetime());
+    }
 
-        // Test lifetime not set (store 'test').
+    /**
+     * Test lifetime not set (store 'test').
+     */
+    public function testLifetimeNotSetStoreTest()
+    {
         $this->assertEquals(0, Cache::lifetime(null, 'test'));
+    }
 
-        // Test lifetime set with seconds (store 'test').
+    /**
+     * Test lifetime set with seconds (store 'test').
+     */
+    public function testLifetimeSetWithSecondsStoreTest()
+    {
         Cache::lifetime(4, 'test');
         $this->assertEquals(4, Cache::lifetime(null, 'test'));
+    }
 
-        // Test lifetime set with minutes (store 'test').
+    /**
+     * Test lifetime set with minutes (store 'test').
+     */
+    public function testLifetimeSetWithMinutesStoreTest()
+    {
         Cache::lifetime('4m', 'test');
         $this->assertEquals(240, Cache::lifetime(null, 'test'));
+    }
 
-        // Test lifetime set with hours (store 'test').
+    /**
+     * Test lifetime set with hours (store 'test').
+     */
+    public function testLifetimeSetWithHoursStoreTest()
+    {
         Cache::lifetime('4h', 'test');
         $this->assertEquals(14400, Cache::lifetime(null, 'test'));
     }

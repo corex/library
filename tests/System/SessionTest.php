@@ -36,45 +36,66 @@ class SessionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test set.
+     * Test set/get integer.
      */
-    public function testSet()
+    public function testSetGetInteger()
     {
-        // Test integer.
         Session::set('test', 4);
         $this->assertTrue(is_int(Session::get('test')));
-
-        // Test string.
-        Session::set('test', 'test');
-        $this->assertTrue(is_string(Session::get('test')));
-
-        // Test array.
-        Session::set('test', ['test']);
-        $this->assertTrue(is_array(Session::get('test')));
-
-        // Test boolean.
-        Session::set('test', false);
-        $this->assertTrue(is_bool(Session::get('test')));
-
-        // Test float.
-        Session::set('test', 10.4);
-        $this->assertTrue(is_float(Session::get('test')));
-
-        // Test object.
-        Session::set('test', new stdClass());
-        $this->assertTrue(is_object(Session::get('test')));
-
-        // Test null.
-        Session::set('test', null);
-        $this->assertNull(Session::get('test', 'test'));
     }
 
     /**
-     * Test get.
+     * Test set/get string.
      */
-    public function testGet()
+    public function testSetGetString()
     {
-        $this->testSet();
+        Session::set('test', 'test');
+        $this->assertTrue(is_string(Session::get('test')));
+    }
+
+    /**
+     * Test set/get array.
+     */
+    public function testSetGetArray()
+    {
+        Session::set('test', ['test']);
+        $this->assertTrue(is_array(Session::get('test')));
+    }
+
+    /**
+     * Test set/get boolean.
+     */
+    public function testSetGetBoolean()
+    {
+        Session::set('test', false);
+        $this->assertTrue(is_bool(Session::get('test')));
+    }
+
+    /**
+     * Test set/get float.
+     */
+    public function testSetGetFloat()
+    {
+        Session::set('test', 10.4);
+        $this->assertTrue(is_float(Session::get('test')));
+    }
+
+    /**
+     * Test set/get object.
+     */
+    public function testSetGetObject()
+    {
+        Session::set('test', new stdClass());
+        $this->assertTrue(is_object(Session::get('test')));
+    }
+
+    /**
+     * Test set/get null.
+     */
+    public function testSetGetNull()
+    {
+        Session::set('test', null);
+        $this->assertNull(Session::get('test', 'test'));
     }
 
     /**
@@ -140,45 +161,66 @@ class SessionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test page set.
+     * Test page set/get integer.
      */
-    public function testPageSet()
+    public function testPageSetGetInteger()
     {
-        // Test integer.
         Session::pageSet('test', 4, $this->namespace1);
         $this->assertTrue(is_int(Session::pageGet('test', null, $this->namespace1)));
-
-        // Test string.
-        Session::pageSet('test', 'test', $this->namespace1);
-        $this->assertTrue(is_string(Session::pageGet('test', null, $this->namespace1)));
-
-        // Test array.
-        Session::pageSet('test', ['test'], $this->namespace1);
-        $this->assertTrue(is_array(Session::pageGet('test', null, $this->namespace1)));
-
-        // Test boolean.
-        Session::pageSet('test', false, $this->namespace1);
-        $this->assertTrue(is_bool(Session::pageGet('test', null, $this->namespace1)));
-
-        // Test float.
-        Session::pageSet('test', 10.4, $this->namespace1);
-        $this->assertTrue(is_float(Session::pageGet('test', null, $this->namespace1)));
-
-        // Test object.
-        Session::pageSet('test', new stdClass(), $this->namespace1);
-        $this->assertTrue(is_object(Session::pageGet('test', null, $this->namespace1)));
-
-        // Test null.
-        Session::pageSet('test', null, $this->namespace1);
-        $this->assertNull(Session::pageGet('test', 'test', $this->namespace1));
     }
 
     /**
-     * Test page get.
+     * Test page set/get string.
      */
-    public function testPageGet()
+    public function testPageSetGetString()
     {
-        $this->testPageSet();
+        Session::pageSet('test', 'test', $this->namespace1);
+        $this->assertTrue(is_string(Session::pageGet('test', null, $this->namespace1)));
+    }
+
+    /**
+     * Test page set/get array.
+     */
+    public function testPageSetGetArray()
+    {
+        Session::pageSet('test', ['test'], $this->namespace1);
+        $this->assertTrue(is_array(Session::pageGet('test', null, $this->namespace1)));
+    }
+
+    /**
+     * Test page set/get boolean.
+     */
+    public function testPageSetGetBoolean()
+    {
+        Session::pageSet('test', false, $this->namespace1);
+        $this->assertTrue(is_bool(Session::pageGet('test', null, $this->namespace1)));
+    }
+
+    /**
+     * Test page set/get float.
+     */
+    public function testPageSetGetFloat()
+    {
+        Session::pageSet('test', 10.4, $this->namespace1);
+        $this->assertTrue(is_float(Session::pageGet('test', null, $this->namespace1)));
+    }
+
+    /**
+     * Test page set/get object.
+     */
+    public function testPageSetGetObject()
+    {
+        Session::pageSet('test', new stdClass(), $this->namespace1);
+        $this->assertTrue(is_object(Session::pageGet('test', null, $this->namespace1)));
+    }
+
+    /**
+     * Test page set/get null.
+     */
+    public function testPageSetGetNull()
+    {
+        Session::pageSet('test', null, $this->namespace1);
+        $this->assertNull(Session::pageGet('test', 'test', $this->namespace1));
     }
 
     /**

@@ -92,23 +92,41 @@ class ArrTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test index of.
+     * Test index of simple.
      */
-    public function testIndexOf()
+    public function testIndexOfSimple()
     {
         // Test simple array.
         $data = ['test1', 'test2', 'test3'];
         $this->assertEquals(1, Arr::indexOf($data, 'test2'));
+    }
 
+    /**
+     * Test index of simple associative.
+     */
+    public function testIndexOfSimpleAssociative()
+    {
         // Test simple array with associative item.
         $data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
         $this->assertEquals(1, Arr::indexOf($data, $this->actor2['firstname'], 'firstname'));
+    }
 
-        // Test aasociative array.
+    /**
+     * Test index of associative.
+     */
+    public function testIndexOfAssociative()
+    {
+        // Test associative array.
         $data = ['test1' => 'test1', 'test2' => 'test2', 'test3' => 'test3'];
         $this->assertEquals('test2', Arr::indexOf($data, 'test2'));
+    }
 
-        // Test aasociative array with associative item.
+    /**
+     * Test index of associative associative.
+     */
+    public function testIndexOfAssociativeAssociative()
+    {
+        // Test associative array with associative item.
         $data = [
             'actor1' => $this->actor1,
             'actor2' => $this->actor2,
@@ -150,17 +168,22 @@ class ArrTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test pluck.
+     * Test pluck simple associative.
      */
-    public function testPluck()
+    public function testPluckSimpleAssociative()
     {
-        $checkData = [$this->actor1['firstname'], $this->actor2['firstname']];
-
         // Test simple array with associative item.
+        $checkData = [$this->actor1['firstname'], $this->actor2['firstname']];
         $data = [$this->actor1, $this->actor2];
         $this->assertEquals($checkData, Arr::pluck($data, 'firstname'));
+    }
 
-        // Test aasociative array.
+    /**
+     * Test pluck simple associative.
+     */
+    public function testPluckAssociative()
+    {
+        // Test associative array.
         $data = ['test1' => 'test1', 'test2' => 'test2', 'test3' => 'test3'];
         $this->assertEquals([null, null, null], Arr::pluck($data, 'test2'));
     }

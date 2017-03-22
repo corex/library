@@ -63,22 +63,29 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get object.
+     * Test get object class exist.
      */
-    public function testGetObject()
+    public function testGetObjectClassExist()
     {
         $path = $this->getUniquePath();
         Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
         require_once(__DIR__ . '/Helpers/ConfigObjectHelper.php');
-
-        // Test when class exists.
         $this->assertEquals(
             new ConfigObjectHelper(['actor' => $this->actor1]),
             Config::getObject('test1', ConfigObjectHelper::class)
         );
+    }
 
-        // Test when class does not exists.
+    /**
+     * Test get object class missing.
+     */
+    public function testGetObjectClassMissing()
+    {
+        $path = $this->getUniquePath();
+        Config::registerApp($path);
+        $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
+        require_once(__DIR__ . '/Helpers/ConfigObjectHelper.php');
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Class test does not exist.');
         Config::getObject('test1', 'test');

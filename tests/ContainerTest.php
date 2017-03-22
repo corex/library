@@ -36,45 +36,57 @@ class ContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test constructor.
+     * Test constructor no data.
      */
-    public function testConstructor()
+    public function testConstructorNoData()
     {
-        // Check no data.
         $container = new Container();
         $this->assertEquals([], $container->toArray());
+    }
 
-        // Check with data.
+    /**
+     * Test constructor with data.
+     */
+    public function testConstructorWithData()
+    {
         $container = new Container($this->data);
         $this->assertEquals($this->data, $container->toArray());
     }
 
     /**
-     * Test clear.
+     * Test clear no data.
      */
-    public function testClear()
+    public function testClearNoData()
     {
         $container = new Container();
-
-        // Check no data.
         $this->assertEquals([], $container->toArray());
+    }
 
-        // Check with data.
+    /**
+     * Test clear with data.
+     */
+    public function testClearWithData()
+    {
+        $container = new Container();
         $container->clear($this->data);
         $this->assertEquals($this->data, $container->toArray());
     }
 
     /**
-     * Test exist.
+     * Test exist no data.
      */
-    public function testExist()
+    public function testExistNoData()
     {
         $container = new Container();
-
-        // Create container with no data.
         $this->assertFalse($container->exist('actor.firstname'));
+    }
 
-        // Create container with data.
+    /**
+     * Test exist with data.
+     */
+    public function testExistWithData()
+    {
+        $container = new Container();
         $container->clear($this->data);
         $this->assertTrue($container->exist('actor.firstname'));
     }

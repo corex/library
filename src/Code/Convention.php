@@ -3,23 +3,10 @@ namespace CoRex\Support\Code;
 
 class Convention
 {
-    const STUDLY = "studly";
     const PASCAL = "pascal";
     const CAMEL = "camel";
     const SNAKE = "snake";
     const KEBAB = "kebab";
-
-    /**
-     * Studly case.
-     *
-     * @param string $value
-     * @return string
-     */
-    public static function studly($value)
-    {
-        $value = ucwords(str_replace(['-', '_'], ' ', $value));
-        return str_replace(' ', '', $value);
-    }
 
     /**
      * Pascal case.
@@ -29,7 +16,8 @@ class Convention
      */
     public static function pascal($value)
     {
-        return static::studly($value);
+        $value = ucwords(str_replace(['-', '_'], ' ', $value));
+        return str_replace(' ', '', $value);
     }
 
     /**
@@ -40,7 +28,7 @@ class Convention
      */
     public static function camel($value)
     {
-        return lcfirst(static::studly($value));
+        return lcfirst(static::pascal($value));
     }
 
     /**
@@ -77,11 +65,11 @@ class Convention
      * Convert key case Recursively, using the method defined.
      *
      * @param array $array
-     * @param string $method The Convention method to execute. Default studly().
+     * @param string $method The Convention method to execute. Default pascal().
      * @param string $separator Default '_'.
      * @return array
      */
-    public static function convertArrayKeysRecursively(array $array, $method = self::STUDLY, $separator = '_')
+    public static function convertArrayKeysRecursively(array $array, $method = self::PASCAL, $separator = '_')
     {
         $return = [];
         foreach ($array as $key => $value) {
