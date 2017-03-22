@@ -23,39 +23,62 @@ $data = Convention::kebab($data);
 ```
 
 
-### Config
-Basic configuration class/helper which works almost the same way as Laravel.
-- Multiple locations are supported through apps.
-- Configuration files (sections) live in a directory named "config" in the root directory
-of your project. It is possible to change this path via registerApp().
+### System/Cache
+Cache.
 
-Generel usage.
+A few examples.
 ```php
-// Register path for myApp.
-Config::registerApp('/my/app/path', 'myApp');
+// Generate key based on string + array.
+$key = Cache::key('test', ['param1' => 'Something']);
 
-// Get firstname of actor from global access.
-$firstname = Config::get('actor.firstname');
+// Set path for cache stores.
+Cache::path('/path/cache/stores');
 
-// Get firstname of actor from myApp.
-$firstname = Config::get('actor.firstname', null, 'myApp');
+// Set lifetime for cache in seconds.
+Cache::lifetime(600);
+
+// Set lifetime for cache in minutes.
+Cache::lifetime('60m');
+
+// Set lifetime for cache in hours.
+Cache::lifetime('1h');
+
+// Get from cache from 'custom-store'.
+$data = Cache::get('test', 'default.value', 'custom-store');
+
+// Put data in cache to 'custom-store'.
+Cache::put('test', 'data', 'custom-store');
+
+// Flush cache 'custom-store'.
+Cache::flush('custom-store');
 ```
 
-Getting configuration as object.
-```php
-$myObject = Config::getObject('actor', MyObject::class);
-```
 
-Getting configuration parsed on closure.
-```php
-$data = Config::getClosure('actor', function ($data) {
-    return $data;
-});
-```
+### System/Console
+Various console helpers.
 
-Getting section.
+A few examples.
 ```php
-$data = Config::get('actor');
+// Writeln text.
+Console::writeln('this is a test');
+
+// Writeln texts.
+Console::writeln(['this is a test', 'this is line 2']);
+
+// Show header.
+Console::header('this is a test');
+
+// Ask question.
+$answer = Console::ask('Enter name');
+
+// Enter password.
+$password = Console::secret('Enter password');
+
+// Show table.
+Console::table($items, ['Header 1', 'Header 2']);
+
+// Throw error (exception).
+Console::throwError('this is an error');
 ```
 
 
@@ -230,6 +253,42 @@ foreach ($collection => $actor) {
 // Get last element.
 $collection = new Collection($actors);
 $lastElement = $collection->last();
+```
+
+
+### Config
+Basic configuration class/helper which works almost the same way as Laravel.
+- Multiple locations are supported through apps.
+- Configuration files (sections) live in a directory named "config" in the root directory
+of your project. It is possible to change this path via registerApp().
+
+Generel usage.
+```php
+// Register path for myApp.
+Config::registerApp('/my/app/path', 'myApp');
+
+// Get firstname of actor from global access.
+$firstname = Config::get('actor.firstname');
+
+// Get firstname of actor from myApp.
+$firstname = Config::get('actor.firstname', null, 'myApp');
+```
+
+Getting configuration as object.
+```php
+$myObject = Config::getObject('actor', MyObject::class);
+```
+
+Getting configuration parsed on closure.
+```php
+$data = Config::getClosure('actor', function ($data) {
+    return $data;
+});
+```
+
+Getting section.
+```php
+$data = Config::get('actor');
 ```
 
 
