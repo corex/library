@@ -1,6 +1,8 @@
 <?php
 
-class PropertiesHelper extends \CoRex\Support\Properties
+use CoRex\Support\Properties;
+
+class PropertiesHelper extends Properties
 {
     private $privateValue;
     protected $protectedValue;

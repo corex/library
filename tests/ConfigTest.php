@@ -171,7 +171,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      * @param array $data
      * @return string
      */
-    private function prepareConfigFiles($path, $appName, $data)
+    private function prepareConfigFiles($path, $appName, array $data)
     {
         $filename = $path . '/' . $appName . '.php';
         $varExport = "<" . "?php\nreturn " . var_export($data, true) . ";\n";
