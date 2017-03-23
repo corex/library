@@ -2,8 +2,9 @@
 
 use CoRex\Support\Str;
 use CoRex\Support\System\Input;
+use PHPUnit\Framework\TestCase;
 
-class InputTest extends PHPUnit_Framework_TestCase
+class InputTest extends TestCase
 {
     const HTTP_HOST = 'test.host';
     const REQUEST_METHOD = 'PaTcH';
@@ -259,7 +260,7 @@ class InputTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBody()
     {
-        // Not testable.
+        $this->assertTrue(true, 'Not possible to test.');
     }
 
     /**

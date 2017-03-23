@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\Str;
+use PHPUnit\Framework\TestCase;
 
-class StrTest extends PHPUnit_Framework_TestCase
+class StrTest extends TestCase
 {
     private $stringLeft = 'æøå';
     private $stringRight = 'ÆØÅ';

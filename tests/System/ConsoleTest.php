@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\System\Console;
+use PHPUnit\Framework\TestCase;
 
-class ConsoleTest extends PHPUnit_Framework_TestCase
+class ConsoleTest extends TestCase
 {
     /**
      * Setup.

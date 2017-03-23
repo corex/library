@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\Code\Convention;
+use PHPUnit\Framework\TestCase;
 
-class ConventionTest extends PHPUnit_Framework_TestCase
+class ConventionTest extends TestCase
 {
     private $pascalCase = 'TestClass';
     private $camelCase = 'testClass';

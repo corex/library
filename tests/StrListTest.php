@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\StrList;
+use PHPUnit\Framework\TestCase;
 
-class StrListTest extends PHPUnit_Framework_TestCase
+class StrListTest extends TestCase
 {
     private $item1 = 'Item 1';
     private $item2 = 'Item 2';

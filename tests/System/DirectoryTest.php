@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\System\Directory;
+use PHPUnit\Framework\TestCase;
 
-class DirectoryTest extends PHPUnit_Framework_TestCase
+class DirectoryTest extends TestCase
 {
     private $tempDirectory;
     private $filename1;

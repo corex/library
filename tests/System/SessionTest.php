@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\System\Session;
+use PHPUnit\Framework\TestCase;
 
-class SessionTest extends PHPUnit_Framework_TestCase
+class SessionTest extends TestCase
 {
     private $namespace1 = 'Namespace 1';
     private $namespace2 = 'Namespace 2';

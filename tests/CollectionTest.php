@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\Collection;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends PHPUnit_Framework_TestCase
+class CollectionTest extends TestCase
 {
     private $actor1 = ['firstname' => 'Sean', 'lastname' => 'Connery', 'value' => 1];
     private $actor2 = ['firstname' => 'Roger', 'lastname' => 'Moore', 'value' => 2];

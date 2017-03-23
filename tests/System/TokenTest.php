@@ -2,8 +2,9 @@
 
 use CoRex\Support\System\Session;
 use CoRex\Support\System\Token;
+use PHPUnit\Framework\TestCase;
 
-class TokenTest extends PHPUnit_Framework_TestCase
+class TokenTest extends TestCase
 {
     private $test1 = 'test 1';
     private $test2 = 'test 2';

@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\Arr;
+use PHPUnit\Framework\TestCase;
 
-class ArrTest extends PHPUnit_Framework_TestCase
+class ArrTest extends TestCase
 {
     private $actor1 = ['firstname' => 'Sean', 'lastname' => 'Connery'];
     private $actor2 = ['firstname' => 'Roger', 'lastname' => 'Moore'];

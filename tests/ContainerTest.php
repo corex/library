@@ -3,8 +3,9 @@
 use CoRex\Support\Container;
 use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
+use PHPUnit\Framework\TestCase;
 
-class ContainerTest extends PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     private $tempDirectory;
 

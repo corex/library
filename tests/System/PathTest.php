@@ -1,8 +1,9 @@
 <?php
 
 use CoRex\Support\System\Path;
+use PHPUnit\Framework\TestCase;
 
-class PathTest extends PHPUnit_Framework_TestCase
+class PathTest extends TestCase
 {
     private $rootDirectory;
     private $currentVendor;

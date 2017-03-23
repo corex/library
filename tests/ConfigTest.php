@@ -4,14 +4,15 @@ use CoRex\Support\Config;
 use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
 use CoRex\Support\System\Path;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConfigTest
  *
  * Warning: This test will create needed temp-directories/files in
- * sys sys_get_temp_dir() everytime you run it.
+ * sys sys_get_temp_dir() every time you run it.
  */
-class ConfigTest extends PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     private $tempDirectory;
 
