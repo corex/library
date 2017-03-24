@@ -248,7 +248,7 @@ class File
         if (!Str::endsWith($filename, '.json')) {
             $filename .= '.json';
         }
-        $options = 0;
+        $options = JSON_UNESCAPED_SLASHES;
         if ($prettyPrint) {
             $options += JSON_PRETTY_PRINT;
         }
