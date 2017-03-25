@@ -10,16 +10,16 @@ Helpers to convert to pascal-case, camel-case, snake-case and kebab-case.
 
 ```php
 // Convert to pascal case.
-$data = Convention::pascal($data);
+$data = Convention::pascalCase($data);
 
 // Convert to camel case.
-$data = Convention::camel($data);
+$data = Convention::camelCase($data);
 
 // Convert to snake case.
-$data = Convention::snake($data);
+$data = Convention::snakeCase($data);
 
 // Convert to kebab case.
-$data = Convention::kebab($data);
+$data = Convention::kebabCase($data);
 ```
 
 
