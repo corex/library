@@ -295,4 +295,36 @@ class StrTest extends TestCase
         $this->assertEquals('test', substr($uniqueSuffix1, -4));
         $this->assertEquals('test', substr($uniqueSuffix2, -4));
     }
+
+    /**
+     * Test explode standard.
+     */
+    public function testExplodeStandard()
+    {
+        $string = "item1|item2|item3|item4";
+        $stringResult = ['item1', 'item2', 'item3', 'item4'];
+        $this->assertEquals($stringResult, Str::explode('|', $string));
+    }
+
+    /**
+     * Test explode file string with cr.
+     */
+    public function testExplodeFileStringWithCR()
+    {
+        $string = "item1\r\nitem2\r\nitem3\r\nitem4";
+        $stringResult = ['item1', 'item2', 'item3', 'item4'];
+        $this->assertEquals($stringResult, Str::explode("\n", $string));
+    }
+
+    /**
+     * Test explode with callable.
+     */
+    public function testExplodeWithCallable()
+    {
+        $string = "item1|item2|item3|item4";
+        $stringResult = ['{item1}', '{item2}', '{item3}', '{item4}'];
+        $this->assertEquals($stringResult, Str::explode('|', $string, function ($line) {
+            return '{' . $line . '}';
+        }));
+    }
 }

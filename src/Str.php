@@ -1,4 +1,5 @@
 <?php
+
 namespace CoRex\Support;
 
 class Str
@@ -417,5 +418,27 @@ class Str
             $unique .= $suffix;
         }
         return $unique;
+    }
+
+    /**
+     * Explode string into items.
+     *
+     * @param string $separator If "\n", "\r", will be removed before explode.
+     * @param string $content
+     * @param callable $lineFunction
+     * @return array
+     */
+    public static function explode($separator, $content, callable $lineFunction = null)
+    {
+        if ($separator == "\n") {
+            $content = str_replace("\r", '', $content);
+        }
+        $lines = explode($separator, $content);
+        if (is_callable($lineFunction)) {
+            foreach ($lines as $index => $line) {
+                $lines[$index] = $lineFunction($line);
+            }
+        }
+        return $lines;
     }
 }
