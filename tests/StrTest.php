@@ -327,4 +327,26 @@ class StrTest extends TestCase
             return '{' . $line . '}';
         }));
     }
+
+    /**
+     * Test implode standard.
+     */
+    public function testImplodeStandard()
+    {
+        $items = ['item1', 'item2', 'item3', 'item4'];
+        $itemsResult = "item1|item2|item3|item4";
+        $this->assertEquals($itemsResult, Str::implode('|', $items));
+    }
+
+    /**
+     * Test implode with callable.
+     */
+    public function testImplodeWithCallable()
+    {
+        $items = ['item1', 'item2', 'item3', 'item4'];
+        $itemsResult = "{item1}|{item2}|{item3}|{item4}";
+        $this->assertEquals($itemsResult, Str::implode('|', $items, function ($line) {
+            return '{' . $line . '}';
+        }));
+    }
 }

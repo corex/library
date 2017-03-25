@@ -425,20 +425,38 @@ class Str
      *
      * @param string $separator If "\n", "\r", will be removed before explode.
      * @param string $content
-     * @param callable $lineFunction
+     * @param callable $itemFunction
      * @return array
      */
-    public static function explode($separator, $content, callable $lineFunction = null)
+    public static function explode($separator, $content, callable $itemFunction = null)
     {
         if ($separator == "\n") {
             $content = str_replace("\r", '', $content);
         }
-        $lines = explode($separator, $content);
-        if (is_callable($lineFunction)) {
-            foreach ($lines as $index => $line) {
-                $lines[$index] = $lineFunction($line);
+        $items = explode($separator, $content);
+        if (is_callable($itemFunction)) {
+            foreach ($items as $index => $item) {
+                $items[$index] = $itemFunction($item);
             }
         }
-        return $lines;
+        return $items;
+    }
+
+    /**
+     * Implode items into string.
+     *
+     * @param string $separator
+     * @param array $items
+     * @param callable $itemFunction
+     * @return string
+     */
+    public static function implode($separator, array $items, callable $itemFunction = null)
+    {
+        if (is_callable($itemFunction)) {
+            foreach ($items as $index => $item) {
+                $items[$index] = $itemFunction($item);
+            }
+        }
+        return implode($separator, $items);
     }
 }
