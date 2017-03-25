@@ -82,7 +82,7 @@ class TemplateTest extends TestCase
      */
     public function testLoadTemplate()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         file_put_contents($this->tempFilename . '.tpl', $content);
         $template = new Template($this->tempDirectory);
         $this->assertTrue($template->loadTemplate(basename($this->tempFilename)));
@@ -94,7 +94,7 @@ class TemplateTest extends TestCase
      */
     public function testSetTemplate()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         $template = new Template($this->tempDirectory);
         $template->setTemplate($content);
         $this->assertEquals('|', $template->render());
@@ -105,7 +105,7 @@ class TemplateTest extends TestCase
      */
     public function testRender()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         $template = new Template($this->tempDirectory);
         $template->setTemplate($content);
         $template->setToken('token1', 'test1');
@@ -126,7 +126,7 @@ class TemplateTest extends TestCase
      */
     public function testSetTokens()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         $template = new Template($this->tempDirectory);
         $template->setTemplate($content);
         $template->setTokens([
@@ -141,7 +141,7 @@ class TemplateTest extends TestCase
      */
     public function testSetTokenValuesNoSeparator()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         $template = new Template($this->tempDirectory);
         $template->setTemplate($content);
         $template->setTokenValues('token1', ['test1', 'test2']);
@@ -154,7 +154,7 @@ class TemplateTest extends TestCase
      */
     public function testSetTokenValuesSeparator()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         $template = new Template($this->tempDirectory);
         $template->setTemplate($content);
         $template->setTokenValues('token1', ['test1', 'test2'], '|');
@@ -167,7 +167,7 @@ class TemplateTest extends TestCase
      */
     public function testSetTokenValuesPrefixSuffix()
     {
-        $content = '{token1}|{token2}';
+        $content = '{{token1}}|{{token2}}';
         $template = new Template($this->tempDirectory);
         $template->setTemplate($content);
         $template->setTokenValues('token1', ['test1', 'test2'], '', '[', ']');

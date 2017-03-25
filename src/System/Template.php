@@ -10,15 +10,25 @@ class Template
     private $template;
     private $content;
     private $tokens;
+    private $tokenPrefix = '{{';
+    private $tokenSuffix = '}}';
 
     /**
      * Template constructor.
      *
      * @param string $path
+     * @param string $tokenPrefix Default '' which means standard.
+     * @param string $tokenSuffix Default '' which means standard.
      */
-    public function __construct($path)
+    public function __construct($path, $tokenPrefix = '', $tokenSuffix = '')
     {
         $this->path = $path;
+        if ($tokenPrefix !== null && $tokenPrefix != '') {
+            $this->tokenPrefix = $tokenPrefix;
+        }
+        if ($tokenSuffix !== null && $tokenSuffix != '') {
+            $this->tokenSuffix = $tokenSuffix;
+        }
         $this->clear();
     }
 
@@ -70,13 +80,13 @@ class Template
 
         if (count($this->tokens) > 0) {
             foreach ($this->tokens as $token => $value) {
-                $content = str_replace('{' . $token . '}', $value, $content);
+                $content = str_replace($this->tokenPrefix . $token . $this->tokenSuffix, $value, $content);
             }
         }
 
         // Remove empty tokens.
         if ($removeEmptyTokens) {
-            $regex = "/{(.*?)}/";
+            $regex = "/" . $this->tokenPrefix . "(.*?)" . $this->tokenSuffix . "/";
             $matchesCount = intval(preg_match_all($regex, $content, $matches));
             if ($matchesCount > 0) {
                 $matches = $matches[0];
