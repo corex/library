@@ -184,6 +184,7 @@ $package = Path::packageName();
 $package = Path::vendorName();
 ```
 
+
 ### System/Session
 Session handler.
 
@@ -200,6 +201,26 @@ if (!Session::has('actor')) {
 }
 ```
 
+
+### System/Template
+Template.
+
+A few examples.
+```php
+// Load a template and render.
+$template = new Template($path/to/templates);
+$template->loadTemplate('welcome');
+$template->setToken('title', 'Welcome');
+print($template->render());
+
+// Set a template and render.
+$template = new Template($path/to/templates);
+$template->setTemplate('{title}');
+$template->setToken('title', 'Welcome');
+print($template->render());
+```
+
+
 ### System/Token
 Token handler (uses Session handler).
 
@@ -212,6 +233,7 @@ $csrfToken = Token::create('csrf');
 if (!Token::isValid($csrfToken)) {
 }
 ```
+
 
 ### Arr
 Various array helpers.
