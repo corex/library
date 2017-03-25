@@ -18,14 +18,22 @@ class ConventionTest extends TestCase
     public function testPascal()
     {
         // Standard.
-        $this->assertEquals($this->pascalCase, Convention::pascal($this->pascalCase), 'CASE: pascal > pascal');
-        $this->assertEquals($this->pascalCase, Convention::pascal($this->camelCase), 'CASE: camel > pascal');
-        $this->assertEquals($this->pascalCase, Convention::pascal($this->snakeCase), 'CASE: snake > pascal');
-        $this->assertEquals($this->pascalCase, Convention::pascal($this->kebabCase), 'CASE: kebab > pascal');
+        $this->assertEquals($this->pascalCase, Convention::pascalCase($this->pascalCase), 'CASE: pascal > pascal');
+        $this->assertEquals($this->pascalCase, Convention::pascalCase($this->camelCase), 'CASE: camel > pascal');
+        $this->assertEquals($this->pascalCase, Convention::pascalCase($this->snakeCase), 'CASE: snake > pascal');
+        $this->assertEquals($this->pascalCase, Convention::pascalCase($this->kebabCase), 'CASE: kebab > pascal');
 
         // Id.
-        $this->assertEquals($this->idPascalCase, Convention::pascal($this->idCamelCase), 'CASE: id camel > pascal');
-        $this->assertEquals($this->idPascalCase, Convention::pascal($this->idPascalCase), 'CASE: id pascal > pascal');
+        $this->assertEquals(
+            $this->idPascalCase,
+            Convention::pascalCase($this->idCamelCase),
+            'CASE: id camel > pascal'
+        );
+        $this->assertEquals(
+            $this->idPascalCase,
+            Convention::pascalCase($this->idPascalCase),
+            'CASE: id pascal > pascal'
+        );
     }
 
     /**
@@ -34,14 +42,22 @@ class ConventionTest extends TestCase
     public function testGetCamel()
     {
         // Standard.
-        $this->assertEquals($this->camelCase, Convention::camel($this->pascalCase), 'CASE: pascal > camel');
-        $this->assertEquals($this->camelCase, Convention::camel($this->camelCase), 'CASE: camel > camel');
-        $this->assertEquals($this->camelCase, Convention::camel($this->snakeCase), 'CASE: snake > camel');
-        $this->assertEquals($this->camelCase, Convention::camel($this->kebabCase), 'CASE: kebab > camel');
+        $this->assertEquals($this->camelCase, Convention::camelCase($this->pascalCase), 'CASE: pascal > camel');
+        $this->assertEquals($this->camelCase, Convention::camelCase($this->camelCase), 'CASE: camel > camel');
+        $this->assertEquals($this->camelCase, Convention::camelCase($this->snakeCase), 'CASE: snake > camel');
+        $this->assertEquals($this->camelCase, Convention::camelCase($this->kebabCase), 'CASE: kebab > camel');
 
         // Id.
-        $this->assertEquals($this->idCamelCase, Convention::camel($this->idCamelCase), 'CASE: id camel > camel');
-        $this->assertEquals($this->idCamelCase, Convention::camel($this->idPascalCase), 'CASE: pascal > camel');
+        $this->assertEquals(
+            $this->idCamelCase,
+            Convention::camelCase($this->idCamelCase),
+            'CASE: id camel > camel'
+        );
+        $this->assertEquals(
+            $this->idCamelCase,
+            Convention::camelCase($this->idPascalCase),
+            'CASE: pascal > camel'
+        );
     }
 
     /**
@@ -50,14 +66,22 @@ class ConventionTest extends TestCase
     public function testGetSnake()
     {
         // Standard.
-        $this->assertEquals($this->snakeCase, Convention::snake($this->pascalCase), 'CASE: pascal > snake');
-        $this->assertEquals($this->snakeCase, Convention::snake($this->camelCase), 'CASE: camel > snake');
-        $this->assertEquals($this->snakeCase, Convention::snake($this->snakeCase), 'CASE: snake > snake');
-        $this->assertEquals($this->snakeCase, Convention::snake($this->kebabCase), 'CASE: kebab > snake');
+        $this->assertEquals($this->snakeCase, Convention::snakeCase($this->pascalCase), 'CASE: pascal > snake');
+        $this->assertEquals($this->snakeCase, Convention::snakeCase($this->camelCase), 'CASE: camel > snake');
+        $this->assertEquals($this->snakeCase, Convention::snakeCase($this->snakeCase), 'CASE: snake > snake');
+        $this->assertEquals($this->snakeCase, Convention::snakeCase($this->kebabCase), 'CASE: kebab > snake');
 
         // Id.
-        $this->assertEquals($this->idCamelCase, Convention::snake($this->idCamelCase), 'CASE: id camel > snake');
-        $this->assertEquals($this->idCamelCase, Convention::snake($this->idPascalCase), 'CASE: id pascal > snake');
+        $this->assertEquals(
+            $this->idCamelCase,
+            Convention::snakeCase($this->idCamelCase),
+            'CASE: id camel > snake'
+        );
+        $this->assertEquals(
+            $this->idCamelCase,
+            Convention::snakeCase($this->idPascalCase),
+            'CASE: id pascal > snake'
+        );
     }
 
     /**
@@ -66,14 +90,22 @@ class ConventionTest extends TestCase
     public function testGetKebab()
     {
         // Standard.
-        $this->assertEquals($this->kebabCase, Convention::kebab($this->pascalCase), 'CASE: pascal > kebab');
-        $this->assertEquals($this->kebabCase, Convention::kebab($this->camelCase), 'CASE: camel > kebab');
-        $this->assertEquals($this->kebabCase, Convention::kebab($this->snakeCase), 'CASE: snake > kebab');
-        $this->assertEquals($this->kebabCase, Convention::kebab($this->kebabCase), 'CASE: kebab > kebab');
+        $this->assertEquals($this->kebabCase, Convention::kebabCase($this->pascalCase), 'CASE: pascal > kebab');
+        $this->assertEquals($this->kebabCase, Convention::kebabCase($this->camelCase), 'CASE: camel > kebab');
+        $this->assertEquals($this->kebabCase, Convention::kebabCase($this->snakeCase), 'CASE: snake > kebab');
+        $this->assertEquals($this->kebabCase, Convention::kebabCase($this->kebabCase), 'CASE: kebab > kebab');
 
         // Id.
-        $this->assertEquals($this->idCamelCase, Convention::kebab($this->idCamelCase), 'CASE: id camel > kebab');
-        $this->assertEquals($this->idCamelCase, Convention::kebab($this->idPascalCase), 'CASE: id pascal > kebab');
+        $this->assertEquals(
+            $this->idCamelCase,
+            Convention::kebabCase($this->idCamelCase),
+            'CASE: id camel > kebab'
+        );
+        $this->assertEquals(
+            $this->idCamelCase,
+            Convention::kebabCase($this->idPascalCase),
+            'CASE: id pascal > kebab'
+        );
     }
 
     /**
