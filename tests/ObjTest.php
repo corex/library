@@ -19,7 +19,7 @@ class ObjTest extends TestCase
     {
         require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $objHelperObject = new ObjHelperObject();
-        $properties = Obj::getPrivatePropertiesFromObject($objHelperObject);
+        $properties = Obj::getPropertiesFromObject($objHelperObject, '', Obj::PROPERTY_PRIVATE);
         $this->assertEquals($this->checkProperties, $properties);
     }
 
@@ -29,7 +29,7 @@ class ObjTest extends TestCase
     public function testGetPrivatePropertiesFromStatic()
     {
         require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
-        $properties = Obj::getPrivatePropertiesFromStatic(ObjHelperStatic::class);
+        $properties = Obj::getPropertiesFromStatic(ObjHelperStatic::class, '', Obj::PROPERTY_PRIVATE);
         $this->assertEquals($this->checkProperties, $properties);
     }
 }
