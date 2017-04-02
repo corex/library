@@ -14,28 +14,28 @@ class Obj
     /**
      * Get private properties from object.
      *
+     * @param integer $propertyType
      * @param object $object
      * @param string $className Default '' which means from object.
-     * @param integer $propertyType Default 0.
      * @return array
      */
-    public static function getPropertiesFromObject($object, $className = '', $propertyType = 0)
+    public static function getPropertiesFromObject($propertyType, $object, $className = '')
     {
         if ($className == '') {
             $className = get_class($object);
         }
-        return self::getPropertiesFromStatic($className, $object, $propertyType);
+        return self::getPropertiesFromStatic($propertyType, $className, $object);
     }
 
     /**
      * Get private properties from static class.
      *
+     * @param integer $propertyType
      * @param string $className
      * @param object $object Default null which means new $className().
-     * @param integer $propertyType Default 0.
      * @return array
      */
-    public static function getPropertiesFromStatic($className, $object = null, $propertyType = 0)
+    public static function getPropertiesFromStatic($propertyType, $className, $object = null)
     {
         $result = [];
         if ($object === null) {
