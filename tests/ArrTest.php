@@ -40,8 +40,8 @@ class ArrTest extends TestCase
     public function testGetFirst()
     {
         $data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
-        $this->assertEquals($this->actor1, Arr::getFirst($data));
-        $this->assertEquals($this->actor1['firstname'], Arr::getFirst($data, 'firstname'));
+        $this->assertEquals($this->actor1, Arr::first($data));
+        $this->assertEquals($this->actor1['firstname'], Arr::first($data, 'firstname'));
     }
 
     /**
@@ -50,8 +50,8 @@ class ArrTest extends TestCase
     public function testGetLast()
     {
         $data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
-        $this->assertEquals($this->actor5, Arr::getLast($data));
-        $this->assertEquals($this->actor5['firstname'], Arr::getLast($data, 'firstname'));
+        $this->assertEquals($this->actor5, Arr::last($data));
+        $this->assertEquals($this->actor5['firstname'], Arr::last($data, 'firstname'));
     }
 
     /**
@@ -61,7 +61,7 @@ class ArrTest extends TestCase
     {
         $data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
         $data = Arr::removeLast($data);
-        $this->assertEquals($this->actor4, Arr::getLast($data));
+        $this->assertEquals($this->actor4, Arr::last($data));
     }
 
     /**
@@ -206,6 +206,6 @@ class ArrTest extends TestCase
             'CoRex\Support\System\Directory',
             'CoRex\Support\System\Template'
         ];
-        $this->assertEquals($linesMatch, Arr::getLineMatch($lines, 'use ', ';', true, true));
+        $this->assertEquals($linesMatch, Arr::lineMatch($lines, 'use ', ';', true, true));
     }
 }

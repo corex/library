@@ -206,7 +206,7 @@ class StrTest extends TestCase
      */
     public function testGetLast()
     {
-        $this->assertEquals($this->part2, Str::getLast($this->part1 . '/' . $this->part2, '/'));
+        $this->assertEquals($this->part2, Str::last($this->part1 . '/' . $this->part2, '/'));
     }
 
     /**
@@ -214,9 +214,9 @@ class StrTest extends TestCase
      */
     public function testGetPart()
     {
-        $this->assertEquals($this->part1, Str::getPart($this->part1 . '/' . $this->part2, '/', 1));
-        $this->assertEquals($this->part2, Str::getPart($this->part1 . '/' . $this->part2, '/', 2));
-        $this->assertEquals('', Str::getPart($this->part1 . '/' . $this->part2, '/', 3));
+        $this->assertEquals($this->part1, Str::part($this->part1 . '/' . $this->part2, '/', 1));
+        $this->assertEquals($this->part2, Str::part($this->part1 . '/' . $this->part2, '/', 2));
+        $this->assertEquals('', Str::part($this->part1 . '/' . $this->part2, '/', 3));
     }
 
     /**
@@ -225,7 +225,7 @@ class StrTest extends TestCase
     public function testGetCsvFields()
     {
         $csv = '"' . $this->part1 . '","' . $this->part2 . '"';
-        $this->assertEquals([$this->part1, $this->part2], Str::getCsvFields($csv));
+        $this->assertEquals([$this->part1, $this->part2], Str::csvFields($csv));
     }
 
     /**

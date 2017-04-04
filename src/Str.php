@@ -298,10 +298,10 @@ class Str
      * @param string $separator
      * @return string
      */
-    public static function getLast($string, $separator)
+    public static function last($string, $separator)
     {
         $string = explode($separator, $string);
-        return Arr::getLast($string);
+        return Arr::last($string);
     }
 
     /**
@@ -312,7 +312,7 @@ class Str
      * @param integer $index
      * @return string
      */
-    public static function getPart($string, $separator, $index)
+    public static function part($string, $separator, $index)
     {
         if ($string != '') {
             $string = explode($separator, $string);
@@ -330,7 +330,7 @@ class Str
      * @param string $delimiter Default ','.
      * @return array
      */
-    public static function getCsvFields($line, $delimiter = ',')
+    public static function csvFields($line, $delimiter = ',')
     {
         if (trim($line) == '') {
             return [];

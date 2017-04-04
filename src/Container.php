@@ -201,6 +201,6 @@ class Container
         if ((string)$path == '') {
             return null;
         }
-        return Str::getLast($path, '.');
+        return Str::last($path, '.');
     }
 }

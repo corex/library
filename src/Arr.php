@@ -14,7 +14,7 @@ class Arr
      */
     public static function get(array $data, $path, $defaultValue = null)
     {
-        $data = self::getDataByPath($data, $path);
+        $data = self::dataByPath($data, $path);
         if ($data === null) {
             $data = $defaultValue;
         }
@@ -28,22 +28,17 @@ class Arr
      * @param string $path Uses dot notation.
      * @param mixed $value
      * @param boolean $create Default false.
-     * @return array|mixed
      */
     public static function set(array &$array, $path, $value, $create = false)
     {
-        if (!is_array($array)) {
-            return $array;
-        }
-
         // Extract key/path.
-        $pathKey = Str::getLast($path, '.');
+        $pathKey = Str::last($path, '.');
         $path = Str::removeLast($path, '.');
 
         // Extract data.
         $pathArray = null;
         if ($path != '' && $path !== null) {
-            $array = &self::getDataByPath($array, $path, $create);
+            $array = &self::dataByPath($array, $path, $create);
         }
         if ($array !== null || $create) {
             $array[$pathKey] = $value;
@@ -57,7 +52,7 @@ class Arr
      * @param string $key Get key from element if array. Default null.
      * @return mixed
      */
-    public static function getFirst(array $data, $key = null)
+    public static function first(array $data, $key = null)
     {
         if (count($data) == 0) {
             return null;
@@ -77,7 +72,7 @@ class Arr
      * @param string $key Get key from element if array. Default null.
      * @return mixed
      */
-    public static function getLast(array $data, $key = null)
+    public static function last(array $data, $key = null)
     {
         if (count($data) == 0) {
             return null;
@@ -248,12 +243,12 @@ class Arr
         }
 
         // Extract key/path.
-        $pathKey = Str::getLast($path, '.');
+        $pathKey = Str::last($path, '.');
         $path = Str::removeLast($path, '.');
 
         // Extract data.
         if ($path != '' && $path !== null) {
-            $array = self::getDataByPath($array, $path);
+            $array = self::dataByPath($array, $path);
         }
         foreach ($array as $item) {
             $value = $defaultValue;
@@ -278,7 +273,7 @@ class Arr
      * @param boolean $removePrefixSuffix Default false.
      * @return array
      */
-    public static function getLineMatch(array $lines, $prefix, $suffix, $doTrim, $removePrefixSuffix = false)
+    public static function lineMatch(array $lines, $prefix, $suffix, $doTrim, $removePrefixSuffix = false)
     {
         $result = [];
         foreach ($lines as $line) {
@@ -317,7 +312,7 @@ class Arr
      * @return mixed
      * @throws \Exception
      */
-    private static function &getDataByPath(array &$data, $path, $create = false, $defaultValue = null)
+    private static function &dataByPath(array &$data, $path, $create = false, $defaultValue = null)
     {
         if ((string)$path == '') {
             return $data;
