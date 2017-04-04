@@ -310,9 +310,10 @@ class Str
      * @param string $string
      * @param string $separator
      * @param integer $index
+     * @param string $defaultValue Default ''.
      * @return string
      */
-    public static function part($string, $separator, $index)
+    public static function part($string, $separator, $index, $defaultValue = '')
     {
         if ($string != '') {
             $string = explode($separator, $string);
@@ -320,7 +321,7 @@ class Str
                 return $string[$index - 1];
             }
         }
-        return '';
+        return $defaultValue;
     }
 
     /**
