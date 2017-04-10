@@ -2,14 +2,14 @@
 
 namespace CoRex\Support;
 
-abstract class Errors
+abstract class Messages
 {
     /**
      * Get all.
      *
      * @return array
      */
-    public static function messages()
+    public static function all()
     {
         $reflectionClass = new \ReflectionClass(get_called_class());
         $constants = $reflectionClass->getConstants();
@@ -30,13 +30,28 @@ abstract class Errors
     }
 
     /**
-     * Get.
+     * Code.
      *
-     * @param string $constant
+     * @param array $constant
+     * @return null
+     */
+    public static function code(array $constant)
+    {
+        $message = self::findMessage($constant);
+        if ($message === null) {
+            return null;
+        }
+        return $message['code'];
+    }
+
+    /**
+     * Message.
+     *
+     * @param array $constant
      * @param array $params Default [].
      * @return string
      */
-    public static function message($constant, array $params = [])
+    public static function text(array $constant, array $params = [])
     {
         $message = self::findMessage($constant);
         if ($message === null) {
@@ -52,21 +67,12 @@ abstract class Errors
     }
 
     /**
-     * Get code.
+     * Status.
      *
-     * @param string $constant
+     * @param array $constant
      * @return null
      */
-    public static function code($constant)
-    {
-        $message = self::findMessage($constant);
-        if ($message === null) {
-            return null;
-        }
-        return $message['code'];
-    }
-
-    public static function status($constant)
+    public static function status(array $constant)
     {
         $message = self::findMessage($constant);
         if ($message === null) {
@@ -75,13 +81,19 @@ abstract class Errors
         return $message['status'];
     }
 
-    private static function findMessage($constant)
+    /**
+     * Find message.
+     *
+     * @param array $constant
+     * @return mixed|null
+     */
+    private static function findMessage(array $constant)
     {
         if (empty($constant[0]) || empty($constant[1])) {
             return null;
         }
         $constantMessage = $constant[1];
-        $messages = self::messages();
+        $messages = self::all();
         foreach ($messages as $message) {
             if ($message['text'] == $constantMessage) {
                 return $message;

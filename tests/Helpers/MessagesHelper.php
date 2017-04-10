@@ -1,8 +1,8 @@
 <?php
 
-use CoRex\Support\Errors;
+use CoRex\Support\Messages;
 
-class ErrorsHelper extends Errors
+class MessagesHelper extends Messages
 {
     // System.
     const SYSTEM_ERROR = [500, 'System error occurred'];

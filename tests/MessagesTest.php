@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class ErrorsTest extends TestCase
+class MessagesTest extends TestCase
 {
     /**
      * Setup.
@@ -10,7 +10,7 @@ class ErrorsTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        require_once(__DIR__ . '/Helpers/ErrorsHelper.php');
+        require_once(__DIR__ . '/Helpers/MessagesHelper.php');
     }
 
     /**
@@ -20,7 +20,7 @@ class ErrorsTest extends TestCase
     {
         $this->assertEquals(
             $this->getMessages(),
-            ErrorsHelper::messages()
+            MessagesHelper::all()
         );
     }
 
@@ -30,7 +30,7 @@ class ErrorsTest extends TestCase
     public function testMessage()
     {
         $messages = $this->getMessages();
-        $message = ErrorsHelper::message(ErrorsHelper::SYSTEM_NOT_FOUND);
+        $message = MessagesHelper::text(MessagesHelper::SYSTEM_NOT_FOUND);
         $this->assertEquals($messages['SYSTEM_NOT_FOUND']['text'], $message);
     }
 
@@ -49,7 +49,7 @@ class ErrorsTest extends TestCase
         $checkMessage = str_replace('{param2}', $check2, $checkMessage);
 
         // Check message.
-        $message = ErrorsHelper::message(ErrorsHelper::SYSTEM_TEST, [
+        $message = MessagesHelper::text(MessagesHelper::SYSTEM_TEST, [
             'param1' => $check1,
             'param2' => $check2
         ]);
@@ -61,8 +61,8 @@ class ErrorsTest extends TestCase
      */
     public function testMessageNotFound()
     {
-        $check = md5(microtime(true));
-        $message = ErrorsHelper::message($check);
+        $check = [123, md5(microtime(true))];
+        $message = MessagesHelper::text($check);
         $this->assertNull($message);
     }
 
@@ -71,7 +71,7 @@ class ErrorsTest extends TestCase
      */
     public function testCode()
     {
-        $this->assertEquals('SYSTEM_NOT_FOUND', ErrorsHelper::code(ErrorsHelper::SYSTEM_NOT_FOUND));
+        $this->assertEquals('SYSTEM_NOT_FOUND', MessagesHelper::code(MessagesHelper::SYSTEM_NOT_FOUND));
     }
 
     /**
@@ -79,7 +79,7 @@ class ErrorsTest extends TestCase
      */
     public function testStatus()
     {
-        $this->assertEquals(404, ErrorsHelper::status(ErrorsHelper::SYSTEM_NOT_FOUND));
+        $this->assertEquals(404, MessagesHelper::status(MessagesHelper::SYSTEM_NOT_FOUND));
     }
 
     /**
@@ -89,7 +89,7 @@ class ErrorsTest extends TestCase
      */
     private function getMessages()
     {
-        $reflectionClass = new \ReflectionClass(ErrorsHelper::class);
+        $reflectionClass = new \ReflectionClass(MessagesHelper::class);
         $constants = $reflectionClass->getConstants();
         $messages = [];
         foreach ($constants as $constant => $properties) {
