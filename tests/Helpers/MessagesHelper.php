@@ -1,11 +1,13 @@
 <?php
 
-class MessagesHelper
+use CoRex\Support\Messages;
+
+class MessagesHelper extends Messages
 {
     // System.
-    const SYSTEM_ERROR = [1, 'System error occurred'];
-    const SYSTEM_NOT_FOUND = [2, 'Not found'];
+    const SYSTEM_ERROR = 'System error occurred';
+    const SYSTEM_NOT_FOUND = 'Not found';
 
     // Test.
-    const TEST = [9999, 'Test ({param1}/{param2})'];
+    const TEST = 'Test ({param1}/{param2})';
 }
