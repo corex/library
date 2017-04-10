@@ -30,6 +30,17 @@ abstract class Messages
     }
 
     /**
+     * Message.
+     *
+     * @param array $constant
+     * @return mixed|null
+     */
+    public static function message(array $constant)
+    {
+        return self::findMessage($constant);
+    }
+
+    /**
      * Code.
      *
      * @param array $constant

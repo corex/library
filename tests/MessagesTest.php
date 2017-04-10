@@ -29,15 +29,32 @@ class MessagesTest extends TestCase
      */
     public function testMessage()
     {
+        $check = ['code' => 'SYSTEM_NOT_FOUND', 'status' => 404, 'text' => 'Not found'];
+        $this->assertEquals($check, MessagesHelper::message(MessagesHelper::SYSTEM_NOT_FOUND));
+    }
+
+    /**
+     * Test message not found.
+     */
+    public function testMessageNotFound()
+    {
+        $this->assertNull(MessagesHelper::message([1234, 'Unknown']));
+    }
+
+    /**
+     * Test text.
+     */
+    public function testText()
+    {
         $messages = $this->getMessages();
         $message = MessagesHelper::text(MessagesHelper::SYSTEM_NOT_FOUND);
         $this->assertEquals($messages['SYSTEM_NOT_FOUND']['text'], $message);
     }
 
     /**
-     * Test message with parameters.
+     * Test text with parameters.
      */
-    public function testMessageWithParameters()
+    public function testTextWithParameters()
     {
         $check1 = md5(microtime(true));
         $check2 = md5(microtime(true));
@@ -59,7 +76,7 @@ class MessagesTest extends TestCase
     /**
      * Test not found.
      */
-    public function testMessageNotFound()
+    public function testTextNotFound()
     {
         $check = [123, md5(microtime(true))];
         $message = MessagesHelper::text($check);
