@@ -51,4 +51,27 @@ class Obj
         }
         return $result;
     }
+
+    /**
+     * Get interfaces.
+     *
+     * @param object $object
+     * @return array
+     */
+    public static function getInterfaces($object)
+    {
+        return class_implements(get_class($object));
+    }
+
+    /**
+     * Has interface.
+     *
+     * @param object $object
+     * @param $interfaceClassName
+     * @return bool
+     */
+    public static function hasInterface($object, $interfaceClassName)
+    {
+        return in_array($interfaceClassName, self::getInterfaces($object));
+    }
 }
