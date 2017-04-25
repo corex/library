@@ -67,11 +67,31 @@ class Obj
      * Has interface.
      *
      * @param object $object
-     * @param $interfaceClassName
-     * @return bool
+     * @param string $interfaceClassName
+     * @return boolean
      */
     public static function hasInterface($object, $interfaceClassName)
     {
         return in_array($interfaceClassName, self::getInterfaces($object));
+    }
+
+    /**
+     * Set property.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
+     * @param string $className Default null which means class from $object.
+     */
+    public static function setProperty($object, $property, $value, $className = null)
+    {
+        if ($className === null) {
+            $className = get_class($object);
+        }
+
+        $reflectionClass = new ReflectionClass($className);
+        $property = $reflectionClass->getProperty($property);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
     }
 }

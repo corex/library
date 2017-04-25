@@ -76,6 +76,30 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test set property.
+     */
+    public function testSetProperty()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        $check1 = md5(microtime(true)) . '1';
+        $check2 = md5(microtime(true)) . '2';
+        $check3 = md5(microtime(true)) . '3';
+        $check4 = md5(microtime(true)) . '4';
+
+        $objHelperObject = new ObjHelperObject();
+        Obj::setProperty($objHelperObject, 'property1', $check1);
+        Obj::setProperty($objHelperObject, 'property2', $check2);
+        Obj::setProperty($objHelperObject, 'property3', $check3);
+        Obj::setProperty($objHelperObject, 'property4', $check4);
+
+        $properties = Obj::getPropertiesFromObject(Obj::PROPERTY_PRIVATE, $objHelperObject);
+        $this->assertEquals($check1, $properties['property1']);
+        $this->assertEquals($check2, $properties['property2']);
+        $this->assertEquals($check3, $properties['property3']);
+        $this->assertEquals($check4, $properties['property4']);
+    }
+
+    /**
      * Load classes.
      */
     private function loadClasses()
