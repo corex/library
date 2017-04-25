@@ -78,7 +78,7 @@ class ObjTest extends TestCase
     /**
      * Test set property.
      */
-    public function testSetProperty()
+    public function testSetPropertyFound()
     {
         require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $check1 = md5(microtime(true)) . '1';
@@ -87,16 +87,61 @@ class ObjTest extends TestCase
         $check4 = md5(microtime(true)) . '4';
 
         $objHelperObject = new ObjHelperObject();
-        Obj::setProperty($objHelperObject, 'property1', $check1);
-        Obj::setProperty($objHelperObject, 'property2', $check2);
-        Obj::setProperty($objHelperObject, 'property3', $check3);
-        Obj::setProperty($objHelperObject, 'property4', $check4);
+        $this->assertTrue(Obj::setProperty($objHelperObject, 'property1', $check1));
+        $this->assertTrue(Obj::setProperty($objHelperObject, 'property2', $check2));
+        $this->assertTrue(Obj::setProperty($objHelperObject, 'property3', $check3));
+        $this->assertTrue(Obj::setProperty($objHelperObject, 'property4', $check4));
 
         $properties = Obj::getPropertiesFromObject(Obj::PROPERTY_PRIVATE, $objHelperObject);
         $this->assertEquals($check1, $properties['property1']);
         $this->assertEquals($check2, $properties['property2']);
         $this->assertEquals($check3, $properties['property3']);
         $this->assertEquals($check4, $properties['property4']);
+    }
+
+    /**
+     * Test set property not found.
+     */
+    public function testSetPropertyNotFound()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        $check1 = md5(microtime(true));
+        $objHelperObject = new ObjHelperObject();
+        $this->assertFalse(Obj::setProperty($objHelperObject, 'unknown', $check1));
+    }
+
+    /**
+     * Test set properties.
+     */
+    public function testSetPropertiesFound()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        $propertiesValues = [
+            'property1' => md5(microtime(true)) . '1',
+            'property2' => md5(microtime(true)) . '2',
+            'property3' => md5(microtime(true)) . '3',
+            'property4' => md5(microtime(true)) . '4'
+        ];
+        $objHelperObject = new ObjHelperObject();
+        Obj::setProperties($objHelperObject, $propertiesValues);
+        $properties = Obj::getPropertiesFromObject(Obj::PROPERTY_PRIVATE, $objHelperObject);
+        $this->assertEquals($propertiesValues, $properties);
+    }
+
+    /**
+     * Test set properties one not found.
+     */
+    public function testSetPropertiesOneNotFound()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        $propertiesValues = [
+            'property1' => md5(microtime(true)) . '1',
+            'unknown' => md5(microtime(true)),
+            'property3' => md5(microtime(true)) . '3',
+            'property4' => md5(microtime(true)) . '4'
+        ];
+        $objHelperObject = new ObjHelperObject();
+        $this->assertFalse(Obj::setProperties($objHelperObject, $propertiesValues));
     }
 
     /**

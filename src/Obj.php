@@ -2,6 +2,7 @@
 
 namespace CoRex\Support;
 
+use Exception;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -82,16 +83,53 @@ class Obj
      * @param string $property
      * @param mixed $value
      * @param string $className Default null which means class from $object.
+     * @return boolean
+     * @throws Exception
      */
     public static function setProperty($object, $property, $value, $className = null)
     {
         if ($className === null) {
             $className = get_class($object);
         }
+        $reflectionClass = new ReflectionClass($className);
+        try {
+            $property = $reflectionClass->getProperty($property);
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Set properties.
+     *
+     * @param object $object
+     * @param array $propertiesValues
+     * @param string $className Default null which means class from $object.
+     * @return boolean
+     * @throws Exception
+     */
+    public static function setProperties($object, array $propertiesValues, $className = null)
+    {
+        if ($className === null) {
+            $className = get_class($object);
+        }
 
         $reflectionClass = new ReflectionClass($className);
-        $property = $reflectionClass->getProperty($property);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
+        if (count($propertiesValues) == 0) {
+            return false;
+        }
+        try {
+            foreach ($propertiesValues as $property => $value) {
+                $property = $reflectionClass->getProperty($property);
+                $property->setAccessible(true);
+                $property->setValue($object, $value);
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
     }
 }
