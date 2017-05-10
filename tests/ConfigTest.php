@@ -107,6 +107,18 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Test get keys.
+     */
+    public function testGetKeys()
+    {
+        $path = $this->getUniquePath();
+        Config::registerApp($path);
+        $this->prepareConfigFiles($path, 'test', ['actor' => $this->actor1]);
+        $this->assertEquals(['actor'], Config::getKeys('test'));
+        $this->assertEquals(['firstname', 'lastname'], Config::getKeys('test.actor'));
+    }
+
+    /**
      * Test get.
      */
     public function testGet()

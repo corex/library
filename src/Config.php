@@ -83,6 +83,21 @@ class Config
     }
 
     /**
+     * Get keys.
+     *
+     * @param string $path Uses dot notation.
+     * @return array
+     */
+    public static function getKeys($path)
+    {
+        $result = self::get($path, []);
+        if (!is_array($result)) {
+            $result = [];
+        }
+        return array_keys($result);
+    }
+
+    /**
      * Get value.
      *
      * @param string $path Uses dot notation.
