@@ -103,6 +103,30 @@ class Obj
     }
 
     /**
+     * Get property.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed $defaultValue Default null.
+     * @param string $className Default null.
+     * @return mixed
+     */
+    public static function getProperty($object, $property, $defaultValue = null, $className = null)
+    {
+        if ($className === null) {
+            $className = get_class($object);
+        }
+        $reflectionClass = new ReflectionClass($className);
+        try {
+            $property = $reflectionClass->getProperty($property);
+            $property->setAccessible(true);
+            return $property->getValue($object);
+        } catch (Exception $e) {
+            return $defaultValue;
+        }
+    }
+
+    /**
      * Set properties.
      *
      * @param object $object

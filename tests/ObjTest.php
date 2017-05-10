@@ -111,6 +111,33 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test get property not found.
+     */
+    public function testGetPropertyNotFound()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        $check = md5(microtime(true));
+        $objHelperObject = new ObjHelperObject();
+        $property = Obj::getProperty($objHelperObject, 'unknown', $check);
+        $this->assertEquals($check, $property);
+    }
+
+    /**
+     * Test get property found.
+     */
+    public function testGetPropertyFound()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        $check1 = md5(microtime(true));
+        $check2 = md5(microtime(true));
+        $objHelperObject = new ObjHelperObject();
+        Obj::setProperty($objHelperObject, 'property1', $check1);
+        Obj::setProperty($objHelperObject, 'property2', $check2);
+        $this->assertEquals($check1, Obj::getProperty($objHelperObject, 'property1'));
+        $this->assertEquals($check2, Obj::getProperty($objHelperObject, 'property2'));
+    }
+
+    /**
      * Test set properties.
      */
     public function testSetPropertiesFound()
