@@ -45,8 +45,10 @@ class PathTest extends TestCase
      */
     public function testPackageCurrent()
     {
+        $expected = $this->rootDirectory . '/' . $this->vendorBaseDirectory;
+        $expected .= '/' . $this->currentVendor . '/' . $this->currentPackage;
         $this->assertEquals(
-            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/' . $this->currentVendor . '/' . $this->currentPackage,
+            $expected,
             Path::packageCurrent()
         );
     }
