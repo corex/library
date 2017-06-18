@@ -112,6 +112,17 @@ class Str
     }
 
     /**
+     * Make a string's first character lowercase.
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function lcfirst($string)
+    {
+        return static::lower(static::substr($string, 0, 1)) . static::substr($string, 1);
+    }
+
+    /**
      * Limit the number of characters in a string.
      *
      * @param string $value
@@ -278,6 +289,20 @@ class Str
     }
 
     /**
+     * Removed first entry based on $separator.
+     *
+     * @param string $string
+     * @param string $separator
+     * @return string
+     */
+    public static function removeFirst($string, $separator)
+    {
+        $string = explode($separator, $string);
+        $string = Arr::removeFirst($string);
+        return implode($separator, $string);
+    }
+
+    /**
      * Removed last entry based on $separator.
      *
      * @param string $string
@@ -289,6 +314,19 @@ class Str
         $string = explode($separator, $string);
         $string = Arr::removeLast($string);
         return implode($separator, $string);
+    }
+
+    /**
+     * Get first part of string based on $separator.
+     *
+     * @param string $string
+     * @param string $separator
+     * @return string
+     */
+    public static function first($string, $separator)
+    {
+        $string = explode($separator, $string);
+        return Arr::first($string);
     }
 
     /**
@@ -317,8 +355,8 @@ class Str
     {
         if ($string != '') {
             $string = explode($separator, $string);
-            if (isset($string[$index - 1])) {
-                return $string[$index - 1];
+            if (isset($string[$index])) {
+                return $string[$index];
             }
         }
         return $defaultValue;

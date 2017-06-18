@@ -105,6 +105,17 @@ class StrTest extends TestCase
     }
 
     /**
+     * Test lcfirst.
+     */
+    public function testLcfirst()
+    {
+        $this->assertEquals(
+            Str::substr($this->stringLeft, 0, 1) . Str::substr($this->stringRight, 1, 2),
+            Str::lcfirst($this->stringRight)
+        );
+    }
+
+    /**
      * Test limit.
      */
     public function testLimit()
@@ -194,11 +205,27 @@ class StrTest extends TestCase
     }
 
     /**
+     * Test remove first.
+     */
+    public function testRemoveFirst()
+    {
+        $this->assertEquals($this->part2, Str::removeFirst($this->part1 . '/' . $this->part2, '/'));
+    }
+
+    /**
      * Test remove last.
      */
     public function testRemoveLast()
     {
         $this->assertEquals($this->part1, Str::removeLast($this->part1 . '/' . $this->part2, '/'));
+    }
+
+    /**
+     * Test get first.
+     */
+    public function testGetFirst()
+    {
+        $this->assertEquals($this->part1, Str::first($this->part1 . '/' . $this->part2, '/'));
     }
 
     /**
@@ -214,9 +241,9 @@ class StrTest extends TestCase
      */
     public function testGetPart()
     {
-        $this->assertEquals($this->part1, Str::part($this->part1 . '/' . $this->part2, '/', 1));
-        $this->assertEquals($this->part2, Str::part($this->part1 . '/' . $this->part2, '/', 2));
-        $this->assertEquals('', Str::part($this->part1 . '/' . $this->part2, '/', 3));
+        $this->assertEquals($this->part1, Str::part($this->part1 . '/' . $this->part2, '/', 0));
+        $this->assertEquals($this->part2, Str::part($this->part1 . '/' . $this->part2, '/', 1));
+        $this->assertEquals('', Str::part($this->part1 . '/' . $this->part2, '/', 2));
     }
 
     /**
