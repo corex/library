@@ -55,6 +55,16 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test remove first.
+     */
+    public function testRemoveFirst()
+    {
+        $data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
+        $data = Arr::removeFirst($data);
+        $this->assertEquals($this->actor2, Arr::first($data));
+    }
+
+    /**
      * Test remove last.
      */
     public function testRemoveLast()

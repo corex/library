@@ -85,6 +85,20 @@ class Arr
     }
 
     /**
+     * Remote first element of array.
+     *
+     * @param array $data
+     * @return array
+     */
+    public static function removeFirst(array $data)
+    {
+        if (count($data) > 0) {
+            array_shift($data);
+        }
+        return $data;
+    }
+
+    /**
      * Remove last element of array.
      *
      * @param array $data
