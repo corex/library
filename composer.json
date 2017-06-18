@@ -1,7 +1,7 @@
 {
     "name": "corex/support",
-    "type": "project",
-    "description": "Support classes and helpers.",
+    "type": "library",
+    "description": "Support classes and helpers",
     "license": "MIT",
     "authors": [
         {
