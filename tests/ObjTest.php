@@ -19,7 +19,7 @@ class ObjTest extends TestCase
     {
         require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $objHelperObject = new ObjHelperObject();
-        $properties = Obj::getPropertiesFromObject(Obj::PROPERTY_PRIVATE, $objHelperObject);
+        $properties = Obj::getProperties($objHelperObject, null, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($this->checkProperties, $properties);
     }
 
@@ -29,7 +29,7 @@ class ObjTest extends TestCase
     public function testGetPrivatePropertiesFromStatic()
     {
         require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
-        $properties = Obj::getPropertiesFromStatic(Obj::PROPERTY_PRIVATE, ObjHelperStatic::class);
+        $properties = Obj::getProperties(null, ObjHelperStatic::class, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($this->checkProperties, $properties);
     }
 
@@ -92,7 +92,7 @@ class ObjTest extends TestCase
         $this->assertTrue(Obj::setProperty($objHelperObject, 'property3', $check3));
         $this->assertTrue(Obj::setProperty($objHelperObject, 'property4', $check4));
 
-        $properties = Obj::getPropertiesFromObject(Obj::PROPERTY_PRIVATE, $objHelperObject);
+        $properties = Obj::getProperties($objHelperObject, null, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($check1, $properties['property1']);
         $this->assertEquals($check2, $properties['property2']);
         $this->assertEquals($check3, $properties['property3']);
@@ -105,9 +105,10 @@ class ObjTest extends TestCase
     public function testSetPropertyNotFound()
     {
         require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
-        $check1 = md5(microtime(true));
+        $check = md5(microtime(true));
         $objHelperObject = new ObjHelperObject();
-        $this->assertFalse(Obj::setProperty($objHelperObject, 'unknown', $check1));
+        $property = Obj::getProperty($objHelperObject, 'unknown', $check);
+        $this->assertEquals($check, $property);
     }
 
     /**
@@ -151,7 +152,7 @@ class ObjTest extends TestCase
         ];
         $objHelperObject = new ObjHelperObject();
         Obj::setProperties($objHelperObject, $propertiesValues);
-        $properties = Obj::getPropertiesFromObject(Obj::PROPERTY_PRIVATE, $objHelperObject);
+        $properties = Obj::getProperties($objHelperObject, null, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($propertiesValues, $properties);
     }
 

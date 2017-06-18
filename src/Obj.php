@@ -4,6 +4,7 @@ namespace CoRex\Support;
 
 use Exception;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionProperty;
 
 class Obj
@@ -13,44 +14,111 @@ class Obj
     const PROPERTY_PUBLIC = ReflectionProperty::IS_PUBLIC;
 
     /**
-     * Get private properties from object.
+     * Get properties.
      *
-     * @param integer $propertyType
      * @param object $object
-     * @param string $className Default '' which means from object.
+     * @param string $class Default null which means class from $object.
+     * @param integer $propertyType Default null.
      * @return array
      */
-    public static function getPropertiesFromObject($propertyType, $object, $className = '')
+    public static function getProperties($object, $class = null, $propertyType = null)
     {
-        if ($className == '') {
-            $className = get_class($object);
+        $reflectionClass = self::getReflectionClass($object, $class);
+        $properties = [];
+        $reflectionProperties = $reflectionClass->getProperties($propertyType);
+        foreach ($reflectionProperties as $property) {
+            $property->setAccessible(true);
+            $properties[$property->getName()] = $property->getValue($object);
         }
-        return self::getPropertiesFromStatic($propertyType, $className, $object);
+        return $properties;
     }
 
     /**
-     * Get private properties from static class.
+     * Get property.
      *
-     * @param integer $propertyType
-     * @param string $className
-     * @param object $object Default null which means new $className().
-     * @return array
+     * @param object $object
+     * @param string $property
+     * @param mixed $defaultValue Default null.
+     * @param string $class Default null which means class from $object.
+     * @return mixed
      */
-    public static function getPropertiesFromStatic($propertyType, $className, $object = null)
+    public static function getProperty($object, $property, $defaultValue = null, $class = null)
     {
-        $result = [];
-        if ($object === null) {
-            $object = new $className();
+        $reflectionClass = self::getReflectionClass($object, $class);
+        try {
+            $property = $reflectionClass->getProperty($property);
+            $property->setAccessible(true);
+            return $property->getValue($object);
+        } catch (Exception $e) {
+            return $defaultValue;
         }
-        $reflectionClass = new ReflectionClass($className);
-        $properties = $reflectionClass->getProperties($propertyType);
-        if (count($properties) > 0) {
-            foreach ($properties as $property) {
+    }
+
+    /**
+     * Set properties.
+     *
+     * @param object $object
+     * @param array $propertiesValues Key/value.
+     * @param string $class Default null which means class from $object.
+     * @return boolean
+     */
+    public static function setProperties($object, array $propertiesValues, $class = null)
+    {
+        $reflectionClass = self::getReflectionClass($object, $class);
+        if (count($propertiesValues) == 0) {
+            return false;
+        }
+        try {
+            foreach ($propertiesValues as $property => $value) {
+                $property = $reflectionClass->getProperty($property);
                 $property->setAccessible(true);
-                $result[$property->getName()] = $property->getValue($object);
+                $property->setValue($object, $value);
             }
+        } catch (Exception $e) {
+            return false;
         }
-        return $result;
+        return true;
+    }
+
+    /**
+     * Set property.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
+     * @param string $class Default null which means class from $object.
+     * @return boolean
+     */
+    public static function setProperty($object, $property, $value, $class = null)
+    {
+        $reflectionClass = self::getReflectionClass($object, $class);
+        try {
+            $property = $reflectionClass->getProperty($property);
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Call method.
+     *
+     * @param string $name
+     * @param object $object
+     * @param array $arguments Default [].
+     * @return mixed
+     */
+    public static function callMethod($name, $object, array $arguments = [])
+    {
+        $method = new ReflectionMethod(get_class($object), $name);
+        $method->setAccessible(true);
+        if (count($arguments) > 0) {
+            return $method->invokeArgs($object, $arguments);
+        } else {
+            return $method->invoke($object);
+        }
     }
 
     /**
@@ -77,83 +145,17 @@ class Obj
     }
 
     /**
-     * Set property.
+     * Get reflection class.
      *
      * @param object $object
-     * @param string $property
-     * @param mixed $value
-     * @param string $className Default null which means class from $object.
-     * @return boolean
-     * @throws Exception
+     * @param string $class Default null which means class from $object.
+     * @return \ReflectionClass
      */
-    public static function setProperty($object, $property, $value, $className = null)
+    private static function getReflectionClass($object, $class = null)
     {
-        if ($className === null) {
-            $className = get_class($object);
+        if ($class === null) {
+            $class = get_class($object);
         }
-        $reflectionClass = new ReflectionClass($className);
-        try {
-            $property = $reflectionClass->getProperty($property);
-            $property->setAccessible(true);
-            $property->setValue($object, $value);
-        } catch (Exception $e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Get property.
-     *
-     * @param object $object
-     * @param string $property
-     * @param mixed $defaultValue Default null.
-     * @param string $className Default null.
-     * @return mixed
-     */
-    public static function getProperty($object, $property, $defaultValue = null, $className = null)
-    {
-        if ($className === null) {
-            $className = get_class($object);
-        }
-        $reflectionClass = new ReflectionClass($className);
-        try {
-            $property = $reflectionClass->getProperty($property);
-            $property->setAccessible(true);
-            return $property->getValue($object);
-        } catch (Exception $e) {
-            return $defaultValue;
-        }
-    }
-
-    /**
-     * Set properties.
-     *
-     * @param object $object
-     * @param array $propertiesValues
-     * @param string $className Default null which means class from $object.
-     * @return boolean
-     * @throws Exception
-     */
-    public static function setProperties($object, array $propertiesValues, $className = null)
-    {
-        if ($className === null) {
-            $className = get_class($object);
-        }
-
-        $reflectionClass = new ReflectionClass($className);
-        if (count($propertiesValues) == 0) {
-            return false;
-        }
-        try {
-            foreach ($propertiesValues as $property => $value) {
-                $property = $reflectionClass->getProperty($property);
-                $property->setAccessible(true);
-                $property->setValue($object, $value);
-            }
-        } catch (Exception $e) {
-            return false;
-        }
-        return true;
+        return new ReflectionClass($class);
     }
 }
