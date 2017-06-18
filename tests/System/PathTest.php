@@ -8,6 +8,7 @@ class PathTest extends TestCase
     private $rootDirectory;
     private $currentVendor;
     private $currentPackage;
+    private $vendorBaseDirectory;
 
     /**
      * Setup.
@@ -18,9 +19,11 @@ class PathTest extends TestCase
 
         // Prepare root directory.
         $this->rootDirectory = __DIR__;
-        for ($c1 = 0; $c1 < 5; $c1++) {
+        for ($c1 = 0; $c1 < 4; $c1++) {
             $this->rootDirectory = dirname($this->rootDirectory);
         }
+        $this->vendorBaseDirectory = basename($this->rootDirectory);
+        $this->rootDirectory = dirname($this->rootDirectory);
 
         // Get package details.
         $packagePath = dirname(dirname(__DIR__));
@@ -43,7 +46,7 @@ class PathTest extends TestCase
     public function testPackageCurrent()
     {
         $this->assertEquals(
-            $this->rootDirectory . '/vendor/' . $this->currentVendor . '/' . $this->currentPackage,
+            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/' . $this->currentVendor . '/' . $this->currentPackage,
             Path::packageCurrent()
         );
     }
@@ -54,7 +57,7 @@ class PathTest extends TestCase
     public function testPackage()
     {
         $this->assertEquals(
-            $this->rootDirectory . '/vendor/test1/test2',
+            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/test1/test2',
             Path::package('test1', 'test2')
         );
     }

@@ -45,17 +45,14 @@ class Path
      */
     public static function package($vendor = null, $package = null, array $segments = [])
     {
-        if ($vendor === null & $package === null) {
-            $vendor = static::vendorName();
+        $path = dirname(dirname(static::packagePath()));
+        if ($package === null) {
             $package = static::packageName();
         }
-        $path = static::root(['vendor']);
-        if ($vendor !== null) {
-            $path .= '/' . $vendor;
-            if ($package !== null) {
-                $path .= '/' . $package;
-            }
+        if ($vendor === null) {
+            $vendor = static::vendorName();
         }
+        $path .= '/' . $vendor . '/' . $package;
         if (count($segments) > 0) {
             $path .= '/' . implode('/', $segments);
         }
