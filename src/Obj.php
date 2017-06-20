@@ -47,6 +47,9 @@ class Obj
         $reflectionClass = self::getReflectionClass($object, $class);
         try {
             $property = $reflectionClass->getProperty($property);
+            if ($object === null && !$property->isStatic()) {
+                return $defaultValue;
+            }
             $property->setAccessible(true);
             return $property->getValue($object);
         } catch (Exception $e) {
