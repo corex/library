@@ -139,6 +139,30 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test get property found static.
+     */
+    public function testGetPropertyFoundStatic()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
+        $check1 = md5(mt_rand(1, 100000));
+        $check2 = md5(mt_rand(1, 100000));
+        $check3 = md5(mt_rand(1, 100000));
+        $check4 = md5(mt_rand(1, 100000));
+        Obj::setProperty(null, 'property1', $check1, ObjHelperStatic::class);
+        Obj::setProperty(null, 'property2', $check2, ObjHelperStatic::class);
+        Obj::setProperty(null, 'property3', $check3, ObjHelperStatic::class);
+        Obj::setProperty(null, 'property4', $check4, ObjHelperStatic::class);
+        $value1 = Obj::getProperty(null, 'property1', null, ObjHelperStatic::class);
+        $value2 = Obj::getProperty(null, 'property2', null, ObjHelperStatic::class);
+        $value3 = Obj::getProperty(null, 'property3', null, ObjHelperStatic::class);
+        $value4 = Obj::getProperty(null, 'property4', null, ObjHelperStatic::class);
+        $this->assertEquals($check1, $value1);
+        $this->assertEquals($check2, $value2);
+        $this->assertEquals($check3, $value3);
+        $this->assertEquals($check4, $value4);
+    }
+
+    /**
      * Test set properties.
      */
     public function testSetPropertiesFound()
