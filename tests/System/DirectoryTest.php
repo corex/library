@@ -109,6 +109,14 @@ class DirectoryTest extends TestCase
     }
 
     /**
+     * Test temp().
+     */
+    public function testTemp()
+    {
+        $this->assertEquals(sys_get_temp_dir(), Directory::temp());
+    }
+
+    /**
      * Create data.
      *
      * @param string $subDirectory

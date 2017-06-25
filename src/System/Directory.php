@@ -187,4 +187,14 @@ class Directory
     {
         return self::delete($path, true);
     }
+
+    /**
+     * Get temp directory.
+     *
+     * @return string
+     */
+    public static function temp()
+    {
+        return sys_get_temp_dir();
+    }
 }
