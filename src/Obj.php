@@ -111,11 +111,15 @@ class Obj
      * @param string $name
      * @param object $object
      * @param array $arguments Default [].
+     * @param string $class Default null.
      * @return mixed
      */
-    public static function callMethod($name, $object, array $arguments = [])
+    public static function callMethod($name, $object, array $arguments = [], $class = null)
     {
-        $method = new ReflectionMethod(get_class($object), $name);
+        if ($class === null) {
+            $class = get_class($object);
+        }
+        $method = new ReflectionMethod($class, $name);
         $method->setAccessible(true);
         if (count($arguments) > 0) {
             return $method->invokeArgs($object, $arguments);

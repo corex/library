@@ -197,6 +197,17 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test callMethod private static.
+     */
+    public function testCallMethodPrivateStatic()
+    {
+        require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
+        $method = 'privateMethod';
+        $check = Obj::callMethod($method, null, [], ObjHelperStatic::class);
+        $this->assertEquals('(' . $method . ')', $check);
+    }
+
+    /**
      * Load classes.
      */
     private function loadClasses()
