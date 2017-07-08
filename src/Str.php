@@ -498,4 +498,36 @@ class Str
         }
         return implode($separator, $items);
     }
+
+    /**
+     * Pad left.
+     *
+     * @param string $string
+     * @param integer $length
+     * @param string $filler Default ' '.
+     * @return string
+     */
+    public static function padLeft($string, $length, $filler = ' ')
+    {
+        while (self::length($string) <= ($length - self::length($filler))) {
+            $string = $filler . $string;
+        }
+        return $string;
+    }
+
+    /**
+     * Pad right.
+     *
+     * @param string $string
+     * @param integer $length
+     * @param string $filler Default ' '.
+     * @return string
+     */
+    public static function padRight($string, $length, $filler = ' ')
+    {
+        while (self::length($string) <= ($length - self::length($filler))) {
+            $string = $string . $filler;
+        }
+        return $string;
+    }
 }

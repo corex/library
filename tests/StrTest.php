@@ -376,4 +376,40 @@ class StrTest extends TestCase
             return '{' . $line . '}';
         }));
     }
+
+    /**
+     * Test pad left default filler.
+     */
+    public function testPadLeftDefaultFiller()
+    {
+        $paddedString = Str::padLeft($this->stringLeft, 4);
+        $this->assertEquals(' ' . $this->stringLeft, $paddedString);
+    }
+
+    /**
+     * Test pad left specified filler.
+     */
+    public function testPadLeftSpecifiedFiller()
+    {
+        $paddedString = Str::padLeft($this->stringLeft, 4, '0');
+        $this->assertEquals('0' . $this->stringLeft, $paddedString);
+    }
+
+    /**
+     * Test pad right default filler.
+     */
+    public function testPadRightDefaultFiller()
+    {
+        $paddedString = Str::padRight($this->stringLeft, 4);
+        $this->assertEquals($this->stringLeft . ' ', $paddedString);
+    }
+
+    /**
+     * Test pad right specified filler.
+     */
+    public function testPadRightSpecifiedFIller()
+    {
+        $paddedString = Str::padRight($this->stringLeft, 4);
+        $this->assertEquals($this->stringLeft . ' ', $paddedString);
+    }
 }
