@@ -530,4 +530,49 @@ class Str
         }
         return $string;
     }
+
+    /**
+     * Wrap.
+     *
+     * @param string $text
+     * @param integer $length
+     * @param string $separator Default "\n".
+     * @return string
+     */
+    public static function wrap($text, $length, $separator = "\n")
+    {
+        if ($text == '' || Str::length($text) == $length) {
+            return $text;
+        }
+        $endedWithLinebreak = substr($text, -1) == "\n";
+        $text = str_replace("\r", "", $text);
+        $text = str_replace("\n", "", $text);
+        $text = explode(" ", $text);
+
+        $result = [];
+        $lineNo = 0;
+        foreach ($text as $word) {
+            if (!isset($result[$lineNo])) {
+                $result[$lineNo] = "";
+            }
+            $lastLineNo = count($result) - 1;
+
+            if ((Str::length($result[$lastLineNo]) + Str::length($word)) >= $length) {
+                $lineNo++;
+                if (!isset($result[$lineNo])) {
+                    $result[$lineNo] = "";
+                }
+                $lastLineNo = count($result) - 1;
+            }
+
+            $result[$lastLineNo] .= $result[$lastLineNo] != "" ? " " : "";
+            $result[$lastLineNo] .= $word;
+        }
+
+        $text = implode($separator, $result);
+        if ($endedWithLinebreak) {
+            $text .= "\n";
+        }
+        return $text;
+    }
 }

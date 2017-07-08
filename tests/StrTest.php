@@ -412,4 +412,24 @@ class StrTest extends TestCase
         $paddedString = Str::padRight($this->stringLeft, 4);
         $this->assertEquals($this->stringLeft . ' ', $paddedString);
     }
+
+    /**
+     * Test wrap not wrapped.
+     */
+    public function testWrapNotWrapped()
+    {
+        $string = 'test1 test2 test3';
+        $wrapped = Str::wrap($string, 20);
+        $this->assertEquals($string, $wrapped);
+    }
+
+    /**
+     * Test wrap wrapped.
+     */
+    public function testWrapWrapped()
+    {
+        $string = 'test1 test2 test3';
+        $wrapped = Str::wrap($string, 8);
+        $this->assertEquals(str_replace(' ', "\n", $string), $wrapped);
+    }
 }
