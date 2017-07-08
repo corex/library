@@ -430,4 +430,21 @@ class ConsoleTest extends TestCase
         $this->expectExceptionMessage(Console\Style::applyStyle('test', 'error'));
         Console::throwError('test');
     }
+
+    /**
+     * Test properties.
+     */
+    public function testProperties()
+    {
+        $data = [
+            'test1' => '1',
+            'test22' => '22'
+        ];
+        ob_start();
+        Console::properties($data);
+        $content = ob_get_clean();
+        $content = explode("\n", $content);
+        $this->assertEquals('test1  : 1', $content[0]);
+        $this->assertEquals('test22 : 22', $content[1]);
+    }
 }

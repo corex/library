@@ -2,6 +2,7 @@
 
 namespace CoRex\Support\System;
 
+use CoRex\Support\Str;
 use CoRex\Support\System\Console\Style;
 use CoRex\Support\System\Console\Table;
 
@@ -377,5 +378,28 @@ class Console
     public static function throwError($message)
     {
         throw new \Exception(Style::applyStyle($message, 'error'));
+    }
+
+    /**
+     * Properties.
+     *
+     * @param array $data
+     * @param string $separator Default ':'.
+     */
+    public static function properties(array $data, $separator = ':')
+    {
+        $keys = array_keys($data);
+        $maxLength = max(array_map('strlen', $keys));
+        if (count($data) > 0) {
+            foreach ($data as $key => $value) {
+                $key = Str::padRight($key, $maxLength);
+                self::write($key);
+                self::write(' ');
+                if (Str::length($separator) > 0) {
+                    self::write($separator . ' ');
+                }
+                self::writeln($value);
+            }
+        }
     }
 }
