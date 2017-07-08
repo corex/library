@@ -72,8 +72,8 @@ class Console
         if (self::$silent) {
             return;
         }
-        if (is_string($messages)) {
-            $messages = [$messages];
+        if (!is_array($messages)) {
+            $messages = [(string)$messages];
         }
         if (count($messages) > 0) {
             foreach ($messages as $message) {
