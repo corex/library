@@ -1,6 +1,7 @@
 <?php
 
 use CoRex\Support\Config;
+use CoRex\Support\Obj;
 use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
 use CoRex\Support\System\Path;
@@ -31,7 +32,7 @@ class ConfigTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        Config::initialize(true);
+        Obj::callMethod('initialize', null, [true, false], Config::class);
         $this->tempDirectory = sys_get_temp_dir();
         $this->tempDirectory .= '/' . str_replace('.', '', microtime(true));
     }
@@ -69,8 +70,8 @@ class ConfigTest extends TestCase
     public function testGetObjectClassExist()
     {
         $path = $this->getUniquePath();
-        Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
+        Config::registerApp($path);
         require_once(__DIR__ . '/Helpers/ConfigObjectHelper.php');
         $this->assertEquals(
             new ConfigObjectHelper(['actor' => $this->actor1]),
@@ -84,8 +85,8 @@ class ConfigTest extends TestCase
     public function testGetObjectClassMissing()
     {
         $path = $this->getUniquePath();
-        Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
+        Config::registerApp($path);
         require_once(__DIR__ . '/Helpers/ConfigObjectHelper.php');
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Class test does not exist.');
@@ -98,8 +99,8 @@ class ConfigTest extends TestCase
     public function testGetClosure()
     {
         $path = $this->getUniquePath();
-        Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
+        Config::registerApp($path);
         $data = Config::getClosure('test1', function ($data) {
             return $data;
         });
@@ -112,8 +113,8 @@ class ConfigTest extends TestCase
     public function testGetKeys()
     {
         $path = $this->getUniquePath();
-        Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test', ['actor' => $this->actor1]);
+        Config::registerApp($path);
         $this->assertEquals(['actor'], Config::getKeys('test'));
         $this->assertEquals(['firstname', 'lastname'], Config::getKeys('test.actor'));
     }
@@ -125,20 +126,20 @@ class ConfigTest extends TestCase
     {
         // Setup global.
         $path = $this->getUniquePath('1');
-        Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
+        Config::registerApp($path);
 
         // Setup app 1.
         $path = $this->getUniquePath('2');
-        Config::registerApp($path, $this->app1);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor2]);
         $this->prepareConfigFiles($path, 'test2', ['actor' => $this->actor3]);
+        Config::registerApp($path, $this->app1);
 
         // Setup app 2.
         $path = $this->getUniquePath('3');
-        Config::registerApp($path, $this->app2);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor4]);
         $this->prepareConfigFiles($path, 'test2', ['actor' => $this->actor5]);
+        Config::registerApp($path, $this->app2);
 
         // Test global
         $this->assertEquals($this->actor1['firstname'], Config::get('test1.actor.firstname'));
@@ -158,13 +159,52 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Test get multiple.
+     */
+    public function testGetMultiple()
+    {
+        $path = $this->getUniquePath();
+        $pathRoot = $path;
+
+        // Create data level 1.
+        $this->prepareConfigFiles($path, 'level2', ['actor' => $this->actor1]);
+
+        // Create data level 2.
+        $path .= '/level2';
+        Directory::make($path);
+        $this->prepareConfigFiles($path, 'level3', ['actor' => $this->actor2]);
+
+        // Create data level 3.
+        $path .= '/level3';
+        Directory::make($path);
+        $this->prepareConfigFiles($path, 'level4', ['actor' => $this->actor3]);
+
+        // Create data level 4.
+        $path .= '/level4';
+        Directory::make($path);
+        $this->prepareConfigFiles($path, 'actor', ['actor' => $this->actor4]);
+
+        Config::registerApp($pathRoot);
+
+        $this->assertEquals($this->actor1, Config::get('level2.actor'));
+
+        $this->assertEquals($this->actor2, Config::get('level2.level3.actor'));
+
+        $check = $this->actor3;
+        $check['actor'] = $this->actor4;
+        $this->assertEquals($check, Config::get('level2.level3.level4.actor'));
+
+        $this->assertEquals($this->actor4, Config::get('level2.level3.level4.actor.actor'));
+    }
+
+    /**
      * Test get section.
      */
     public function testGetSection()
     {
         $path = $this->getUniquePath();
-        Config::registerApp($path);
         $this->prepareConfigFiles($path, 'test1', ['actor' => $this->actor1]);
+        Config::registerApp($path);
         $this->assertEquals($this->actor1, Config::get('test1.actor'));
     }
 

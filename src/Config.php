@@ -2,30 +2,13 @@
 
 namespace CoRex\Support;
 
+use CoRex\Support\System\Directory;
 use CoRex\Support\System\Path;
 
 class Config
 {
     private static $app;
     private static $data;
-
-    /**
-     * Initialize.
-     *
-     * @param boolean $clear Default false.
-     */
-    public static function initialize($clear = false)
-    {
-        if (!is_array(self::$data) || $clear) {
-            self::$data = [];
-        }
-        if (!is_array(self::$app) || $clear) {
-            self::$app = [];
-        }
-        if (!isset(self::$app['*']) || $clear) {
-            self::$app['*'] = Path::root(['config']);
-        }
-    }
 
     /**
      * Register app.
@@ -43,6 +26,7 @@ class Config
             $path = substr($path, 0, -1);
         }
         self::$app[$app] = $path;
+        self::loadFiles($app);
     }
 
     /**
@@ -86,11 +70,12 @@ class Config
      * Get keys.
      *
      * @param string $path Uses dot notation.
+     * @param string $app Default null.
      * @return array
      */
-    public static function getKeys($path)
+    public static function getKeys($path, $app = null)
     {
-        $result = self::get($path, []);
+        $result = self::get($path, [], $app);
         if (!is_array($result)) {
             $result = [];
         }
@@ -103,41 +88,13 @@ class Config
      * @param string $path Uses dot notation.
      * @param mixed $defaultValue Default null.
      * @param string $app Default null.
-     * @param boolean $throwException Default false.
      * @return mixed
      * @throws \Exception
      */
-    public static function get($path, $defaultValue = null, $app = null, $throwException = false)
+    public static function get($path, $defaultValue = null, $app = null)
     {
         self::initialize();
-        // Extract section from path.
-        $pathSegments = explode('.', $path);
-        $section = $pathSegments[0];
-        unset($pathSegments[0]);
-        $pathSegments = array_values($pathSegments);
-
-        // Set section data.
-        $data = self::getSection($section, $app);
-        if ($data === null) {
-            if ($throwException) {
-                throw new \Exception('Section ' . $section . ' not found.');
-            }
-            return $defaultValue;
-        }
-
-        // Extract on path.
-        foreach ($pathSegments as $pathSegment) {
-            if (isset($data[$pathSegment])) {
-                $data = &$data[$pathSegment];
-            } else {
-                if ($throwException) {
-                    throw new \Exception('Path ' . $path . ' not found.');
-                }
-                $data = $defaultValue;
-            }
-        }
-
-        return $data;
+        return self::getAppData($app, $path, '.', $defaultValue);
     }
 
     /**
@@ -149,18 +106,7 @@ class Config
      */
     public static function getSection($section, $app = null)
     {
-        self::initialize();
-        $sectionData = null;
-        if ($app === null) {
-            $app = '*';
-        }
-        if (!isset(self::$data[$app][$section])) {
-            self::load($section, $app);
-        }
-        if (isset(self::$data[$app][$section])) {
-            $sectionData = self::$data[$app][$section];
-        }
-        return $sectionData;
+        return self::get($section, null, $app);
     }
 
     /**
@@ -186,26 +132,111 @@ class Config
     }
 
     /**
-     * Load section.
+     * Initialize.
      *
-     * @param string $section
-     * @param string $app Default null.
-     * @return boolean
+     * @param boolean $clear Default false.
+     * @param boolean $loadFiles Default false.
      */
-    private static function load($section, $app = null)
+    private static function initialize($clear = false, $loadFiles = true)
     {
-        self::initialize();
+        if (!is_array(self::$data) || $clear) {
+            self::$data = [];
+        }
+        if (!is_array(self::$app) || $clear) {
+            self::$app = [];
+        }
+        if (!isset(self::$app['*']) || $clear) {
+            self::$app['*'] = Path::root(['config']);
+            if ($loadFiles) {
+                self::loadFiles('*');
+            }
+        }
+    }
+
+    /**
+     * Load files.
+     *
+     * @param string $app
+     */
+    private static function loadFiles($app)
+    {
+        if (!isset(self::$app['*'])) {
+            return;
+        }
+        $path = self::$app[$app];
+        if (!Directory::exist($path)) {
+            return;
+        }
+
+        // Get entries recursive.
+        $entries = Directory::entries($path, '*', [Directory::TYPE_FILE], true);
+        if (count($entries) == 0) {
+            return;
+        }
+
+        // Sort after level.
+        usort($entries, function ($entry1, $entry2) {
+            if ($entry1['level'] == $entry2['level']) {
+                return 0;
+            }
+            return ($entry1['level'] < $entry2['level']) ? -1 : 1;
+        });
+
+        // Load files.
+        foreach ($entries as $entry) {
+            $pathRelative = trim(substr($entry['path'], strlen($entry['pathRoot'])), '/');
+            $pathRelative .= '/' . Str::removeLast($entry['name'], '.');
+            $pathRelative = trim($pathRelative, '/');
+
+            $appData =& self::getAppData($app, $pathRelative, '/');
+            if (!is_array($appData)) {
+                $appData = [];
+            }
+
+            $filename = $entry['path'] . '/' . $entry['name'];
+            if (!file_exists($filename)) {
+                continue;
+            }
+            $config = require($filename);
+            if (is_array($appData) && is_array($config)) {
+                foreach ($config as $key => $value) {
+                    $appData[$key] = $value;
+                }
+            } else {
+                $appData = $config;
+            }
+        }
+    }
+
+    /**
+     * Get app data.
+     *
+     * @param string $app
+     * @param string $path
+     * @param string $separator Default '.'.
+     * @param string $defaultValue Default null.
+     * @return null
+     */
+    private static function &getAppData($app, $path, $separator = '.', $defaultValue = null)
+    {
         if ($app === null) {
             $app = '*';
         }
-        if (!isset(self::$app[$app])) {
-            return false;
+        if (!isset(self::$data[$app])) {
+            self::$data[$app] = [];
         }
-        $filename = self::$app[$app] . '/' . $section . '.php';
-        if (!file_exists($filename)) {
-            return false;
+        $data = &self::$data[$app];
+        if ((string)$path == '') {
+            return $data;
         }
-        self::$data[$app][$section] = require($filename);
-        return true;
+        $null = null;
+        $pathSegments = explode($separator, $path);
+        foreach ($pathSegments as $pathSegment) {
+            if (!isset($data[$pathSegment]) && $defaultValue !== null) {
+                return $defaultValue;
+            }
+            $data = &$data[$pathSegment];
+        }
+        return $data;
     }
 }
