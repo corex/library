@@ -61,10 +61,16 @@ class Directory
      * @param string $criteria
      * @param string|array $types List of types to return. Use constants Directory::TYPE_*. Default [] which means all.
      * @param boolean $recursive Default false.
+     * @param array $attributes Default []. Used internally.
      * @return array
      */
-    public static function entries($path, $criteria, $types = [], $recursive = false)
+    public static function entries($path, $criteria, $types = [], $recursive = false, array $attributes = [])
     {
+        if (count($attributes) == 0) {
+            $attributes = [
+                'pathRoot' => $path
+            ];
+        }
         $entries = [];
         if (substr($path, -1) == '/') {
             $path = substr($path, 0, -1);
@@ -116,6 +122,15 @@ class Directory
                     'type' => $type
                 ];
 
+                // Add attributes.
+                foreach ($attributes as $attribute => $value) {
+                    $entry[$attribute] = $value;
+                }
+
+                // Determine level.
+                $pathRelative = substr($entry['path'], strlen($entry['pathRoot']));
+                $entry['level'] = substr_count($pathRelative, '/');
+
                 // Add to list.
                 if (in_array($type, $types)) {
                     $entries[] = $entry;
@@ -127,7 +142,8 @@ class Directory
                         $path . '/' . $entryName,
                         $criteria,
                         $types,
-                        $recursive
+                        $recursive,
+                        $attributes
                     );
                     $entries = array_merge($entries, $recursiveEntries);
                 }
