@@ -182,7 +182,7 @@ class Session
     /**
      * Initialize.
      */
-    private static function initialize()
+    public static function initialize()
     {
         if (session_status() == PHP_SESSION_NONE && php_sapi_name() != 'cli') {
             session_start();
