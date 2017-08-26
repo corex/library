@@ -256,6 +256,18 @@ class InputTest extends TestCase
     }
 
     /**
+     * Test is headers sent.
+     */
+    public function testIsHeadersSent()
+    {
+        ob_start();
+        $this->assertFalse(Input::isHeadersSent());
+        print('output');
+        $this->assertTrue(Input::isHeadersSent());
+        ob_end_clean();
+    }
+
+    /**
      * Test get body.
      */
     public function testGetBody()

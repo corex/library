@@ -274,6 +274,16 @@ class Input
     }
 
     /**
+     * Is headers sent.
+     *
+     * @return boolean
+     */
+    public static function isHeadersSent()
+    {
+        return strlen(ob_get_contents()) > 0;
+    }
+
+    /**
      * Return body.
      *
      * @return string
