@@ -38,7 +38,7 @@ class Table
         }
         $columnNumber = 0;
         foreach ($headers as $header) {
-            $this->updateWidth($columnNumber, Str::length($header));
+            $this->updateWidth($columnNumber, $this->length($header));
             if (!in_array($header, $this->headers)) {
                 $this->headers[] = $header;
             }
@@ -62,8 +62,8 @@ class Table
                 $row = [$row];
             }
             foreach ($row as $column => $value) {
-                $this->updateWidth($columnNumber, Str::length($column));
-                $this->updateWidth($columnNumber, Str::length($value));
+                $this->updateWidth($columnNumber, $this->length($column));
+                $this->updateWidth($columnNumber, $this->length($value));
                 if (!in_array($column, $this->columns)) {
                     $this->columns[] = $column;
                 }
@@ -173,7 +173,7 @@ class Table
         $output = [];
         $width = $this->getWidth($columnNumber);
         $output[] = $filler;
-        while (Str::length($value) < $width) {
+        while ($this->length($value) < $width) {
             $value .= $filler;
         }
         $output[] = Style::applyStyle($value, $style);
@@ -206,5 +206,17 @@ class Table
         if ($width > $this->getWidth($columnNumber)) {
             $this->widths[$columnNumber] = $width;
         }
+    }
+
+    /**
+     * Length.
+     *
+     * @param string $string
+     * @return integer
+     */
+    private function length($string)
+    {
+        $string = preg_replace("/\033\[[^m]*m/", '', $string);
+        return Str::length($string);
     }
 }
