@@ -79,6 +79,9 @@ class Directory
             return $entries;
         }
 
+        if (is_string($types)) {
+            $types = [$types];
+        }
         if (count($types) == 0) {
             $types = [self::TYPE_DIRECTORY, self::TYPE_LINK, self::TYPE_FILE];
         }
