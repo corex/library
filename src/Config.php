@@ -164,6 +164,7 @@ class Config
             return;
         }
         $path = self::$app[$app];
+        self::$data[$app] = [];
         if (!Directory::exist($path)) {
             return;
         }
@@ -184,6 +185,9 @@ class Config
 
         // Load files.
         foreach ($entries as $entry) {
+            if (!Str::endsWith($entry['name'], '.php')) {
+                continue;
+            }
             $pathRelative = trim(substr($entry['path'], strlen($entry['pathRoot'])), '/');
             $pathRelative .= '/' . Str::removeLast($entry['name'], '.');
             $pathRelative = trim($pathRelative, '/');
