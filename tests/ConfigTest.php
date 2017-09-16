@@ -47,6 +47,15 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Test clear.
+     */
+    public function testClear()
+    {
+        Config::clear();
+        $this->assertEquals([], Config::getData(false));
+    }
+
+    /**
      * Test register app.
      */
     public function testRegisterApp()
@@ -215,6 +224,31 @@ class ConfigTest extends TestCase
     {
         $this->testRegisterApp();
     }
+
+    /**
+     * Test set.
+     */
+    public function testSet()
+    {
+        Config::clear();
+        $path = md5(mt_rand(1, 100000));
+        $check = md5(mt_rand(1, 100000));
+        Config::set($path, $check);
+        $this->assertEquals($check, Config::get($path));
+    }
+
+    /**
+     * Test set config file.
+     */
+    public function testSetConfigFile()
+    {
+        Config::clear();
+        $path = $this->getUniquePath();
+        $this->prepareConfigFiles($path, 'test', ['actor' => $this->actor1]);
+        Config::setConfigFile($path . '/test.php');
+        $this->assertEquals($this->actor1, Config::get('test.actor'));
+    }
+
 
     /**
      * Prepare config files.

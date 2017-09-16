@@ -3,12 +3,22 @@
 namespace CoRex\Support;
 
 use CoRex\Support\System\Directory;
+use CoRex\Support\System\File;
 use CoRex\Support\System\Path;
 
 class Config
 {
     private static $app;
     private static $data;
+
+    /**
+     * Clear.
+     */
+    public static function clear()
+    {
+        self::$app = [];
+        self::$data = [];
+    }
 
     /**
      * Register app.
@@ -123,19 +133,69 @@ class Config
     /**
      * Get data.
      *
+     * @param boolean $loadFiles Default true.
      * @return array
      */
-    public static function getData()
+    public static function getData($loadFiles = true)
     {
-        self::initialize();
+        self::initialize(false, $loadFiles);
         return self::$data;
+    }
+
+    /**
+     * Set.
+     *
+     * @param string $path Uses dot notation.
+     * @param mixed $value
+     * @param string $app Default null.
+     */
+    public static function set($path, $value, $app = null)
+    {
+        self::initialize(false, false);
+        if (strpos($path, '.') > 0) {
+            $key = Str::last($path, '.');
+            $path = Str::removeLast($path, '.');
+        } else {
+            $key = $path;
+            $path = '';
+        }
+        $data =& self::getAppData($app, $path);
+        if (!is_array($data)) {
+            $data = [];
+        }
+        if ($key != '') {
+            $data[$key] = $value;
+        } else {
+            $data = $value;
+        }
+    }
+
+    /**
+     * Set config file.
+     *
+     * @param string $filename
+     * @param mixed $defaultConfig Default null.
+     * @param string $app Default null.
+     */
+    public static function setConfigFile($filename, $defaultConfig = null, $app = null)
+    {
+        $dataPath = Str::stripSuffix(File::basename($filename), 'php', '.');
+        if (File::extension($filename) != 'php') {
+            $filename .= '.php';
+        }
+        if (File::exist($filename)) {
+            $config = self::loadFile($filename);
+        } else {
+            $config = $defaultConfig;
+        }
+        self::set($dataPath, $config, $app);
     }
 
     /**
      * Initialize.
      *
      * @param boolean $clear Default false.
-     * @param boolean $loadFiles Default false.
+     * @param boolean $loadFiles Default true.
      */
     private static function initialize($clear = false, $loadFiles = true)
     {
@@ -201,7 +261,7 @@ class Config
             if (!file_exists($filename)) {
                 continue;
             }
-            $config = require($filename);
+            $config = self::loadFile($filename);
             if (is_array($appData) && is_array($config)) {
                 foreach ($config as $key => $value) {
                     $appData[$key] = $value;
@@ -210,6 +270,21 @@ class Config
                 $appData = $config;
             }
         }
+    }
+
+    /**
+     * Load file.
+     *
+     * @param string $filename
+     * @param mixed $defaultValue Default null.
+     * @return mixed
+     */
+    private static function loadFile($filename, $defaultValue = null)
+    {
+        if (!File::exist($filename)) {
+            return $defaultValue;
+        }
+        return require($filename);
     }
 
     /**
