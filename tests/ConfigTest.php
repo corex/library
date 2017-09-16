@@ -238,15 +238,40 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * Test set config file.
+     * Test set file path string empty.
      */
-    public function testSetConfigFile()
+    public function testSetFilePathStringEmpty()
     {
         Config::clear();
         $path = $this->getUniquePath();
         $this->prepareConfigFiles($path, 'test', ['actor' => $this->actor1]);
-        Config::setConfigFile($path . '/test.php');
-        $this->assertEquals($this->actor1, Config::get('test.actor'));
+        Config::setFile('', $path . '/test');
+        $this->assertEquals($this->actor1, Config::get('actor'));
+    }
+
+    /**
+     * Test set file path null.
+     */
+    public function testSetFilePathNull()
+    {
+        Config::clear();
+        $path = $this->getUniquePath();
+        $this->prepareConfigFiles($path, 'test', ['actor' => $this->actor1]);
+        Config::setFile(null, $path . '/test');
+        $this->assertEquals($this->actor1, Config::get('actor'));
+    }
+
+    /**
+     * Test set file path valid.
+     */
+    public function testSetFilePathValid()
+    {
+        $check = md5(mt_rand(1, 100000));
+        Config::clear();
+        $path = $this->getUniquePath();
+        $this->prepareConfigFiles($path, 'test', ['actor' => $this->actor1]);
+        Config::setFile($check, $path . '/test');
+        $this->assertEquals($this->actor1, Config::get($check . '.actor'));
     }
 
 

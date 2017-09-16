@@ -171,15 +171,18 @@ class Config
     }
 
     /**
-     * Set config file.
+     * Set file.
      *
+     * @param string $path Set to '' or null if root.
      * @param string $filename
      * @param mixed $defaultConfig Default null.
      * @param string $app Default null.
      */
-    public static function setConfigFile($filename, $defaultConfig = null, $app = null)
+    public static function setFile($path, $filename, $defaultConfig = null, $app = null)
     {
-        $dataPath = Str::stripSuffix(File::basename($filename), 'php', '.');
+        if ($path === null) {
+            $path = '';
+        }
         if (File::extension($filename) != 'php') {
             $filename .= '.php';
         }
@@ -188,7 +191,7 @@ class Config
         } else {
             $config = $defaultConfig;
         }
-        self::set($dataPath, $config, $app);
+        self::set($path, $config, $app);
     }
 
     /**
