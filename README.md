@@ -5,23 +5,8 @@ Some of the code is heavily inspired by Laravel, Yii and other frameworks.
 
 **_Versioning for this package follows http://semver.org/. Backwards compatibility might break on upgrade to major versions._**
 
-### Code/Convention
-Helpers to convert to pascal-case, camel-case, snake-case and kebab-case.
-
-```php
-// Convert to pascal case.
-$data = Convention::pascalCase($data);
-
-// Convert to camel case.
-$data = Convention::camelCase($data);
-
-// Convert to snake case.
-$data = Convention::snakeCase($data);
-
-// Convert to kebab case.
-$data = Convention::kebabCase($data);
-```
-
+With version 3.0.0, this package has been thinned out. Removed packages has either been merged into existing code or been moved to separate packages.
+- Code/Convention - merged into Str
 
 ### System/Cache
 Cache.
@@ -367,6 +352,18 @@ $text = Str::replaceToken($text, [
 
 // Create a unique string.
 $identifier = Str::unique();
+
+// Convert to pascal case.
+$data = Convention::pascalCase($data);
+
+// Convert to camel case.
+$data = Convention::camelCase($data);
+
+// Convert to snake case.
+$data = Convention::snakeCase($data);
+
+// Convert to kebab case.
+$data = Convention::kebabCase($data);
 ```
 
 

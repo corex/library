@@ -12,6 +12,12 @@ class StrTest extends TestCase
     private $part2 = 'part2';
     private $slugTest = 'ThIs%is\a#certanly.test|with"funny-ChaRaCtErS/and^more$fun more+to_come';
     private $slugTestValid = 'thisisacertanly.testwithfunny.charactersandmorefun.moreto.come';
+    private $pascalCase = 'TestClass';
+    private $camelCase = 'testClass';
+    private $snakeCase = 'test_class';
+    private $kebabCase = 'test-class';
+    private $idCamelCase = 'id';
+    private $idPascalCase = 'Id';
 
     /**
      * Test length.
@@ -431,5 +437,120 @@ class StrTest extends TestCase
         $string = 'test1 test2 test3';
         $wrapped = Str::wrap($string, 8);
         $this->assertEquals(str_replace(' ', "\n", $string), $wrapped);
+    }
+
+    /**
+     * Test pascal case.
+     */
+    public function testPascalCase()
+    {
+        // Standard.
+        $this->assertEquals($this->pascalCase, Str::pascalCase($this->pascalCase), 'CASE: pascal > pascal');
+        $this->assertEquals($this->pascalCase, Str::pascalCase($this->camelCase), 'CASE: camel > pascal');
+        $this->assertEquals($this->pascalCase, Str::pascalCase($this->snakeCase), 'CASE: snake > pascal');
+        $this->assertEquals($this->pascalCase, Str::pascalCase($this->kebabCase), 'CASE: kebab > pascal');
+
+        // Id.
+        $this->assertEquals(
+            $this->idPascalCase,
+            Str::pascalCase($this->idCamelCase),
+            'CASE: id camel > pascal'
+        );
+        $this->assertEquals(
+            $this->idPascalCase,
+            Str::pascalCase($this->idPascalCase),
+            'CASE: id pascal > pascal'
+        );
+    }
+
+    /**
+     * Test camel case.
+     */
+    public function testCamelCase()
+    {
+        // Standard.
+        $this->assertEquals($this->camelCase, Str::camelCase($this->pascalCase), 'CASE: pascal > camel');
+        $this->assertEquals($this->camelCase, Str::camelCase($this->camelCase), 'CASE: camel > camel');
+        $this->assertEquals($this->camelCase, Str::camelCase($this->snakeCase), 'CASE: snake > camel');
+        $this->assertEquals($this->camelCase, Str::camelCase($this->kebabCase), 'CASE: kebab > camel');
+
+        // Id.
+        $this->assertEquals(
+            $this->idCamelCase,
+            Str::camelCase($this->idCamelCase),
+            'CASE: id camel > camel'
+        );
+        $this->assertEquals(
+            $this->idCamelCase,
+            Str::camelCase($this->idPascalCase),
+            'CASE: pascal > camel'
+        );
+    }
+
+    /**
+     * Test snake case.
+     */
+    public function testSnakeCase()
+    {
+        // Standard.
+        $this->assertEquals($this->snakeCase, Str::snakeCase($this->pascalCase), 'CASE: pascal > snake');
+        $this->assertEquals($this->snakeCase, Str::snakeCase($this->camelCase), 'CASE: camel > snake');
+        $this->assertEquals($this->snakeCase, Str::snakeCase($this->snakeCase), 'CASE: snake > snake');
+        $this->assertEquals($this->snakeCase, Str::snakeCase($this->kebabCase), 'CASE: kebab > snake');
+
+        // Id.
+        $this->assertEquals(
+            $this->idCamelCase,
+            Str::snakeCase($this->idCamelCase),
+            'CASE: id camel > snake'
+        );
+        $this->assertEquals(
+            $this->idCamelCase,
+            Str::snakeCase($this->idPascalCase),
+            'CASE: id pascal > snake'
+        );
+    }
+
+    /**
+     * Test kebab case.
+     */
+    public function testKebabCase()
+    {
+        // Standard.
+        $this->assertEquals($this->kebabCase, Str::kebabCase($this->pascalCase), 'CASE: pascal > kebab');
+        $this->assertEquals($this->kebabCase, Str::kebabCase($this->camelCase), 'CASE: camel > kebab');
+        $this->assertEquals($this->kebabCase, Str::kebabCase($this->snakeCase), 'CASE: snake > kebab');
+        $this->assertEquals($this->kebabCase, Str::kebabCase($this->kebabCase), 'CASE: kebab > kebab');
+
+        // Id.
+        $this->assertEquals(
+            $this->idCamelCase,
+            Str::kebabCase($this->idCamelCase),
+            'CASE: id camel > kebab'
+        );
+        $this->assertEquals(
+            $this->idCamelCase,
+            Str::kebabCase($this->idPascalCase),
+            'CASE: id pascal > kebab'
+        );
+    }
+
+    /**
+     * Test case convert array keys recursively.
+     */
+    public function testCaseConvertArrayKeysRecursively()
+    {
+        $convertedTest = Str::caseConvertArrayKeysRecursively([
+            'id' => [
+                'firstname' => 'Roger',
+                'lastname' => 'Moore'
+            ]
+        ]);
+        $this->assertEquals([
+            'Id' => [
+                'Firstname' => 'Roger',
+                'Lastname' => 'Moore'
+            ]
+        ], $convertedTest);
     }
 }
