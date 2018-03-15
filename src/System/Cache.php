@@ -25,7 +25,7 @@ class Cache
     }
 
     /**
-     * Set/get path for stores.
+     * Set/get path for storages.
      *
      * @param string $path Default null which means not set.
      * @param boolean $force Default false.
@@ -52,10 +52,10 @@ class Cache
      * Set/get lifetime.
      *
      * @param string $lifetime Add 'm' for minutes, 'h' for hours. If not specified, seconds are assumed.
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
      * @return integer Lifetime in seconds.
      */
-    public static function lifetime($lifetime = null, $store = 'global')
+    public static function lifetime($lifetime = null, $storage = 'global')
     {
         if ($lifetime !== null) {
             $seconds = strtolower($lifetime);
@@ -73,10 +73,10 @@ class Cache
             if (!is_array(self::$seconds)) {
                 self::$seconds = [];
             }
-            self::$seconds[$store] = intval($seconds);
+            self::$seconds[$storage] = intval($seconds);
         }
-        if (isset(self::$seconds[$store])) {
-            return self::$seconds[$store];
+        if (isset(self::$seconds[$storage])) {
+            return self::$seconds[$storage];
         }
         return 0;
     }
@@ -85,10 +85,10 @@ class Cache
      * Get expiration from key.
      *
      * @param string $key
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
      * @return integer If not exist, 0 is returned.
      */
-    public static function expiration($key, $store = 'global')
+    public static function expiration($key, $storage = 'global')
     {
         if (!self::has($key)) {
             return null;
@@ -97,8 +97,8 @@ class Cache
         // Get content.
         $fileKey = self::key($key);
         $content = null;
-        if (file_exists(self::$path . '/' . $store . '/' . $fileKey)) {
-            $content = file_get_contents(self::$path . '/' . $store . '/' . $fileKey);
+        if (file_exists(self::$path . '/' . $storage . '/' . $fileKey)) {
+            $content = file_get_contents(self::$path . '/' . $storage . '/' . $fileKey);
         }
         if ($content === null) {
             return null;
@@ -119,10 +119,10 @@ class Cache
      *
      * @param string $key
      * @param mixed $defaultValue Default null.
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
      * @return mixed|null
      */
-    public static function get($key, $defaultValue = null, $store = 'global')
+    public static function get($key, $defaultValue = null, $storage = 'global')
     {
         if (!self::has($key)) {
             return $defaultValue;
@@ -131,8 +131,8 @@ class Cache
         // Get content.
         $fileKey = self::key($key);
         $content = null;
-        if (file_exists(self::$path . '/' . $store . '/' . $fileKey)) {
-            $content = file_get_contents(self::$path . '/' . $store . '/' . $fileKey);
+        if (file_exists(self::$path . '/' . $storage . '/' . $fileKey)) {
+            $content = file_get_contents(self::$path . '/' . $storage . '/' . $fileKey);
         }
         if ($content === null) {
             return null;
@@ -160,61 +160,62 @@ class Cache
      *
      * @param string $key
      * @param mixed $value
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
+     * @throws \Exception
      */
-    public static function put($key, $value, $store = 'global')
+    public static function put($key, $value, $storage = 'global')
     {
-        self::initialize($store);
+        self::initialize($storage);
         $expiration = time() + intval(self::$seconds);
         $value = $expiration . self::$marker . serialize($value);
         $fileKey = self::key($key);
-        @file_put_contents(self::$path . '/' . $store . '/' . $fileKey, $value);
+        @file_put_contents(self::$path . '/' . $storage . '/' . $fileKey, $value);
     }
 
     /**
      * Has key.
      *
      * @param string $key
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
      * @return boolean
      */
-    public static function has($key, $store = 'global')
+    public static function has($key, $storage = 'global')
     {
         $fileKey = self::key($key);
-        return file_exists(self::$path . '/' . $store . '/' . $fileKey);
+        return file_exists(self::$path . '/' . $storage . '/' . $fileKey);
     }
 
     /**
      * Forget key.
      *
      * @param string $key
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
      */
-    public static function forget($key, $store = 'global')
+    public static function forget($key, $storage = 'global')
     {
         $fileKey = self::key($key);
         if (self::has($key)) {
-            @unlink(self::$path . '/' . $store . '/' . $fileKey);
+            @unlink(self::$path . '/' . $storage . '/' . $fileKey);
         }
     }
 
     /**
-     * Flush store.
+     * Flush storage.
      *
-     * @param string $store Default 'global'.
+     * @param string $storage Default 'global'.
      */
-    public static function flush($store = 'global')
+    public static function flush($storage = 'global')
     {
-        if (!is_dir(self::$path . '/' . $store)) {
+        if (!is_dir(self::$path . '/' . $storage)) {
             return;
         }
-        $filenames = scandir(self::$path . '/' . $store);
+        $filenames = scandir(self::$path . '/' . $storage);
         if (count($filenames) > 0) {
             foreach ($filenames as $filename) {
                 if (substr($filename, 0, 1) == '.') {
                     continue;
                 }
-                @unlink(self::$path . '/' . $store . '/' . $filename);
+                @unlink(self::$path . '/' . $storage . '/' . $filename);
             }
         }
     }
@@ -222,17 +223,17 @@ class Cache
     /**
      * Initialize.
      *
-     * @param string $store
+     * @param string $storage
      * @throws \Exception
      */
-    private static function initialize($store)
+    private static function initialize($storage)
     {
         if (self::$path === null) {
             throw new \Exception('Path not set.');
         }
-        if (self::lifetime(null, $store) == 0) {
+        if (self::lifetime(null, $storage) == 0) {
             throw new \Exception('Lifetime not set.');
         }
-        Directory::make(self::$path . '/' . $store);
+        Directory::make(self::$path . '/' . $storage);
     }
 }
