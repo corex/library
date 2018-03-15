@@ -313,10 +313,10 @@ $firstname = $container->get('actor.firstname');
 ```
 
 
-### Properties (abstract)
+### Base/BaseProperties (abstract)
 Simple abstract class with option to parse array of data which will be parsed to existing properties on class (private, protected and public).
 ```php
-class Properties extends \CoRex\Support\Properties
+class BaseProperties extends \CoRex\Support\Base\BaseProperties
 {
     private $privateValue;
     protected $protectedValue;

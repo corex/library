@@ -1,8 +1,8 @@
 <?php
 
-use CoRex\Support\Properties;
+use CoRex\Support\Base\BaseProperties;
 
-class PropertiesHelper extends Properties
+class BasePropertiesHelper extends BaseProperties
 {
     private $privateValue;
     protected $protectedValue;

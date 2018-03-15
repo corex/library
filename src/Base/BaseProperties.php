@@ -1,13 +1,14 @@
 <?php
 
-namespace CoRex\Support;
+namespace CoRex\Support\Base;
 
-abstract class Properties
+abstract class BaseProperties
 {
     /**
-     * Data constructor.
+     * Constructor.
      *
      * @param mixed $data
+     * @throws \ReflectionException
      */
     public function __construct($data)
     {

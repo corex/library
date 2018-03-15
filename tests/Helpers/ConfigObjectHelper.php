@@ -1,8 +1,8 @@
 <?php
 
-use CoRex\Support\Properties;
+use CoRex\Support\Base\BaseProperties;
 
-class ConfigObjectHelper extends Properties
+class ConfigObjectHelper extends BaseProperties
 {
     private $actor;
 }

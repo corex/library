@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class PropertiesTest extends TestCase
+class BasePropertiesTest extends TestCase
 {
     /**
      * Setup.
@@ -10,15 +10,17 @@ class PropertiesTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        require_once(__DIR__ . '/Helpers/PropertiesHelper.php');
+        require_once(dirname(__DIR__) . '/Helpers/BasePropertiesHelper.php');
     }
 
     /**
      * Test constructor null.
+     *
+     * @throws ReflectionException
      */
     public function testConstructorNull()
     {
-        $properties = new PropertiesHelper(null);
+        $properties = new BasePropertiesHelper(null);
         $this->assertNull($properties->getPrivate());
         $this->assertNull($properties->getProtected());
         $this->assertNull($properties->publicValue);
@@ -26,11 +28,13 @@ class PropertiesTest extends TestCase
 
     /**
      * Test private value set.
+     *
+     * @throws ReflectionException
      */
     public function testGetPrivateValue()
     {
         $testValue = microtime();
-        $properties = new PropertiesHelper([
+        $properties = new BasePropertiesHelper([
             'privateValue' => $testValue
         ]);
         $this->assertEquals($testValue, $properties->getPrivate());
@@ -40,11 +44,13 @@ class PropertiesTest extends TestCase
 
     /**
      * Test protected value set.
+     *
+     * @throws ReflectionException
      */
     public function testProtectedValue()
     {
         $testValue = microtime();
-        $properties = new PropertiesHelper([
+        $properties = new BasePropertiesHelper([
             'protectedValue' => $testValue
         ]);
         $this->assertNull($properties->getPrivate());
@@ -54,11 +60,13 @@ class PropertiesTest extends TestCase
 
     /**
      * Test public value set.
+     *
+     * @throws ReflectionException
      */
     public function testPublicValue()
     {
         $testValue = microtime();
-        $properties = new PropertiesHelper([
+        $properties = new BasePropertiesHelper([
             'publicValue' => $testValue
         ]);
         $this->assertNull($properties->getPrivate());
