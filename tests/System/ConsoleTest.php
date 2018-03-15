@@ -38,6 +38,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test write standard.
+     *
+     * @throws Exception
      */
     public function testWriteStandard()
     {
@@ -49,6 +51,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test write array.
+     *
+     * @throws Exception
      */
     public function testWriteArray()
     {
@@ -60,6 +64,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test write length.
+     *
+     * @throws Exception
      */
     public function testWriteLength()
     {
@@ -71,6 +77,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test write suffix.
+     *
+     * @throws Exception
      */
     public function testWriteSuffix()
     {
@@ -82,6 +90,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test write style.
+     *
+     * @throws Exception
      */
     public function testWriteStyle()
     {
@@ -93,6 +103,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test write silent.
+     *
+     * @throws Exception
      */
     public function testWriteSilent()
     {
@@ -423,6 +435,8 @@ class ConsoleTest extends TestCase
 
     /**
      * Test throw error.
+     *
+     * @throws Exception
      */
     public function testThrowError()
     {

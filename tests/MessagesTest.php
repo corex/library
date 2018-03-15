@@ -15,6 +15,8 @@ class MessagesTest extends TestCase
 
     /**
      * Test all.
+     *
+     * @throws ReflectionException
      */
     public function testMessages()
     {
@@ -43,6 +45,8 @@ class MessagesTest extends TestCase
 
     /**
      * Test text.
+     *
+     * @throws ReflectionException
      */
     public function testText()
     {
@@ -53,6 +57,8 @@ class MessagesTest extends TestCase
 
     /**
      * Test text with parameters.
+     *
+     * @throws ReflectionException
      */
     public function testTextWithParameters()
     {
@@ -103,6 +109,7 @@ class MessagesTest extends TestCase
      * Get messages.
      *
      * @return array
+     * @throws ReflectionException
      */
     private function getMessages()
     {

@@ -75,6 +75,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test get object class exist.
+     *
+     * @throws Exception
      */
     public function testGetObjectClassExist()
     {
@@ -90,6 +92,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test get object class missing.
+     *
+     * @throws Exception
      */
     public function testGetObjectClassMissing()
     {
@@ -104,6 +108,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test get closure.
+     *
+     * @throws Exception
      */
     public function testGetClosure()
     {
@@ -130,6 +136,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test get.
+     *
+     * @throws Exception
      */
     public function testGet()
     {
@@ -169,6 +177,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test get multiple.
+     *
+     * @throws Exception
      */
     public function testGetMultiple()
     {
@@ -208,6 +218,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test get section.
+     *
+     * @throws Exception
      */
     public function testGetSection()
     {
@@ -227,6 +239,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test set.
+     *
+     * @throws Exception
      */
     public function testSet()
     {
@@ -239,6 +253,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test set file path string empty.
+     *
+     * @throws Exception
      */
     public function testSetFilePathStringEmpty()
     {
@@ -251,6 +267,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test set file path null.
+     *
+     * @throws Exception
      */
     public function testSetFilePathNull()
     {
@@ -263,6 +281,8 @@ class ConfigTest extends TestCase
 
     /**
      * Test set file path valid.
+     *
+     * @throws Exception
      */
     public function testSetFilePathValid()
     {

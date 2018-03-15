@@ -33,6 +33,8 @@ class TemplateTest extends TestCase
 
     /**
      * Test constructor.
+     *
+     * @throws ReflectionException
      */
     public function testConstructor()
     {
@@ -49,6 +51,8 @@ class TemplateTest extends TestCase
 
     /**
      * Test clear.
+     *
+     * @throws ReflectionException
      */
     public function testClear()
     {
@@ -181,6 +185,7 @@ class TemplateTest extends TestCase
      * @param string $className
      * @param object $object Default null which means new $className().
      * @return array
+     * @throws ReflectionException
      */
     private function getPrivatePropertiesFromStaticClass($className, $object = null)
     {

@@ -117,6 +117,8 @@ class CollectionTest extends TestCase
 
     /**
      * Test each.
+     *
+     * @throws Exception
      */
     public function testEach()
     {
