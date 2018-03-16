@@ -258,4 +258,12 @@ class ArrTest extends TestCase
     {
         $this->assertEquals([], Arr::toArray(false));
     }
+
+    /**
+     * Test toArray by string single.
+     */
+    public function testToArrayByStringSingle()
+    {
+        $this->assertEquals(['a'], Arr::toArray('a'));
+    }
 }
