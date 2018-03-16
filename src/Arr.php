@@ -48,6 +48,20 @@ class Arr
     }
 
     /**
+     * Has.
+     *
+     * @param array $array
+     * @param string $path
+     * @return boolean
+     * @throws \Exception
+     */
+    public static function has(array $array, $path)
+    {
+        $check = self::dataByPath($array, $path, false, 'not.found');
+        return $check != 'not.found';
+    }
+
+    /**
      * Get first element of array.
      *
      * @param array $data
