@@ -99,6 +99,17 @@ class PathTest extends TestCase
     }
 
     /**
+     * Test package segments as single.
+     */
+    public function testPackageSegmentsAsSingle()
+    {
+        $this->assertEquals(
+            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/test1/test2/a',
+            Path::package('test1', 'test2', 'a')
+        );
+    }
+
+    /**
      * Test vendor name.
      */
     public function testVendorName()
