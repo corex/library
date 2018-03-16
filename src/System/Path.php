@@ -2,34 +2,34 @@
 
 namespace CoRex\Support\System;
 
+use CoRex\Support\Arr;
+
 class Path
 {
     /**
      * Get path to root of site.
      *
-     * @param array $segments Default [].
+     * @param string|array $segments Dot notation is supported in string. Default null.
      * @return string
      */
-    public static function root(array $segments = [])
+    public static function root($segments = null)
     {
         $path = __DIR__;
         for ($c1 = 0; $c1 < 5; $c1++) {
             $path = dirname($path);
         }
         $path = str_replace('\\', '/', $path);
-        if (count($segments) > 0) {
-            $path .= '/' . implode('/', $segments);
-        }
+        $path = self::addSegmentsToPath($path, $segments);
         return $path;
     }
 
     /**
      * Get path to current package.
      *
-     * @param array $segments Default [].
+     * @param string|array $segments Dot notation is supported in string. Default null.
      * @return string
      */
-    public static function packageCurrent(array $segments = [])
+    public static function packageCurrent($segments = null)
     {
         return self::package(null, null, $segments);
     }
@@ -40,10 +40,10 @@ class Path
      *
      * @param string $vendor Default null which means current.
      * @param string $package Default null which means current.
-     * @param array $segments Default [].
+     * @param @param string|array $segments Dot notation is supported in string. Default null.
      * @return string
      */
-    public static function package($vendor = null, $package = null, array $segments = [])
+    public static function package($vendor = null, $package = null, $segments = null)
     {
         $path = dirname(dirname(static::packagePath()));
         if ($package === null) {
@@ -53,9 +53,7 @@ class Path
             $vendor = static::vendorName();
         }
         $path .= '/' . $vendor . '/' . $package;
-        if (count($segments) > 0) {
-            $path .= '/' . implode('/', $segments);
-        }
+        $path = self::addSegmentsToPath($path, $segments);
         return $path;
     }
 
@@ -83,11 +81,28 @@ class Path
 
     /**
      * Get package path.
+     * Note: if this class is extended, this method has to be overridden to give the base path.
      *
      * @return string
      */
     protected static function packagePath()
     {
         return dirname(dirname(__DIR__));
+    }
+
+    /**
+     * Add segments to path.
+     *
+     * @param string $path
+     * @param @param string|array $segments Dot notation is supported in string.
+     * @return string
+     */
+    private static function addSegmentsToPath($path, $segments)
+    {
+        $segments = Arr::toArray($segments);
+        if (count($segments) > 0) {
+            $path .= '/' . implode('/', $segments);
+        }
+        return $path;
     }
 }

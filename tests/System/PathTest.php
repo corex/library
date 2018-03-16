@@ -38,6 +38,7 @@ class PathTest extends TestCase
     {
         $this->assertEquals($this->rootDirectory, Path::root());
         $this->assertEquals($this->rootDirectory . '/test1/test2', Path::root(['test1', 'test2']));
+        $this->assertEquals($this->rootDirectory . '/test1/test2', Path::root('test1.test2'));
     }
 
     /**
@@ -61,6 +62,39 @@ class PathTest extends TestCase
         $this->assertEquals(
             $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/test1/test2',
             Path::package('test1', 'test2')
+        );
+    }
+
+    /**
+     * Test package segments as array.
+     */
+    public function testPackageSegmentsAsArray()
+    {
+        $this->assertEquals(
+            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/test1/test2/a/b/c/d',
+            Path::package('test1', 'test2', ['a', 'b', 'c', 'd'])
+        );
+    }
+
+    /**
+     * Test package segments as dot notation.
+     */
+    public function testPackageSegmentsAsDotNotation()
+    {
+        $this->assertEquals(
+            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/test1/test2/a/b/c/d',
+            Path::package('test1', 'test2', 'a.b.c.d')
+        );
+    }
+
+    /**
+     * Test package segments as dot notation.
+     */
+    public function testPackageSegmentsAsString()
+    {
+        $this->assertEquals(
+            $this->rootDirectory . '/' . $this->vendorBaseDirectory . '/test1/test2/a/b/c/d',
+            Path::package('test1', 'test2', 'a/b/c/d')
         );
     }
 
