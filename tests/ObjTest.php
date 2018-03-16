@@ -17,7 +17,6 @@ class ObjTest extends TestCase
      */
     public function testGetPrivatePropertiesFromObject()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $objHelperObject = new ObjHelperObject();
         $properties = Obj::getProperties($objHelperObject, null, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($this->checkProperties, $properties);
@@ -28,51 +27,152 @@ class ObjTest extends TestCase
      */
     public function testGetPrivatePropertiesFromStatic()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
         $properties = Obj::getProperties(null, ObjHelperStatic::class, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($this->checkProperties, $properties);
     }
 
     /**
-     * Test get interfaces with.
+     * Test get interfaces with from object.
      */
-    public function testGetInterfacesWith()
+    public function testGetInterfacesWithFromObject()
     {
-        $this->loadClasses();
         $objHelperWithInterface = new ObjHelperWithInterface();
         $interfaces = Obj::getInterfaces($objHelperWithInterface);
         $this->assertArrayHasKey(ObjHelperInterface::class, $interfaces);
     }
 
     /**
-     * Test get interfaces without.
+     * Test get interfaces with from class.
      */
-    public function testGetInterfacesWithout()
+    public function testGetInterfacesWithFromClass()
     {
-        $this->loadClasses();
+        $interfaces = Obj::getInterfaces(ObjHelperWithInterface::class);
+        $this->assertArrayHasKey(ObjHelperInterface::class, $interfaces);
+    }
+
+    /**
+     * Test get interfaces without from object.
+     */
+    public function testGetInterfacesWithoutFromObject()
+    {
         $objHelperWithoutInterface = new ObjHelperWithoutInterface();
         $interfaces = Obj::getInterfaces($objHelperWithoutInterface);
         $this->assertArrayNotHasKey(ObjHelperInterface::class, $interfaces);
     }
 
     /**
-     * Test has interface with.
+     * Test get interfaces without from class.
      */
-    public function testHasInterfaceWith()
+    public function testGetInterfacesWithoutFromClass()
     {
-        $this->loadClasses();
+        $interfaces = Obj::getInterfaces(ObjHelperWithoutInterface::class);
+        $this->assertArrayNotHasKey(ObjHelperInterface::class, $interfaces);
+    }
+
+    /**
+     * Test has interface with from object.
+     */
+    public function testHasInterfaceWithFromObject()
+    {
         $objHelperWithInterface = new ObjHelperWithInterface();
         $this->assertTrue(Obj::hasInterface($objHelperWithInterface, ObjHelperInterface::class));
     }
 
     /**
-     * Test has interface without.
+     * Test has interface with from class.
      */
-    public function testHasInterfaceWithout()
+    public function testHasInterfaceWithFromClass()
     {
-        $this->loadClasses();
+        $this->assertTrue(Obj::hasInterface(ObjHelperWithInterface::class, ObjHelperInterface::class));
+    }
+
+    /**
+     * Test has interface without from object.
+     */
+    public function testHasInterfaceWithoutFromObject()
+    {
         $objHelperWithoutInterface = new ObjHelperWithoutInterface();
         $this->assertFalse(Obj::hasInterface($objHelperWithoutInterface, ObjHelperInterface::class));
+    }
+
+    /**
+     * Test has interface without from class.
+     */
+    public function testHasInterfaceWithoutFromClass()
+    {
+        $this->assertFalse(Obj::hasInterface(ObjHelperWithoutInterface::class, ObjHelperInterface::class));
+    }
+
+    /**
+     * Test getExtends with from object.
+     */
+    public function testGetExtendsWithFromObject()
+    {
+        $objHelperObjectExtended = new ObjHelperObjectExtended();
+        $extends = Obj::getExtends($objHelperObjectExtended);
+        $this->assertTrue(in_array(ObjHelperObject::class, $extends));
+    }
+
+    /**
+     * Test getExtends with from class.
+     */
+    public function testGetExtendsWithFromClass()
+    {
+        $extends = Obj::getExtends(ObjHelperObjectExtended::class);
+        $this->assertTrue(in_array(ObjHelperObject::class, $extends));
+    }
+
+    /**
+     * Test getExtends without from object.
+     */
+    public function testGetExtendsWithoutFromObject()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $extends = Obj::getExtends($objHelperObject);
+        $this->assertEquals([], $extends);
+    }
+
+    /**
+     * Test getExtends without from class.
+     */
+    public function testGetExtendsWithoutFromClass()
+    {
+        $extends = Obj::getExtends(ObjHelperObject::class);
+        $this->assertEquals([], $extends);
+    }
+
+    /**
+     * Test hasExtends with from object.
+     */
+    public function testHasExtendsWithFromObject()
+    {
+        $objHelperObjectExtended = new ObjHelperObjectExtended();
+        $this->assertTrue(Obj::hasExtends($objHelperObjectExtended, ObjHelperObject::class));
+    }
+
+    /**
+     * Test hasExtends with from class.
+     */
+    public function testHasExtendsWithFromClass()
+    {
+        $this->assertTrue(Obj::hasExtends(ObjHelperObjectExtended::class, ObjHelperObject::class));
+    }
+
+    /**
+     * Test hasExtends without from object.
+     */
+    public function testHasExtendsWithoutFromObject()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $this->assertFalse(Obj::hasExtends($objHelperObject, ObjHelperObject::class));
+    }
+
+    /**
+     * Test hasExtends without from class.
+     */
+    public function testHasExtendsWithoutFromClass()
+    {
+        $this->assertFalse(Obj::hasExtends(ObjHelperObject::class, ObjHelperObject::class));
     }
 
     /**
@@ -80,17 +180,16 @@ class ObjTest extends TestCase
      */
     public function testSetPropertyFound()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $check1 = md5(microtime(true)) . '1';
         $check2 = md5(microtime(true)) . '2';
         $check3 = md5(microtime(true)) . '3';
         $check4 = md5(microtime(true)) . '4';
 
         $objHelperObject = new ObjHelperObject();
-        $this->assertTrue(Obj::setProperty($objHelperObject, 'property1', $check1));
-        $this->assertTrue(Obj::setProperty($objHelperObject, 'property2', $check2));
-        $this->assertTrue(Obj::setProperty($objHelperObject, 'property3', $check3));
-        $this->assertTrue(Obj::setProperty($objHelperObject, 'property4', $check4));
+        $this->assertTrue(Obj::setProperty('property1', $objHelperObject, $check1));
+        $this->assertTrue(Obj::setProperty('property2', $objHelperObject, $check2));
+        $this->assertTrue(Obj::setProperty('property3', $objHelperObject, $check3));
+        $this->assertTrue(Obj::setProperty('property4', $objHelperObject, $check4));
 
         $properties = Obj::getProperties($objHelperObject, null, Obj::PROPERTY_PRIVATE);
         $this->assertEquals($check1, $properties['property1']);
@@ -104,10 +203,9 @@ class ObjTest extends TestCase
      */
     public function testSetPropertyNotFound()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $check = md5(microtime(true));
         $objHelperObject = new ObjHelperObject();
-        $property = Obj::getProperty($objHelperObject, 'unknown', $check);
+        $property = Obj::getProperty('unknown', $objHelperObject, $check);
         $this->assertEquals($check, $property);
     }
 
@@ -116,10 +214,9 @@ class ObjTest extends TestCase
      */
     public function testGetPropertyNotFound()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $check = md5(microtime(true));
         $objHelperObject = new ObjHelperObject();
-        $property = Obj::getProperty($objHelperObject, 'unknown', $check);
+        $property = Obj::getProperty('unknown', $objHelperObject, $check);
         $this->assertEquals($check, $property);
     }
 
@@ -128,14 +225,13 @@ class ObjTest extends TestCase
      */
     public function testGetPropertyFound()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $check1 = md5(microtime(true));
         $check2 = md5(microtime(true));
         $objHelperObject = new ObjHelperObject();
-        Obj::setProperty($objHelperObject, 'property1', $check1);
-        Obj::setProperty($objHelperObject, 'property2', $check2);
-        $this->assertEquals($check1, Obj::getProperty($objHelperObject, 'property1'));
-        $this->assertEquals($check2, Obj::getProperty($objHelperObject, 'property2'));
+        Obj::setProperty('property1', $objHelperObject, $check1);
+        Obj::setProperty('property2', $objHelperObject, $check2);
+        $this->assertEquals($check1, Obj::getProperty('property1', $objHelperObject));
+        $this->assertEquals($check2, Obj::getProperty('property2', $objHelperObject));
     }
 
     /**
@@ -143,19 +239,18 @@ class ObjTest extends TestCase
      */
     public function testGetPropertyFoundStatic()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
         $check1 = md5(mt_rand(1, 100000));
         $check2 = md5(mt_rand(1, 100000));
         $check3 = md5(mt_rand(1, 100000));
         $check4 = md5(mt_rand(1, 100000));
-        Obj::setProperty(null, 'property1', $check1, ObjHelperStatic::class);
-        Obj::setProperty(null, 'property2', $check2, ObjHelperStatic::class);
-        Obj::setProperty(null, 'property3', $check3, ObjHelperStatic::class);
-        Obj::setProperty(null, 'property4', $check4, ObjHelperStatic::class);
-        $value1 = Obj::getProperty(null, 'property1', null, ObjHelperStatic::class);
-        $value2 = Obj::getProperty(null, 'property2', null, ObjHelperStatic::class);
-        $value3 = Obj::getProperty(null, 'property3', null, ObjHelperStatic::class);
-        $value4 = Obj::getProperty(null, 'property4', null, ObjHelperStatic::class);
+        Obj::setProperty('property1', null, $check1, ObjHelperStatic::class);
+        Obj::setProperty('property2', null, $check2, ObjHelperStatic::class);
+        Obj::setProperty('property3', null, $check3, ObjHelperStatic::class);
+        Obj::setProperty('property4', null, $check4, ObjHelperStatic::class);
+        $value1 = Obj::getProperty('property1', null, null, ObjHelperStatic::class);
+        $value2 = Obj::getProperty('property2', null, null, ObjHelperStatic::class);
+        $value3 = Obj::getProperty('property3', null, null, ObjHelperStatic::class);
+        $value4 = Obj::getProperty('property4', null, null, ObjHelperStatic::class);
         $this->assertEquals($check1, $value1);
         $this->assertEquals($check2, $value2);
         $this->assertEquals($check3, $value3);
@@ -167,7 +262,6 @@ class ObjTest extends TestCase
      */
     public function testSetPropertiesFound()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $propertiesValues = [
             'property1' => md5(microtime(true)) . '1',
             'property2' => md5(microtime(true)) . '2',
@@ -185,7 +279,6 @@ class ObjTest extends TestCase
      */
     public function testSetPropertiesOneNotFound()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
         $propertiesValues = [
             'property1' => md5(microtime(true)) . '1',
             'unknown' => md5(microtime(true)),
@@ -201,19 +294,85 @@ class ObjTest extends TestCase
      */
     public function testCallMethodPrivateStatic()
     {
-        require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
         $method = 'privateMethod';
         $check = Obj::callMethod($method, null, [], ObjHelperStatic::class);
         $this->assertEquals('(' . $method . ')', $check);
     }
 
     /**
-     * Load classes.
+     * Test getReflectionClass by object.
+     *
+     * @throws ReflectionException
      */
-    private function loadClasses()
+    public function testGetReflectionClassByObject()
     {
+        $objHelperObject = new ObjHelperObject();
+        $reflectionClass = $this->getReflectionClassFromObj($objHelperObject);
+        $this->assertEquals(ObjHelperObject::class, $reflectionClass->getName());
+    }
+
+    /**
+     * Test getReflectionClass by class.
+     *
+     * @throws ReflectionException
+     */
+    public function testGetReflectionClassByClass()
+    {
+        $reflectionClass = $this->getReflectionClassFromObj(ObjHelperObject::class);
+        $this->assertEquals(ObjHelperObject::class, $reflectionClass->getName());
+    }
+
+    /**
+     * Test getReflectionClass by object override.
+     *
+     * @throws ReflectionException
+     */
+    public function testGetReflectionClassByByObjectOverride()
+    {
+        $objHelperObjectExtended = new ObjHelperObjectExtended();
+        $reflectionClass = $this->getReflectionClassFromObj($objHelperObjectExtended, ObjHelperObject::class);
+        $this->assertEquals(ObjHelperObject::class, $reflectionClass->getName());
+    }
+
+    /**
+     * Test getReflectionClass by class override.
+     *
+     * @throws ReflectionException
+     */
+    public function testGetReflectionClassByByClassOverride()
+    {
+        $reflectionClass = $this->getReflectionClassFromObj(ObjHelperObjectExtended::class, ObjHelperObject::class);
+        $this->assertEquals(ObjHelperObject::class, $reflectionClass->getName());
+    }
+
+    /**
+     * Setup.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        // Load helper classes.
+        require_once(__DIR__ . '/Helpers/ObjHelperObject.php');
+        require_once(__DIR__ . '/Helpers/ObjHelperObjectExtended.php');
+        require_once(__DIR__ . '/Helpers/ObjHelperStatic.php');
         require_once(__DIR__ . '/Helpers/ObjHelperInterface.php');
         require_once(__DIR__ . '/Helpers/ObjHelperWithInterface.php');
         require_once(__DIR__ . '/Helpers/ObjHelperWithoutInterface.php');
+    }
+
+    /**
+     * Get reflection class from obj.
+     *
+     * @param object|string $objectOrClass
+     * @param string $classOverride Default null which means class from $object.
+     * @return ReflectionClass
+     * @throws ReflectionException
+     */
+    private function getReflectionClassFromObj($objectOrClass, $classOverride = null)
+    {
+        $reflectionMethod = new ReflectionMethod(Obj::class, 'getReflectionClass');
+        $reflectionMethod->setAccessible(true);
+        return $reflectionMethod->invokeArgs(null, [$objectOrClass, $classOverride]);
     }
 }

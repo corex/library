@@ -17,13 +17,15 @@ class Obj
      * Get properties.
      *
      * @param object $object
-     * @param string $class Default null which means class from $object.
+     * @param string $classOverride Default null which means class from $object.
      * @param integer $propertyType Default null.
      * @return array
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public static function getProperties($object, $class = null, $propertyType = null)
+    public static function getProperties($object, $classOverride = null, $propertyType = null)
     {
-        $reflectionClass = self::getReflectionClass($object, $class);
+        $reflectionClass = self::getReflectionClass($object, $classOverride);
         $properties = [];
         $reflectionProperties = $reflectionClass->getProperties($propertyType);
         foreach ($reflectionProperties as $property) {
@@ -36,15 +38,17 @@ class Obj
     /**
      * Get property.
      *
-     * @param object $object
      * @param string $property
+     * @param object $object
      * @param mixed $defaultValue Default null.
-     * @param string $class Default null which means class from $object.
+     * @param string $classOverride Default null which means class from $object.
      * @return mixed
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public static function getProperty($object, $property, $defaultValue = null, $class = null)
+    public static function getProperty($property, $object, $defaultValue = null, $classOverride = null)
     {
-        $reflectionClass = self::getReflectionClass($object, $class);
+        $reflectionClass = self::getReflectionClass($object, $classOverride);
         try {
             $property = $reflectionClass->getProperty($property);
             if ($object === null && !$property->isStatic()) {
@@ -62,12 +66,14 @@ class Obj
      *
      * @param object $object
      * @param array $propertiesValues Key/value.
-     * @param string $class Default null which means class from $object.
+     * @param string $classOverride Default null which means class from $object.
      * @return boolean
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public static function setProperties($object, array $propertiesValues, $class = null)
+    public static function setProperties($object, array $propertiesValues, $classOverride = null)
     {
-        $reflectionClass = self::getReflectionClass($object, $class);
+        $reflectionClass = self::getReflectionClass($object, $classOverride);
         if (count($propertiesValues) == 0) {
             return false;
         }
@@ -86,15 +92,17 @@ class Obj
     /**
      * Set property.
      *
-     * @param object $object
      * @param string $property
+     * @param object $object
      * @param mixed $value
-     * @param string $class Default null which means class from $object.
+     * @param string $classOverride Default null which means class from $object.
      * @return boolean
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public static function setProperty($object, $property, $value, $class = null)
+    public static function setProperty($property, $object, $value, $classOverride = null)
     {
-        $reflectionClass = self::getReflectionClass($object, $class);
+        $reflectionClass = self::getReflectionClass($object, $classOverride);
         try {
             $property = $reflectionClass->getProperty($property);
             $property->setAccessible(true);
@@ -111,15 +119,16 @@ class Obj
      * @param string $name
      * @param object $object
      * @param array $arguments Default [].
-     * @param string $class Default null.
+     * @param string $classOverride Default null.
      * @return mixed
+     * @throws \ReflectionException
      */
-    public static function callMethod($name, $object, array $arguments = [], $class = null)
+    public static function callMethod($name, $object, array $arguments = [], $classOverride = null)
     {
-        if ($class === null) {
-            $class = get_class($object);
+        if ($classOverride === null) {
+            $classOverride = get_class($object);
         }
-        $method = new ReflectionMethod($class, $name);
+        $method = new ReflectionMethod($classOverride, $name);
         $method->setAccessible(true);
         if (count($arguments) > 0) {
             return $method->invokeArgs($object, $arguments);
@@ -131,37 +140,72 @@ class Obj
     /**
      * Get interfaces.
      *
-     * @param object $object
+     * @param object|string $objectOrClass
      * @return array
      */
-    public static function getInterfaces($object)
+    public static function getInterfaces($objectOrClass)
     {
-        return class_implements(get_class($object));
+        if (is_object($objectOrClass)) {
+            $objectOrClass = get_class($objectOrClass);
+        }
+        return class_implements($objectOrClass);
     }
 
     /**
      * Has interface.
      *
-     * @param object $object
+     * @param object|string $objectOrClass
      * @param string $interfaceClassName
      * @return boolean
      */
-    public static function hasInterface($object, $interfaceClassName)
+    public static function hasInterface($objectOrClass, $interfaceClassName)
     {
-        return in_array($interfaceClassName, self::getInterfaces($object));
+        return in_array($interfaceClassName, self::getInterfaces($objectOrClass));
+    }
+
+    /**
+     * Get extends.
+     *
+     * @param object|string $objectOrClass
+     * @return array
+     */
+    public static function getExtends($objectOrClass)
+    {
+        if (is_object($objectOrClass)) {
+            $objectOrClass = get_class($objectOrClass);
+        }
+        return array_values(class_parents($objectOrClass));
+    }
+
+    /**
+     * Has extends.
+     *
+     * @param object|string $objectOrClass
+     * @param string $class
+     * @return boolean
+     */
+    public static function hasExtends($objectOrClass, $class)
+    {
+        return in_array($class, self::getExtends($objectOrClass));
     }
 
     /**
      * Get reflection class.
      *
-     * @param object $object
-     * @param string $class Default null which means class from $object.
+     * @param object|string $objectOrClass
+     * @param string $classOverride Default null which means class from $object.
      * @return \ReflectionClass
+     * @throws \ReflectionException
      */
-    private static function getReflectionClass($object, $class = null)
+    private static function getReflectionClass($objectOrClass, $classOverride = null)
     {
+        $class = $classOverride;
         if ($class === null) {
-            $class = get_class($object);
+            if (is_object($objectOrClass)) {
+                $class = get_class($objectOrClass);
+            } else {
+                $class = $objectOrClass;
+            }
         }
         return new ReflectionClass($class);
     }
