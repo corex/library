@@ -317,6 +317,26 @@ class Arr
     }
 
     /**
+     * To array.
+     *
+     * @param string|array $stringOrArray
+     * @param string $separator Default '.'.
+     * @return array
+     */
+    public static function toArray($stringOrArray, $separator = '.')
+    {
+        if (is_string($stringOrArray)) {
+            if (trim($stringOrArray) != '') {
+                $stringOrArray = explode($separator, $stringOrArray);
+            }
+        }
+        if (!is_array($stringOrArray)) {
+            return [];
+        }
+        return $stringOrArray;
+    }
+
+    /**
      * Get data by path.
      *
      * @param array $data

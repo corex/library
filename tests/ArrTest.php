@@ -218,4 +218,44 @@ class ArrTest extends TestCase
         ];
         $this->assertEquals($linesMatch, Arr::lineMatch($lines, 'use ', ';', true, true));
     }
+
+    /**
+     * Test toArray by string.
+     */
+    public function testToArrayByString()
+    {
+        $this->assertEquals(['a', 'b', 'c', 'd'], Arr::toArray('a.b.c.d'));
+    }
+
+    /**
+     * Test toArray by empty string.
+     */
+    public function testToArrayByEmptyString()
+    {
+        $this->assertEquals([], Arr::toArray(''));
+    }
+
+    /**
+     * Test toArray by array.
+     */
+    public function testToArrayByArray()
+    {
+        $this->assertEquals(['a', 'b', 'c', 'd'], Arr::toArray(['a', 'b', 'c', 'd']));
+    }
+
+    /**
+     * Test toArray by empty array.
+     */
+    public function testToArrayByEmptyArray()
+    {
+        $this->assertEquals([], Arr::toArray([]));
+    }
+
+    /**
+     * Test toArray by other type.
+     */
+    public function testToArrayByOtherType()
+    {
+        $this->assertEquals([], Arr::toArray(false));
+    }
 }
