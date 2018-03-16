@@ -313,6 +313,23 @@ $firstname = $container->get('actor.firstname');
 ```
 
 
+### Base/BaseProperties (abstract)
+Simple abstract class with option to parse array of data which will be parsed to existing properties on class (private, protected and public).
+```php
+class BaseProperties extends \CoRex\Support\Base\BaseProperties
+{
+    private $privateValue;
+    protected $protectedValue;
+    public $publicValue;
+}
+$properties = new BaseProperties([
+    'privateValue' => 'something',
+    'protectedValue' => 'something',
+    'publicValue' => 'something'
+]);
+```
+
+
 ### Str
 Various string helpers (multi-byte).
 
