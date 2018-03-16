@@ -101,6 +101,31 @@ class Arr
     }
 
     /**
+     * Remove.
+     *
+     * @param array $array
+     * @param string $path
+     * @return array
+     * @throws \Exception
+     */
+    public static function remove(array $array, $path)
+    {
+        // Extract key/path.
+        $pathKey = Str::last($path, '.');
+        $path = Str::removeLast($path, '.');
+
+        // If found, remove element.
+        $arrayElement = &self::dataByPath($array, $path, false, 'not.found');
+        if ($arrayElement != 'not.found') {
+            if (array_key_exists($pathKey, $arrayElement)) {
+                unset($arrayElement[$pathKey]);
+            }
+        }
+
+        return $array;
+    }
+
+    /**
      * Remote first element of array.
      *
      * @param array $data

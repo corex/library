@@ -75,6 +75,27 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test remove.
+     *
+     * @throws Exception
+     */
+    public function testRemove()
+    {
+        $data = [
+            'this' => [
+                'is' => [
+                    'a' => [
+                        'test' => md5(mt_rand(1, 100000))
+                    ]
+                ]
+            ]
+        ];
+        $this->assertTrue(Arr::has($data, 'this.is.a.test'));
+        $data = Arr::remove($data, 'this.is.a.test');
+        $this->assertFalse(Arr::has($data, 'this.is.a.test'));
+    }
+
+    /**
      * Test remove first.
      */
     public function testRemoveFirst()
