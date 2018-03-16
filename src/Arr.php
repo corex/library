@@ -11,6 +11,7 @@ class Arr
      * @param string $path Uses dot notation.
      * @param mixed $defaultValue Default null.
      * @return mixed|null
+     * @throws \Exception
      */
     public static function get(array $data, $path, $defaultValue = null)
     {
@@ -28,6 +29,7 @@ class Arr
      * @param string $path Uses dot notation.
      * @param mixed $value
      * @param boolean $create Default false.
+     * @throws \Exception
      */
     public static function set(array &$array, $path, $value, $create = false)
     {
@@ -248,6 +250,7 @@ class Arr
      * @param string $path Uses dot notation.
      * @param mixed $defaultValue Default null.
      * @return array
+     * @throws \Exception
      */
     public static function pluck(array $array, $path, $defaultValue = null)
     {

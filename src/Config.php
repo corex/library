@@ -64,6 +64,7 @@ class Config
      * @param string $section
      * @param callable $closure
      * @param string $app Default null.
+     * @return \Closure
      * @throws \Exception
      */
     public static function getClosure($section, callable $closure, $app = null)
@@ -82,6 +83,7 @@ class Config
      * @param string $path Uses dot notation.
      * @param string $app Default null.
      * @return array
+     * @throws \Exception
      */
     public static function getKeys($path, $app = null)
     {
@@ -113,6 +115,7 @@ class Config
      * @param string $section
      * @param string $app Default null.
      * @return mixed
+     * @throws \Exception
      */
     public static function getSection($section, $app = null)
     {

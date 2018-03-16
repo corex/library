@@ -58,6 +58,7 @@ class Container
      *
      * @param string $path Uses dot notation.
      * @param mixed $value
+     * @throws \Exception
      */
     public function set($path, $value)
     {
@@ -73,6 +74,7 @@ class Container
      * Set array (merged by key).
      *
      * @param array $data
+     * @throws \Exception
      */
     public function setArray(array $data)
     {
@@ -89,6 +91,7 @@ class Container
      * @param string $path Uses dot notation.
      * @param mixed $defaultValue
      * @return mixed
+     * @throws \Exception
      */
     public function get($path, $defaultValue = null)
     {
@@ -107,6 +110,7 @@ class Container
      * Delete value.
      *
      * @param string $path Uses dot notation.
+     * @throws \Exception
      */
     public function delete($path)
     {

@@ -77,6 +77,7 @@ class Style
      * @param string $text
      * @param string $style
      * @return string
+     * @throws \Exception
      */
     public static function applyStyle($text, $style)
     {

@@ -49,6 +49,7 @@ class OutputFormatterStyle
      * @param string|null $foreground The style foreground color name.
      * @param string|null $background The style background color name.
      * @param array $options The style options.
+     * @throws \Exception
      */
     public function __construct($foreground = null, $background = null, array $options = array())
     {
@@ -162,6 +163,7 @@ class OutputFormatterStyle
      * Sets multiple style options at once.
      *
      * @param array $options
+     * @throws \Exception
      */
     public function setOptions(array $options)
     {
@@ -192,7 +194,7 @@ class OutputFormatterStyle
             $unsetCodes[] = $this->background['unset'];
         }
         if (count($this->options)) {
-            foreach ($this->o as $option) {
+            foreach ($this->options as $option) {
                 $setCodes[] = $option['set'];
                 $unsetCodes[] = $option['unset'];
             }
