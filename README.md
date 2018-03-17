@@ -9,7 +9,37 @@ With version 3.0.0, this package has been thinned out. Removed packages has eith
 - Code/Convention - merged into Str
 - Config - Removed in favor of package corex/config.
 - Collection - Removed in favor of package corex/collection.
-- System/Cache - Removed in favor of package corex/cache.
+
+
+### System/Cache
+Cache.
+
+A few examples.
+```php
+// Generate key based on string + array.
+$key = Cache::key('test', ['param1' => 'Something']);
+
+// Set path for cache stores.
+Cache::path('/path/cache/stores');
+
+// Set lifetime for cache in seconds.
+Cache::lifetime(600);
+
+// Set lifetime for cache in minutes.
+Cache::lifetime('60m');
+
+// Set lifetime for cache in hours.
+Cache::lifetime('1h');
+
+// Get from cache from 'custom-store'.
+$data = Cache::get('test', 'default.value', 'custom-store');
+
+// Put data in cache to 'custom-store'.
+Cache::put('test', 'data', 'custom-store');
+
+// Flush cache 'custom-store'.
+Cache::flush('custom-store');
+```
 
 
 ### System/Console
