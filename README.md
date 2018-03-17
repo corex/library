@@ -8,7 +8,6 @@ Some of the code is heavily inspired by Laravel, Yii and other frameworks.
 With version 3.0.0, this package has been thinned out. Removed packages has either been merged into existing code or been moved to separate packages.
 - Code/Convention - merged into Str
 - Config - Removed in favor of package corex/config.
-- Collection - Removed in favor of package corex/collection.
 
 
 ### System/Cache
@@ -217,6 +216,33 @@ Arr::set($array, 'actor.firstname', $firstname);
 
 // Pluck firstnames from list of actors.
 $firstnames = Arr::pluck($actors, 'firstname');
+```
+
+
+### Collection
+Helper for manipulation of elements (collections).
+
+A few examples.
+```php
+// Update each element in collection.
+$collection = new Collection($actors);
+$collection->each(function (&$actor) {
+    $actor->firstname = 'Mr. ' . $actor->firstname;
+});
+
+// Get sum of value.
+$collection = new Collection($values);
+$sum = $collection->sum('amount');
+
+// Loop through actors.
+$collection = new Collection($actors);
+foreach ($collection => $actor) {
+    var_dump($actor->firstname);
+};
+
+// Get last element.
+$collection = new Collection($actors);
+$lastElement = $collection->last();
 ```
 
 
