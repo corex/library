@@ -7,6 +7,7 @@ Some of the code is heavily inspired by Laravel, Yii and other frameworks.
 
 With version 3.0.0, this package has been thinned out. Removed packages has either been merged into existing code or been moved to separate packages.
 - Code/Convention - merged into Str
+- Config - Removed in favor of package corex/config.
 
 ### System/Cache
 Cache.
@@ -260,42 +261,6 @@ foreach ($collection => $actor) {
 // Get last element.
 $collection = new Collection($actors);
 $lastElement = $collection->last();
-```
-
-
-### Config
-Basic configuration class/helper which works almost the same way as Laravel.
-- Multiple locations are supported through apps.
-- Configuration files (sections) live in a directory named "config" in the root directory
-of your project. It is possible to change this path via registerApp().
-
-Generel usage.
-```php
-// Register path for myApp.
-Config::registerApp('/my/app/path', 'myApp');
-
-// Get firstname of actor from global access.
-$firstname = Config::get('actor.firstname');
-
-// Get firstname of actor from myApp.
-$firstname = Config::get('actor.firstname', null, 'myApp');
-```
-
-Getting configuration as object.
-```php
-$myObject = Config::getObject('actor', MyObject::class);
-```
-
-Getting configuration parsed on closure.
-```php
-$data = Config::getClosure('actor', function ($data) {
-    return $data;
-});
-```
-
-Getting section.
-```php
-$data = Config::get('actor');
 ```
 
 
