@@ -160,25 +160,6 @@ if (!Session::has('actor')) {
 ```
 
 
-### System/Template
-Template.
-
-A few examples.
-```php
-// Load a template and render.
-$template = new Template($path/to/templates);
-$template->loadTemplate('welcome');
-$template->setToken('title', 'Welcome');
-print($template->render());
-
-// Set a template and render.
-$template = new Template($path/to/templates);
-$template->setTemplate('{title}');
-$template->setToken('title', 'Welcome');
-print($template->render());
-```
-
-
 ### System/Token
 Token handler (uses Session handler).
 
