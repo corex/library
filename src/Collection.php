@@ -9,9 +9,9 @@ class Collection implements \Iterator, \Countable
     /**
      * Data constructor.
      *
-     * @param mixed $items Default null which means [].
+     * @param array $items Default null which means [].
      */
-    public function __construct($items = null)
+    public function __construct(array $items = null)
     {
         if ($items === null) {
             $items = [];

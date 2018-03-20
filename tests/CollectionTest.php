@@ -1,6 +1,7 @@
 <?php
 
 use CoRex\Support\Collection;
+use CoRex\Support\Obj;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
@@ -25,6 +26,39 @@ class CollectionTest extends TestCase
         parent::setUp();
         $this->data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
         $this->collection = new Collection($this->data);
+    }
+
+    /**
+     * Test constructor null.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    public function testConstructorNull()
+    {
+        $collection = new Collection();
+        $this->assertEquals([], Obj::getProperty('items', $collection));
+    }
+
+    /**
+     * Test constructor array.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    public function testConstructorArray()
+    {
+        $collection = new Collection($this->data);
+        $this->assertEquals($this->data, Obj::getProperty('items', $collection));
+    }
+
+    /**
+     * Test constructor other than array.
+     */
+    public function testConstructorOtherThanArray()
+    {
+        $this->expectException(TypeError::class);
+        new Collection('davs');
     }
 
     /**
