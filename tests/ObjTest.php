@@ -14,6 +14,8 @@ class ObjTest extends TestCase
 
     /**
      * Test get private properties from object.
+     *
+     * @throws ReflectionException
      */
     public function testGetPrivatePropertiesFromObject()
     {
@@ -24,6 +26,8 @@ class ObjTest extends TestCase
 
     /**
      * Test get private properties from static.
+     *
+     * @throws ReflectionException
      */
     public function testGetPrivatePropertiesFromStatic()
     {
@@ -177,6 +181,8 @@ class ObjTest extends TestCase
 
     /**
      * Test set property.
+     *
+     * @throws ReflectionException
      */
     public function testSetPropertyFound()
     {
@@ -200,6 +206,8 @@ class ObjTest extends TestCase
 
     /**
      * Test set property not found.
+     *
+     * @throws ReflectionException
      */
     public function testSetPropertyNotFound()
     {
@@ -211,6 +219,8 @@ class ObjTest extends TestCase
 
     /**
      * Test get property not found.
+     *
+     * @throws ReflectionException
      */
     public function testGetPropertyNotFound()
     {
@@ -222,6 +232,8 @@ class ObjTest extends TestCase
 
     /**
      * Test get property found.
+     *
+     * @throws ReflectionException
      */
     public function testGetPropertyFound()
     {
@@ -236,6 +248,8 @@ class ObjTest extends TestCase
 
     /**
      * Test get property found static.
+     *
+     * @throws ReflectionException
      */
     public function testGetPropertyFoundStatic()
     {
@@ -259,6 +273,8 @@ class ObjTest extends TestCase
 
     /**
      * Test set properties.
+     *
+     * @throws ReflectionException
      */
     public function testSetPropertiesFound()
     {
@@ -276,6 +292,8 @@ class ObjTest extends TestCase
 
     /**
      * Test set properties one not found.
+     *
+     * @throws ReflectionException
      */
     public function testSetPropertiesOneNotFound()
     {
@@ -291,6 +309,8 @@ class ObjTest extends TestCase
 
     /**
      * Test callMethod private static.
+     *
+     * @throws ReflectionException
      */
     public function testCallMethodPrivateStatic()
     {

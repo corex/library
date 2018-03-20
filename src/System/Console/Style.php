@@ -57,18 +57,21 @@ class Style
      * @param string $foreground Default ''.
      * @param string $background Default ''.
      * @return string
-     * @throws \Exception
      */
     public static function apply($text, $foreground = '', $background = '')
     {
-        $style = new OutputFormatterStyle();
-        if ($foreground != '') {
-            $style->setForeground($foreground);
+        try {
+            $style = new OutputFormatterStyle();
+            if ($foreground != '') {
+                $style->setForeground($foreground);
+            }
+            if ($background != '') {
+                $style->setBackground($background);
+            }
+            return $style->apply($text);
+        } catch (\Exception $e) {
+            return $text;
         }
-        if ($background != '') {
-            $style->setBackground($background);
-        }
-        return $style->apply($text);
     }
 
     /**
@@ -77,7 +80,6 @@ class Style
      * @param string $text
      * @param string $style
      * @return string
-     * @throws \Exception
      */
     public static function applyStyle($text, $style)
     {

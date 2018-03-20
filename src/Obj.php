@@ -20,7 +20,6 @@ class Obj
      * @param string $classOverride Default null which means class from $object.
      * @param integer $propertyType Default null.
      * @return array
-     * @throws Exception
      * @throws \ReflectionException
      */
     public static function getProperties($object, $classOverride = null, $propertyType = null)
@@ -43,7 +42,6 @@ class Obj
      * @param mixed $defaultValue Default null.
      * @param string $classOverride Default null which means class from $object.
      * @return mixed
-     * @throws Exception
      * @throws \ReflectionException
      */
     public static function getProperty($property, $object, $defaultValue = null, $classOverride = null)
@@ -68,7 +66,6 @@ class Obj
      * @param array $propertiesValues Key/value.
      * @param string $classOverride Default null which means class from $object.
      * @return boolean
-     * @throws Exception
      * @throws \ReflectionException
      */
     public static function setProperties($object, array $propertiesValues, $classOverride = null)
@@ -97,7 +94,6 @@ class Obj
      * @param mixed $value
      * @param string $classOverride Default null which means class from $object.
      * @return boolean
-     * @throws Exception
      * @throws \ReflectionException
      */
     public static function setProperty($property, $object, $value, $classOverride = null)
@@ -194,7 +190,7 @@ class Obj
      *
      * @param object|string $objectOrClass
      * @param string $classOverride Default null which means class from $object.
-     * @return \ReflectionClass
+     * @return ReflectionClass
      * @throws \ReflectionException
      */
     private static function getReflectionClass($objectOrClass, $classOverride = null)

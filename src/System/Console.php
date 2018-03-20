@@ -65,7 +65,6 @@ class Console
      * @param string $style Default '' which means 'normal'.
      * @param integer $length Default 0 which means not fixed length. $messages NOT shortened.
      * @param string $suffix Default ''.
-     * @throws \Exception
      */
     public static function write($messages, $style = '', $length = 0, $suffix = '')
     {
@@ -94,7 +93,6 @@ class Console
      * @param string|array $messages
      * @param string $style Default '' which means normal.
      * @param integer $length Default 0 which means not fixed length.
-     * @throws \Exception
      */
     public static function writeln($messages, $style = '', $length = 0)
     {
@@ -106,7 +104,6 @@ class Console
      *
      * @param string $title
      * @param string $style Default 'title'.
-     * @throws \Exception
      */
     public static function header($title, $style = 'title')
     {
@@ -119,7 +116,6 @@ class Console
      * Write separator-line.
      *
      * @param string $character Default '-'.
-     * @throws \Exception
      */
     public static function separator($character = '-')
     {
@@ -132,7 +128,6 @@ class Console
      * @param string|array $messages
      * @param boolean $linebreak Default false.
      * @param integer $length Default 0 which means not fixed length.
-     * @throws \Exception
      */
     public static function info($messages, $linebreak = true, $length = 0)
     {
@@ -146,7 +141,6 @@ class Console
      * @param string|array $messages
      * @param boolean $linebreak Default false.
      * @param integer $length Default 0 which means not fixed length.
-     * @throws \Exception
      */
     public static function error($messages, $linebreak = true, $length = 0)
     {
@@ -160,7 +154,6 @@ class Console
      * @param string|array $messages
      * @param boolean $linebreak Default false.
      * @param integer $length Default 0 which means not fixed length.
-     * @throws \Exception
      */
     public static function comment($messages, $linebreak = true, $length = 0)
     {
@@ -174,7 +167,6 @@ class Console
      * @param string|array $messages
      * @param boolean $linebreak Default false.
      * @param integer $length Default 0 which means not fixed length.
-     * @throws \Exception
      */
     public static function warning($messages, $linebreak = true, $length = 0)
     {
@@ -188,7 +180,6 @@ class Console
      * @param string|array $messages
      * @param boolean $linebreak Default false.
      * @param integer $length Default 0 which means not fixed length.
-     * @throws \Exception
      */
     public static function title($messages, $linebreak = true, $length = 0)
     {
@@ -201,7 +192,6 @@ class Console
      *
      * @param string|array $messages
      * @param string $style
-     * @throws \Exception
      */
     public static function block($messages, $style)
     {
@@ -228,7 +218,6 @@ class Console
      * @param mixed $defaultValue Default null.
      * @param boolean $secret Default false.
      * @return string
-     * @throws \Exception
      */
     public static function ask($question, $defaultValue = null, $secret = false)
     {
@@ -277,7 +266,6 @@ class Console
      * @param boolean $allowShort Allow to use "y" / "n".
      * @param boolean $defaultValue Default false.
      * @return boolean
-     * @throws \Exception
      */
     public static function confirm($question, $allowShort, $defaultValue = false)
     {
@@ -291,7 +279,6 @@ class Console
      *
      * @param string $question
      * @return string
-     * @throws \Exception
      */
     public static function secret($question)
     {
@@ -305,7 +292,6 @@ class Console
      * @param array $choices
      * @param mixed $defaultValue Default null.
      * @return string
-     * @throws \Exception
      */
     public static function choice($question, array $choices, $defaultValue = null)
     {
@@ -358,7 +344,6 @@ class Console
      *
      * @param array $rows
      * @param array $headers Default [].
-     * @throws \Exception
      */
     public static function table(array $rows, array $headers = [])
     {
@@ -377,7 +362,6 @@ class Console
      * @param array $words
      * @param string $style Default ''.
      * @param string $separator Default ', '.
-     * @throws \Exception
      */
     public static function words(array $words, $style = '', $separator = ', ')
     {
@@ -400,7 +384,6 @@ class Console
      *
      * @param array $data
      * @param string $separator Default ':'.
-     * @throws \Exception
      */
     public static function properties(array $data, $separator = ':')
     {

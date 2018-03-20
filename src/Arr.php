@@ -8,14 +8,13 @@ class Arr
      * Get value from data.
      *
      * @param array $data
-     * @param string $path Uses dot notation.
+     * @param string $key Uses dot notation.
      * @param mixed $defaultValue Default null.
      * @return mixed|null
-     * @throws \Exception
      */
-    public static function get(array $data, $path, $defaultValue = null)
+    public static function get(array $data, $key, $defaultValue = null)
     {
-        $data = self::dataByPath($data, $path);
+        $data = self::dataByPath($data, $key);
         if ($data === null) {
             $data = $defaultValue;
         }
@@ -26,24 +25,23 @@ class Arr
      * Set value in data.
      *
      * @param array $array
-     * @param string $path Uses dot notation.
+     * @param string $key Uses dot notation.
      * @param mixed $value
      * @param boolean $create Default false.
-     * @throws \Exception
      */
-    public static function set(array &$array, $path, $value, $create = false)
+    public static function set(array &$array, $key, $value, $create = false)
     {
         // Extract key/path.
-        $pathKey = Str::last($path, '.');
-        $path = Str::removeLast($path, '.');
+        $keyLast = Str::last($key, '.');
+        $key = Str::removeLast($key, '.');
 
         // Extract data.
         $pathArray = null;
-        if ($path != '' && $path !== null) {
-            $array = &self::dataByPath($array, $path, $create);
+        if ($key != '' && $key !== null) {
+            $array = &self::dataByPath($array, $key, $create);
         }
         if ($array !== null || $create) {
-            $array[$pathKey] = $value;
+            $array[$keyLast] = $value;
         }
     }
 
@@ -51,13 +49,12 @@ class Arr
      * Has.
      *
      * @param array $array
-     * @param string $path
+     * @param string $key Uses dot notation.
      * @return boolean
-     * @throws \Exception
      */
-    public static function has(array $array, $path)
+    public static function has(array $array, $key)
     {
-        $check = self::dataByPath($array, $path, false, 'not.found');
+        $check = self::dataByPath($array, $key, false, 'not.found');
         return $check != 'not.found';
     }
 
@@ -104,21 +101,20 @@ class Arr
      * Remove.
      *
      * @param array $array
-     * @param string $path
+     * @param string $key Uses dot notation.
      * @return array
-     * @throws \Exception
      */
-    public static function remove(array $array, $path)
+    public static function remove(array $array, $key)
     {
         // Extract key/path.
-        $pathKey = Str::last($path, '.');
-        $path = Str::removeLast($path, '.');
+        $keyLast = Str::last($key, '.');
+        $key = Str::removeLast($key, '.');
 
         // If found, remove element.
-        $arrayElement = &self::dataByPath($array, $path, false, 'not.found');
+        $arrayElement = &self::dataByPath($array, $key, false, 'not.found');
         if ($arrayElement != 'not.found') {
-            if (array_key_exists($pathKey, $arrayElement)) {
-                unset($arrayElement[$pathKey]);
+            if (array_key_exists($keyLast, $arrayElement)) {
+                unset($arrayElement[$keyLast]);
             }
         }
 
@@ -286,12 +282,11 @@ class Arr
      * Pluck.
      *
      * @param array $array
-     * @param string $path Uses dot notation.
+     * @param string $key Uses dot notation.
      * @param mixed $defaultValue Default null.
      * @return array
-     * @throws \Exception
      */
-    public static function pluck(array $array, $path, $defaultValue = null)
+    public static function pluck(array $array, $key, $defaultValue = null)
     {
         $result = [];
         if (!is_array($array)) {
@@ -299,19 +294,19 @@ class Arr
         }
 
         // Extract key/path.
-        $pathKey = Str::last($path, '.');
-        $path = Str::removeLast($path, '.');
+        $keyLast = Str::last($key, '.');
+        $key = Str::removeLast($key, '.');
 
         // Extract data.
-        if ($path != '' && $path !== null) {
-            $array = self::dataByPath($array, $path);
+        if ($key != '' && $key !== null) {
+            $array = self::dataByPath($array, $key);
         }
         foreach ($array as $item) {
             $value = $defaultValue;
-            if (is_object($item) && isset($item->{$pathKey})) {
-                $value = $item->{$pathKey};
-            } elseif (is_array($item) && isset($item[$pathKey])) {
-                $value = $item[$pathKey];
+            if (is_object($item) && isset($item->{$keyLast})) {
+                $value = $item->{$keyLast};
+            } elseif (is_array($item) && isset($item[$keyLast])) {
+                $value = $item[$keyLast];
             }
             $result[] = $value;
         }
@@ -382,18 +377,17 @@ class Arr
      * Get data by path.
      *
      * @param array $data
-     * @param string $path
+     * @param string $key Uses dot notation.
      * @param boolean $create Default false.
      * @param mixed $defaultValue Default null.
      * @return mixed
-     * @throws \Exception
      */
-    private static function &dataByPath(array &$data, $path, $create = false, $defaultValue = null)
+    private static function &dataByPath(array &$data, $key, $create = false, $defaultValue = null)
     {
-        if ((string)$path == '') {
+        if ((string)$key == '') {
             return $data;
         }
-        $pathSegments = explode('.', $path);
+        $pathSegments = explode('.', $key);
         foreach ($pathSegments as $pathSegment) {
             if (!isset($data[$pathSegment]) && !$create) {
                 return $defaultValue;
