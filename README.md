@@ -246,6 +246,20 @@ $lastElement = $collection->last();
 ```
 
 
+### Container
+Container to help with data manipulation ie. array/json.
+
+A few examples.
+```php
+// Get json.
+$container = new Container();
+$container->set('actor.firstname', 'Roger');
+
+// Get firstname of actor using dot notation.
+$firstname = $container->get('actor.firstname');
+```
+
+
 ### Base/BaseProperties (abstract)
 Simple abstract class with option to parse array of data which will be parsed to existing properties on class (private, protected and public).
 ```php
