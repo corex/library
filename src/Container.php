@@ -15,9 +15,9 @@ class Container
     /**
      * Constructor.
      *
-     * @param array $properties Default null.
+     * @param array $properties
      */
-    public function __construct(array $properties = null)
+    public function __construct(array $properties = [])
     {
         $this->clear($properties);
     }
@@ -25,9 +25,9 @@ class Container
     /**
      * Clear.
      *
-     * @param array $properties Default null which means [].
+     * @param array $properties
      */
-    public function clear(array $properties = null)
+    public function clear(array $properties = [])
     {
         if ($properties === null) {
             $properties = [];
