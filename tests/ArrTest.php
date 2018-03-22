@@ -307,4 +307,52 @@ class ArrTest extends TestCase
     {
         $this->assertEquals(['a'], Arr::toArray('a'));
     }
+
+    /**
+     * Test toJson pretty pring.
+     */
+    public function testToJsonPrettyPrint()
+    {
+        $data = [
+            'string' => 'test',
+            'bool' => false,
+            'null' => null,
+            'array' => [1, 2, 3, 4],
+            'path' => '/home/test/this/is/i/path'
+        ];
+        $json = Arr::toJson($data);
+        $this->assertEquals(json_encode($data, JSON_UNESCAPED_SLASHES + JSON_PRETTY_PRINT), $json);
+    }
+
+    /**
+     * Test toJson compact.
+     */
+    public function testToJsonCompact()
+    {
+        $data = [
+            'string' => 'test',
+            'bool' => false,
+            'null' => null,
+            'array' => [1, 2, 3, 4],
+            'path' => '/home/test/this/is/i/path'
+        ];
+        $json = Arr::toJson($data, false);
+        $this->assertEquals(json_encode($data, JSON_UNESCAPED_SLASHES), $json);
+    }
+
+    /**
+     * Test toJson slashed.
+     */
+    public function testToJsonSlashed()
+    {
+        $data = [
+            'string' => 'test',
+            'bool' => false,
+            'null' => null,
+            'array' => [1, 2, 3, 4],
+            'path' => '/home/test/this/is/i/path'
+        ];
+        $json = Arr::toJson($data, true, false);
+        $this->assertEquals(json_encode($data, JSON_PRETTY_PRINT), $json);
+    }
 }

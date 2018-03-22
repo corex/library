@@ -374,6 +374,26 @@ class Arr
     }
 
     /**
+     * To json.
+     *
+     * @param array $array
+     * @param boolean $prettyPrint
+     * @param boolean $unescapedSlashes
+     * @return string
+     */
+    public static function toJson(array $array, $prettyPrint = true, $unescapedSlashes = true)
+    {
+        $options = 0;
+        if ($unescapedSlashes) {
+            $options += JSON_UNESCAPED_SLASHES;
+        }
+        if ($prettyPrint) {
+            $options += JSON_PRETTY_PRINT;
+        }
+        return json_encode($array, $options);
+    }
+
+    /**
      * Get data by path.
      *
      * @param array $data
