@@ -99,26 +99,11 @@ class Container
     }
 
     /**
-     * To json.
-     *
-     * @param boolean $prettyPrint Default true.
-     * @return string
-     */
-    public function toJson($prettyPrint = true)
-    {
-        $options = 0;
-        if ($prettyPrint) {
-            $options += JSON_PRETTY_PRINT;
-        }
-        return json_encode($this->properties, $options);
-    }
-
-    /**
-     * To array.
+     * All.
      *
      * @return array
      */
-    public function toArray()
+    public function all()
     {
         return (array)$this->properties;
     }

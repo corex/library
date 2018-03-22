@@ -17,7 +17,6 @@ class ContainerTest extends TestCase
      * Test constructor no data.
      *
      * @throws Exception
-     * @throws ReflectionException
      */
     public function testConstructorNull()
     {
@@ -31,7 +30,7 @@ class ContainerTest extends TestCase
     public function testConstructorNoData()
     {
         $container = new Container();
-        $this->assertEquals([], $container->toArray());
+        $this->assertEquals([], $container->all());
     }
 
     /**
@@ -40,7 +39,7 @@ class ContainerTest extends TestCase
     public function testConstructorWithData()
     {
         $container = new Container($this->data);
-        $this->assertEquals($this->data, $container->toArray());
+        $this->assertEquals($this->data, $container->all());
     }
 
     /**
@@ -49,7 +48,7 @@ class ContainerTest extends TestCase
     public function testClearNoData()
     {
         $container = new Container();
-        $this->assertEquals([], $container->toArray());
+        $this->assertEquals([], $container->all());
     }
 
     /**
@@ -59,7 +58,7 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
         $container->clear($this->data);
-        $this->assertEquals($this->data, $container->toArray());
+        $this->assertEquals($this->data, $container->all());
     }
 
     /**
@@ -152,21 +151,11 @@ class ContainerTest extends TestCase
     }
 
     /**
-     * Test to json.
+     * Test all.
      */
-    public function testToJson()
+    public function testAll()
     {
         $container = new Container($this->data);
-        $this->assertEquals(json_encode($this->data), $container->toJson(false));
-        $this->assertEquals(json_encode($this->data, JSON_PRETTY_PRINT), $container->toJson(true));
-    }
-
-    /**
-     * Test to array.
-     */
-    public function testToArray()
-    {
-        $container = new Container($this->data);
-        $this->assertEquals($this->data, $container->toArray());
+        $this->assertEquals($this->data, $container->all());
     }
 }
