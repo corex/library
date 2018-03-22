@@ -246,17 +246,17 @@ $lastElement = $collection->last();
 ```
 
 
-### Container
-Container to help with data manipulation ie. array/json.
+### Bag
+A simple bag structure.
 
 A few examples.
 ```php
 // Get json.
-$container = new Container();
-$container->set('actor.firstname', 'Roger');
+$bag = new Bag();
+$bag->set('actor.firstname', 'Roger');
 
 // Get firstname of actor using dot notation.
-$firstname = $container->get('actor.firstname');
+$firstname = $bag->get('actor.firstname');
 ```
 
 

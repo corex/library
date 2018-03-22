@@ -1,10 +1,10 @@
 <?php
 
-use CoRex\Support\Container;
+use CoRex\Support\Bag;
 use CoRex\Support\Obj;
 use PHPUnit\Framework\TestCase;
 
-class ContainerTest extends TestCase
+class BagTest extends TestCase
 {
     private $data = [
         'actor' => [
@@ -20,7 +20,7 @@ class ContainerTest extends TestCase
      */
     public function testConstructorNull()
     {
-        $container = new Container();
+        $container = new Bag();
         $this->assertEquals([], Obj::getProperty('properties', $container));
     }
 
@@ -29,7 +29,7 @@ class ContainerTest extends TestCase
      */
     public function testConstructorNoData()
     {
-        $container = new Container();
+        $container = new Bag();
         $this->assertEquals([], $container->all());
     }
 
@@ -38,7 +38,7 @@ class ContainerTest extends TestCase
      */
     public function testConstructorWithData()
     {
-        $container = new Container($this->data);
+        $container = new Bag($this->data);
         $this->assertEquals($this->data, $container->all());
     }
 
@@ -47,7 +47,7 @@ class ContainerTest extends TestCase
      */
     public function testClearNoData()
     {
-        $container = new Container();
+        $container = new Bag();
         $this->assertEquals([], $container->all());
     }
 
@@ -56,7 +56,7 @@ class ContainerTest extends TestCase
      */
     public function testClearWithData()
     {
-        $container = new Container();
+        $container = new Bag();
         $container->clear($this->data);
         $this->assertEquals($this->data, $container->all());
     }
@@ -67,7 +67,7 @@ class ContainerTest extends TestCase
      */
     public function testHasNoData()
     {
-        $container = new Container();
+        $container = new Bag();
         $this->assertFalse($container->has('actor.firstname'));
     }
 
@@ -77,7 +77,7 @@ class ContainerTest extends TestCase
      */
     public function testHasWithData()
     {
-        $container = new Container();
+        $container = new Bag();
         $container->clear($this->data);
         $this->assertTrue($container->has('actor.firstname'));
     }
@@ -88,7 +88,7 @@ class ContainerTest extends TestCase
      */
     public function testSet()
     {
-        $container = new Container($this->data);
+        $container = new Bag($this->data);
 
         // Check standard data.
         $this->assertEquals($this->data['actor']['firstname'], $container->get('actor.firstname'));
@@ -109,7 +109,7 @@ class ContainerTest extends TestCase
      */
     public function testSetArray()
     {
-        $container = new Container();
+        $container = new Bag();
         $container->setArray($this->data);
 
         // Check standard data.
@@ -123,7 +123,7 @@ class ContainerTest extends TestCase
      */
     public function testGet()
     {
-        $container = new Container($this->data);
+        $container = new Bag($this->data);
 
         // Check standard data.
         $this->assertEquals($this->data['actor']['firstname'], $container->get('actor.firstname'));
@@ -136,7 +136,7 @@ class ContainerTest extends TestCase
      */
     public function testRemove()
     {
-        $container = new Container($this->data);
+        $container = new Bag($this->data);
 
         // Check standard data.
         $this->assertEquals($this->data['actor']['firstname'], $container->get('actor.firstname'));
@@ -155,7 +155,7 @@ class ContainerTest extends TestCase
      */
     public function testAll()
     {
-        $container = new Container($this->data);
+        $container = new Bag($this->data);
         $this->assertEquals($this->data, $container->all());
     }
 }

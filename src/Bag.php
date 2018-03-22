@@ -2,13 +2,7 @@
 
 namespace CoRex\Support;
 
-/**
- * Class Container
- * Note: this container has nothing to do with ioc.
- *
- * @package CoRex\Support
- */
-class Container
+class Bag
 {
     private $properties;
 
