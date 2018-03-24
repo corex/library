@@ -29,6 +29,54 @@ class Input
     }
 
     /**
+     * Get uri.
+     *
+     * @return string
+     */
+    public static function getUri()
+    {
+        // Set basic protocol.
+        $parts = [$uri = self::getProtocol(), '://'];
+
+        // Set auth username and auth password.
+        $authUsername = self::getAuthUsername();
+        $authPassword = self::getAuthPassword();
+        if ($authUsername !== null && $authPassword !== null) {
+            $parts[] = $authUsername . ':' . $authPassword . '@';
+        }
+
+        // Set host.
+        $parts[] = self::getHost();
+
+        // Set path.
+        $path = self::getPath();
+        if ($path !== null && $path != '') {
+            $parts[] = '/' . $path;
+        }
+
+        // Set query.
+        $query = Input::getQuery();
+        if (is_array($query) && count($query) > 0) {
+            $queryString = [];
+            foreach ($query as $key => $value) {
+                $queryKeyValue = $key . '=';
+                if ($value !== null) {
+                    if (is_string($value)) {
+                        $value = urlencode($value);
+                    }
+                    $queryKeyValue .= $value;
+                }
+                $queryString[] = $queryKeyValue;
+            }
+            if (count($queryString) > 0) {
+                $parts[] = '?' . implode('&', $queryString);
+            }
+        }
+
+        return implode('', $parts);
+    }
+
+    /**
      * Get host.
      *
      * @return string
@@ -39,6 +87,19 @@ class Input
             return $_SERVER['HTTP_HOST'];
         }
         return '';
+    }
+
+    /**
+     * Get port (default 80).
+     *
+     * @return integer
+     */
+    public static function getPort()
+    {
+        if (isset($_SERVER['SERVER_PORT'])) {
+            return intval($_SERVER['SERVER_PORT']);
+        }
+        return 80;
     }
 
     /**
@@ -75,8 +136,8 @@ class Input
      */
     public static function getProtocol()
     {
-        $protocol = 'http';
-        if (self::isSsl()) {
+        $protocol = isset($_SERVER['REQUEST_SCHEME']) ? strtolower($_SERVER['REQUEST_SCHEME']) : 'http';
+        if ($protocol == 'http' && self::isSsl()) {
             $protocol .= 's';
         }
         return $protocol;
@@ -114,11 +175,11 @@ class Input
     }
 
     /**
-     * Get remote-address.
+     * Get remote ip.
      *
      * @return string
      */
-    public static function getRemoteAddress()
+    public static function getRemoteIp()
     {
         if (isset($_SERVER['REMOTE_ADDR'])) {
             return $_SERVER['REMOTE_ADDR'];
@@ -174,6 +235,16 @@ class Input
             }
         }
         return $queryStringParts;
+    }
+
+    /**
+     * Get query string.
+     *
+     * @return string
+     */
+    public static function getQueryString()
+    {
+        return isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
     }
 
     /**
@@ -291,5 +362,39 @@ class Input
     public static function getBody()
     {
         return file_get_contents('php://input');
+    }
+
+    /**
+     * Get auth username.
+     *
+     * @return string|null
+     */
+    public static function getAuthUsername()
+    {
+        $result = null;
+        if (isset($_SERVER['PHP_AUTH_USER'])) {
+            $result = $_SERVER['PHP_AUTH_USER'];
+        }
+        if (trim($result) == '') {
+            $result = null;
+        }
+        return $result;
+    }
+
+    /**
+     * Get auth password.
+     *
+     * @return string|null
+     */
+    public static function getAuthPassword()
+    {
+        $result = null;
+        if (isset($_SERVER['PHP_AUTH_PW'])) {
+            $result = $_SERVER['PHP_AUTH_PW'];
+        }
+        if (trim($result) == '') {
+            $result = null;
+        }
+        return $result;
     }
 }

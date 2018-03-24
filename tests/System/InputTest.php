@@ -74,11 +74,43 @@ class InputTest extends TestCase
     }
 
     /**
+     * Test get uri.
+     */
+    public function testGetUri()
+    {
+        $checkUsername = md5(mt_rand(1, 100000));
+        $checkPassword = md5(mt_rand(1, 100000));
+        $_SERVER['PHP_AUTH_USER'] = $checkUsername;
+        $_SERVER['PHP_AUTH_PW'] = $checkPassword;
+        $parts = [
+            Input::getProtocol(),
+            '://',
+            Input::getAuthUsername() . ':' . Input::getAuthPassword() . '@',
+            Input::getHost(),
+            '/' . Input::getPath(),
+            '?' . self::QUERY_STRING
+        ];
+        $this->assertEquals(implode('', $parts), Input::getUri());
+    }
+
+    /**
      * Test get host.
      */
     public function testGetHost()
     {
         $this->assertEquals(self::HTTP_HOST, Input::getHost());
+    }
+
+    /**
+     * Test get port.
+     */
+    public function testGetPort()
+    {
+        $_SERVER['SERVER_PORT'] = 80;
+        $this->assertEquals(80, Input::getPort());
+
+        $_SERVER['SERVER_PORT'] = mt_rand(80, 5000);
+        $this->assertEquals($_SERVER['SERVER_PORT'], Input::getPort());
     }
 
     /**
@@ -116,6 +148,17 @@ class InputTest extends TestCase
     }
 
     /**
+     * Test get protocol.
+     */
+    public function testGetProtocolOtherThanHttp()
+    {
+        $check = md5(mt_rand(1, 100000));
+        $this->setSslEntries(4);
+        $_SERVER['REQUEST_SCHEME'] = $check;
+        $this->assertEquals($check, Input::getProtocol());
+    }
+
+    /**
      * Test is ssl.
      */
     public function testIsSsl()
@@ -141,11 +184,11 @@ class InputTest extends TestCase
     }
 
     /**
-     * Test get remote address.
+     * Test get remote ip.
      */
-    public function testGetRemoteAddress()
+    public function testGetRemoteIp()
     {
-        $this->assertEquals(self::IP, Input::getRemoteAddress());
+        $this->assertEquals(self::IP, Input::getRemoteIp());
     }
 
     /**
@@ -179,6 +222,14 @@ class InputTest extends TestCase
         $this->assertEquals(self::QUERY_ARRAY, Input::getQuery());
         $this->assertEquals(self::QUERY_ARRAY['encoded'], Input::getQuery('encoded'));
         $this->assertNull(Input::getQuery('unknown'));
+    }
+
+    /**
+     * Test get query string.
+     */
+    public function testGetQueryString()
+    {
+        $this->assertEquals(self::QUERY_STRING, Input::getQueryString());
     }
 
     /**
@@ -273,6 +324,48 @@ class InputTest extends TestCase
     public function testGetBody()
     {
         $this->assertTrue(true, 'Not possible to test.');
+    }
+
+    /**
+     * Test get auth username.
+     */
+    public function testGetAuthUsername()
+    {
+        // Test not set.
+        if (array_key_exists('PHP_AUTH_USER', $_SERVER)) {
+            unset($_SERVER['PHP_AUTH_USER']);
+        }
+        $this->assertNull(Input::getAuthUsername());
+
+        // Test ''.
+        $_SERVER['PHP_AUTH_USER'] = null;
+        $this->assertNull(Input::getAuthUsername());
+
+        // Test random value.
+        $check = md5(mt_rand(1, 100000));
+        $_SERVER['PHP_AUTH_USER'] = $check;
+        $this->assertEquals($check, Input::getAuthUsername());
+    }
+
+    /**
+     * Test get auth password.
+     */
+    public function testGetAuthPassword()
+    {
+        // Test not set.
+        if (array_key_exists('PHP_AUTH_PW', $_SERVER)) {
+            unset($_SERVER['PHP_AUTH_PW']);
+        }
+        $this->assertNull(Input::getAuthPassword());
+
+        // Test ''.
+        $_SERVER['PHP_AUTH_PW'] = null;
+        $this->assertNull(Input::getAuthPassword());
+
+        // Test random value.
+        $check = md5(mt_rand(1, 100000));
+        $_SERVER['PHP_AUTH_PW'] = $check;
+        $this->assertEquals($check, Input::getAuthPassword());
     }
 
     /**
