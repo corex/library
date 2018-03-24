@@ -23,10 +23,13 @@ class Bag
      */
     public function clear(array $properties = [])
     {
+        $this->properties = [];
         if ($properties === null) {
             $properties = [];
         }
-        $this->properties = $properties;
+        foreach ($properties as $key => $value) {
+            $this->set($key, $value);
+        }
     }
 
     /**
@@ -34,10 +37,10 @@ class Bag
      *
      * @param string $key Uses dot notation.
      * @return boolean
-     * @throws \Exception
      */
     public function has($key)
     {
+        $key = $this->prepareKey($key);
         return Arr::has($this->properties, $key);
     }
 
@@ -47,10 +50,10 @@ class Bag
      * @param string $key Uses dot notation.
      * @param mixed $value
      * @param boolean $create Default false.
-     * @throws \Exception
      */
     public function set($key, $value, $create = false)
     {
+        $key = $this->prepareKey($key);
         Arr::set($this->properties, $key, $value, $create);
     }
 
@@ -59,7 +62,6 @@ class Bag
      *
      * @param array $data
      * @param boolean $create Default false.
-     * @throws \Exception
      */
     public function setArray(array $data, $create = false)
     {
@@ -74,10 +76,10 @@ class Bag
      * @param string $key Uses dot notation.
      * @param mixed $defaultValue
      * @return mixed
-     * @throws \Exception
      */
     public function get($key, $defaultValue = null)
     {
+        $key = $this->prepareKey($key);
         return Arr::get($this->properties, $key, $defaultValue);
     }
 
@@ -85,11 +87,21 @@ class Bag
      * Remove$key.
      *
      * @param string $key Uses dot notation.
-     * @throws \Exception
      */
     public function remove($key)
     {
+        $key = $this->prepareKey($key);
         $this->properties = Arr::remove($this->properties, $key);
+    }
+
+    /**
+     * Keys.
+     *
+     * @return array
+     */
+    public function keys()
+    {
+        return array_keys($this->all());
     }
 
     /**
@@ -100,5 +112,16 @@ class Bag
     public function all()
     {
         return (array)$this->properties;
+    }
+
+    /**
+     * Prepare key.
+     *
+     * @param string $key
+     * @return string
+     */
+    protected function prepareKey($key)
+    {
+        return $key;
     }
 }

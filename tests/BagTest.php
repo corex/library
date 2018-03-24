@@ -151,6 +151,16 @@ class BagTest extends TestCase
     }
 
     /**
+     * Test keys.
+     */
+    public function testKeys()
+    {
+        $container = new Bag($this->data);
+        $all = $container->all();
+        $this->assertEquals(array_keys($all), $container->keys());
+    }
+
+    /**
      * Test all.
      */
     public function testAll()
