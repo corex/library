@@ -6,6 +6,13 @@ use CoRex\Support\Str;
 
 class Input
 {
+    // Standard schemes.
+    private static $schemes = [
+        'http' => 80,
+        'https' => 443,
+        'ftp' => 21
+    ];
+
     /**
      * Get url.
      *
@@ -36,7 +43,7 @@ class Input
     public static function getUri()
     {
         // Set basic protocol.
-        $parts = [$uri = self::getProtocol(), '://'];
+        $parts = [$uri = self::getScheme(), '://'];
 
         // Set auth username and auth password.
         $authUsername = self::getAuthUsername();
@@ -47,6 +54,12 @@ class Input
 
         // Set host.
         $parts[] = self::getHost();
+
+        // Set port.
+        $port = self::getPort();
+        if ($port != self::getStandardPort(self::getScheme())) {
+            $parts[] = ':' . $port;
+        }
 
         // Set path.
         $path = self::getPath();
@@ -96,10 +109,31 @@ class Input
      */
     public static function getPort()
     {
+        $port = 0;
         if (isset($_SERVER['SERVER_PORT'])) {
-            return intval($_SERVER['SERVER_PORT']);
+            $port = intval($_SERVER['SERVER_PORT']);
         }
-        return 80;
+        if ($port == 0) {
+            $port = self::getStandardPort();
+        }
+        return $port;
+    }
+
+    /**
+     * Get standard port. If not found, then 0.
+     *
+     * @param string $scheme
+     * @return integer
+     */
+    public static function getStandardPort($scheme = null)
+    {
+        if ($scheme === null) {
+            $scheme = self::getScheme();
+        }
+        if (isset(self::$schemes[$scheme])) {
+            return self::$schemes[$scheme];
+        }
+        return 0;
     }
 
     /**
@@ -130,11 +164,11 @@ class Input
     }
 
     /**
-     * GEt protocol.
+     * GEt scheme.
      *
      * @return string
      */
-    public static function getProtocol()
+    public static function getScheme()
     {
         $protocol = isset($_SERVER['REQUEST_SCHEME']) ? strtolower($_SERVER['REQUEST_SCHEME']) : 'http';
         if ($protocol == 'http' && self::isSsl()) {

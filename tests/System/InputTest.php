@@ -82,11 +82,14 @@ class InputTest extends TestCase
         $checkPassword = md5(mt_rand(1, 100000));
         $_SERVER['PHP_AUTH_USER'] = $checkUsername;
         $_SERVER['PHP_AUTH_PW'] = $checkPassword;
+        $_SERVER['REQUEST_SCHEME'] = 'https';
+        $_SERVER['SERVER_PORT'] = 1234;
         $parts = [
-            Input::getProtocol(),
+            Input::getScheme(),
             '://',
             Input::getAuthUsername() . ':' . Input::getAuthPassword() . '@',
             Input::getHost(),
+            ':' . Input::getPort(),
             '/' . Input::getPath(),
             '?' . self::QUERY_STRING
         ];
@@ -114,6 +117,37 @@ class InputTest extends TestCase
     }
 
     /**
+     * Test get standard port.
+     */
+    public function testGetStandardPort()
+    {
+        if (isset($_SERVER['HTTPS'])) {
+            unset($_SERVER['HTTPS']);
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            unset($_SERVER['HTTP_X_FORWARDED_PROTO']);
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_SSL'])) {
+            unset($_SERVER['HTTP_X_FORWARDED_SSL']);
+        }
+        $_SERVER['REQUEST_SCHEME'] = 'http';
+        $_SERVER['SERVER_PORT'] = 80;
+        $this->assertEquals(80, Input::getStandardPort());
+
+        $_SERVER['REQUEST_SCHEME'] = 'https';
+        $_SERVER['SERVER_PORT'] = 443;
+        $this->assertEquals(443, Input::getStandardPort());
+
+        $_SERVER['REQUEST_SCHEME'] = 'http';
+        $_SERVER['SERVER_PORT'] = 1234;
+        $this->assertEquals(80, Input::getStandardPort());
+
+        $this->assertEquals(80, Input::getStandardPort('http'));
+        $this->assertEquals(443, Input::getStandardPort('https'));
+        $this->assertEquals(21, Input::getStandardPort('ftp'));
+    }
+
+    /**
      * Test get domain.
      */
     public function testGetDomain()
@@ -131,20 +165,20 @@ class InputTest extends TestCase
     }
 
     /**
-     * Test get protocol.
+     * Test get scheme.
      */
-    public function testGetProtocol()
+    public function testGetSCheme()
     {
         $this->setSslEntries(0);
-        $this->assertEquals('http', Input::getProtocol());
+        $this->assertEquals('http', Input::getScheme());
         $this->setSslEntries(1);
-        $this->assertEquals('https', Input::getProtocol());
+        $this->assertEquals('https', Input::getScheme());
         $this->setSslEntries(2);
-        $this->assertEquals('https', Input::getProtocol());
+        $this->assertEquals('https', Input::getScheme());
         $this->setSslEntries(3);
-        $this->assertEquals('https', Input::getProtocol());
+        $this->assertEquals('https', Input::getScheme());
         $this->setSslEntries(4);
-        $this->assertEquals('https', Input::getProtocol());
+        $this->assertEquals('https', Input::getScheme());
     }
 
     /**
@@ -155,7 +189,7 @@ class InputTest extends TestCase
         $check = md5(mt_rand(1, 100000));
         $this->setSslEntries(4);
         $_SERVER['REQUEST_SCHEME'] = $check;
-        $this->assertEquals($check, Input::getProtocol());
+        $this->assertEquals($check, Input::getScheme());
     }
 
     /**
