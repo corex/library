@@ -96,10 +96,15 @@ class Input
      */
     public static function getHost()
     {
-        if (isset($_SERVER['HTTP_HOST'])) {
-            return $_SERVER['HTTP_HOST'];
+        $host = null;
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+        } elseif (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = $_SERVER['SERVER_NAME'];
         }
-        return '';
+        return $host;
     }
 
     /**
