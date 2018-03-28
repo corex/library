@@ -5,10 +5,6 @@ Some of the code is heavily inspired by Laravel, Yii and other frameworks.
 
 **_Versioning for this package follows http://semver.org/. Backwards compatibility might break on upgrade to major versions._**
 
-With version 3.0.0, this package has been thinned out. Removed packages has either been merged into existing code or been moved to separate packages.
-- Code/Convention - merged into Str
-- Config - Removed in favor of package corex/config.
-
 
 ### System/Cache
 Cache.
@@ -146,7 +142,7 @@ $baseUrl = Input::getBaseUrl();
 $userAgent = Input::getUserAgent();
 
 // Get remote address.
-$remoteAddress = Input::getRemoteAddress();
+$remoteAddress = Input::getRemoteIp();
 
 // Get headers.
 $headers = Input::getHeaders();
