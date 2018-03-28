@@ -1,7 +1,5 @@
 # ChangeLog
 
-Based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
-
 ## 3.0.0
 This release breaks code.
 
