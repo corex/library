@@ -35,5 +35,5 @@ This release breaks code.
 
 ### Removed
 - Class Messages removed.
-- Class config removed in favor of package corex/config.
+- Class Config removed in favor of package corex/config.
 - Class System/Template removed.
