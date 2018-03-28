@@ -169,7 +169,7 @@ class Input
     }
 
     /**
-     * GEt scheme.
+     * Get scheme.
      *
      * @return string
      */
