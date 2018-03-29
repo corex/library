@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 3.0.1
+
+### Fixed
+- System/Input::getHost() now supports gethostname() if not set.
+- Updated System/Input to handle server entries not set.
+
 ## 3.0.0
 This release breaks code.
 

@@ -105,6 +105,17 @@ class InputTest extends TestCase
     }
 
     /**
+     * Test get host from system.
+     */
+    public function testGetHostFromSystem()
+    {
+        if (isset($_SERVER['HTTP_HOST'])) {
+            unset($_SERVER['HTTP_HOST']);
+        }
+        $this->assertEquals(gethostname(), Input::getHost());
+    }
+
+    /**
      * Test get port.
      */
     public function testGetPort()

@@ -101,8 +101,10 @@ class Input
             $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
         } elseif (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
-        } else {
+        } elseif (isset($_SERVER['SERVER_NAME'])) {
             $host = $_SERVER['SERVER_NAME'];
+        } else {
+            $host = gethostname();
         }
         return $host;
     }
@@ -233,7 +235,7 @@ class Input
      */
     public static function getPath()
     {
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
         if (strpos($uri, '?') > 0) {
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
@@ -265,7 +267,10 @@ class Input
      */
     public static function getQuery($name = '', $defaultValue = null)
     {
-        parse_str($_SERVER['QUERY_STRING'], $queryStringParts);
+        $queryStringParts = [];
+        if (isset($_SERVER['QUERY_STRING'])) {
+            parse_str($_SERVER['QUERY_STRING'], $queryStringParts);
+        }
         if ($name != '') {
             if (isset($queryStringParts[$name])) {
                 return $queryStringParts[$name];
