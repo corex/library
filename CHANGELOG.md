@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 3.2.0
+
+### Added
+- Added Obj::hasMethod().
+
+
 ## 3.1.0
 
 ### Added

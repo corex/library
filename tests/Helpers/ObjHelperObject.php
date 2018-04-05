@@ -6,4 +6,25 @@ class ObjHelperObject
     private $property2 = 'property 2';
     private $property3 = 'property 3';
     private $property4 = 'property 4';
+
+    /**
+     * Private method.
+     */
+    private function privateMethod()
+    {
+    }
+
+    /**
+     * Protected method.
+     */
+    protected function protectedMethod()
+    {
+    }
+
+    /**
+     * Public method.
+     */
+    public function publicMethod()
+    {
+    }
 }

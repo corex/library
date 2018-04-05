@@ -180,6 +180,81 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test hasMethod private from object.
+     */
+    public function testHasMethodPrivateFromObject()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $this->assertTrue(Obj::hasMethod('privateMethod', $objHelperObject));
+    }
+
+    /**
+     * Test hasMethod protected from object.
+     */
+    public function testHasMethodProtectedFromObject()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $this->assertTrue(Obj::hasMethod('protectedMethod', $objHelperObject));
+    }
+
+    /**
+     * Test hasMethod public from object.
+     */
+    public function testHasMethodPublicFromObject()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $this->assertTrue(Obj::hasMethod('publicMethod', $objHelperObject));
+    }
+
+    /**
+     * Test hasMethod private from class.
+     */
+    public function testHasMethodPrivateFromClass()
+    {
+        $this->assertTrue(Obj::hasMethod('privateMethod', ObjHelperObject::class));
+    }
+
+    /**
+     * Test hasMethod protected from class.
+     */
+    public function testHasMethodProtectedFromClass()
+    {
+        $this->assertTrue(Obj::hasMethod('protectedMethod', ObjHelperObject::class));
+    }
+
+    /**
+     * Test hasMethod public from class.
+     */
+    public function testHasMethodPublicFromClass()
+    {
+        $this->assertTrue(Obj::hasMethod('publicMethod', ObjHelperObject::class));
+    }
+
+    /**
+     * Test hasMethod private from extended class.
+     */
+    public function testHasMethodPrivateFromExtendedClass()
+    {
+        $this->assertTrue(Obj::hasMethod('privateMethod', ObjHelperObjectExtended::class));
+    }
+
+    /**
+     * Test hasMethod protected from extended class.
+     */
+    public function testHasMethodProtectedFromExtendedClass()
+    {
+        $this->assertTrue(Obj::hasMethod('protectedMethod', ObjHelperObjectExtended::class));
+    }
+
+    /**
+     * Test hasMethod public from extended class.
+     */
+    public function testHasMethodPublicFromExtendedClass()
+    {
+        $this->assertTrue(Obj::hasMethod('publicMethod', ObjHelperObjectExtended::class));
+    }
+
+    /**
      * Test set property.
      *
      * @throws ReflectionException

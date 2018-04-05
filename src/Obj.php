@@ -186,6 +186,23 @@ class Obj
     }
 
     /**
+     * Has method.
+     *
+     * @param string $method
+     * @param object|string $objectOrClass
+     * @return boolean
+     */
+    public static function hasMethod($method, $objectOrClass)
+    {
+        try {
+            $reflectionClass = self::getReflectionClass($objectOrClass);
+            return $reflectionClass->hasMethod($method);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * Get reflection class.
      *
      * @param object|string $objectOrClass
