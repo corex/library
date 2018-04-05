@@ -553,4 +553,72 @@ class StrTest extends TestCase
             ]
         ], $convertedTest);
     }
+
+    /**
+     * Test strpos.
+     */
+    public function testStrpos()
+    {
+        // Check random character starting from 0+.
+        $check = substr($this->slugTestValid, mt_rand(1, strlen($this->slugTestValid) - 1), 1);
+        $checkPos = strpos($this->slugTestValid, $check);
+        $pos = Str::strpos($this->slugTestValid, $check);
+        $this->assertTrue(is_int($pos));
+        $this->assertEquals($checkPos, $pos);
+
+        // Check first character.
+        $check = substr($this->slugTestValid, 0, 1);
+        $pos = Str::strpos($this->slugTestValid, $check);
+        $this->assertTrue(is_int($pos));
+        $this->assertEquals(0, $pos);
+
+        // Check unknown character.
+        $check = '-';
+        $pos = Str::strpos($this->slugTestValid, $check);
+        $this->assertFalse(is_int($pos));
+        $this->assertFalse($pos);
+    }
+
+    /**
+     * Test indexOf.
+     */
+    public function testIndexOf()
+    {
+        // Check random character starting from 0+.
+        $check = substr($this->slugTestValid, mt_rand(1, strlen($this->slugTestValid) - 1), 1);
+        $checkPos = strpos($this->slugTestValid, $check);
+        $pos = Str::indexOf($this->slugTestValid, $check);
+        $this->assertTrue(is_int($pos));
+        $this->assertEquals($checkPos, $pos);
+
+        // Check first character.
+        $check = substr($this->slugTestValid, 0, 1);
+        $pos = Str::indexOf($this->slugTestValid, $check);
+        $this->assertTrue(is_int($pos));
+        $this->assertEquals(0, $pos);
+
+        // Check unknown character.
+        $check = '-';
+        $pos = Str::indexOf($this->slugTestValid, $check);
+        $this->assertTrue(is_int($pos));
+        $this->assertEquals(-1, $pos);
+    }
+
+    /**
+     * Test contains.
+     */
+    public function testContains()
+    {
+        // Check random character starting from 0+.
+        $check = substr($this->slugTestValid, mt_rand(1, strlen($this->slugTestValid) - 1), 1);
+        $this->assertTrue(Str::contains($this->slugTestValid, $check));
+
+        // Check first character.
+        $check = substr($this->slugTestValid, 0, 1);
+        $this->assertTrue(Str::contains($this->slugTestValid, $check));
+
+        // Check unknown character.
+        $check = '-';
+        $this->assertFalse(Str::contains($this->slugTestValid, $check));
+    }
 }

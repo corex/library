@@ -1,10 +1,19 @@
 # ChangeLog
 
+## 3.1.0
+
+### Added
+- Added Str::strpos().
+- Added Str::indexOf().
+- Added Str::contains().
+
+
 ## 3.0.1
 
 ### Fixed
 - System/Input::getHost() now supports gethostname() if not set.
 - Updated System/Input to handle server entries not set.
+
 
 ## 3.0.0
 This release breaks code.

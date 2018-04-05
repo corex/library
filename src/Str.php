@@ -655,4 +655,44 @@ class Str
         }
         return $return;
     }
+
+    /**
+     * Get position in string.
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param integer $offset
+     * @return boolean|false|integer
+     */
+    public static function strpos($haystack, $needle, $offset = 0)
+    {
+        return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+    }
+
+    /**
+     * Index of.
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param integer $offset
+     * @return integer
+     */
+    public static function indexOf($haystack, $needle, $offset = 0)
+    {
+        $pos = self::strpos($haystack, $needle, $offset);
+        return is_int($pos) ? $pos : -1;
+    }
+
+    /**
+     * Contains.
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param integer $offset
+     * @return boolean
+     */
+    public static function contains($haystack, $needle, $offset = 0)
+    {
+        return self::strpos($haystack, $needle, $offset) !== false;
+    }
 }
