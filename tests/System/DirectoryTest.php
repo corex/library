@@ -1,6 +1,7 @@
 <?php
 
 use CoRex\Support\System\Directory;
+use CoRex\Support\System\File;
 use PHPUnit\Framework\TestCase;
 
 class DirectoryTest extends TestCase
@@ -81,16 +82,37 @@ class DirectoryTest extends TestCase
         $this->createTestData('test');
 
         // Check entries.
-        $entries = Directory::entries($this->tempDirectory, '*', [], true);
+        $entries = Directory::entries($this->tempDirectory, '*', Directory::TYPE_FILE, true);
         $checkEntries = [
             $this->filename1,
             $this->filename2,
-            'test'
         ];
-        $this->assertCount(3, $entries);
+        $this->assertCount(2, $entries);
         foreach ($entries as $entry) {
             $this->assertTrue(in_array($entry['name'], $checkEntries));
         }
+    }
+
+    /**
+     * Test entries not path.
+     */
+    public function testEntriesNotPath()
+    {
+        $entries = Directory::entries(null, '*');
+        $this->assertEquals([], $entries);
+    }
+
+
+    /**
+     * Test entries no criteria and type string.
+     */
+    public function testEntriesNoCriteriaMatchAndTypeString()
+    {
+        $this->createTestData('test');
+
+        // Check entries.
+        $entries = Directory::entries($this->tempDirectory, 'unknown*', [], true);
+        $this->assertEquals([], $entries);
     }
 
     /**
@@ -101,11 +123,19 @@ class DirectoryTest extends TestCase
         $this->createTestData('test');
         $this->createTestData('test2');
 
+        // Crate symbolic link in '/test2'.
+        $filename = $this->tempDirectory . '/test2/' . $this->filename1;
+        symlink($filename, $filename . '.lnk');
+
         Directory::clean($this->tempDirectory . '/test');
         Directory::delete($this->tempDirectory . '/test2');
 
+        $this->assertFalse(File::exist($filename . '.lnk'));
+
         $this->assertTrue(Directory::exist($this->tempDirectory . '/test'));
         $this->assertFalse(Directory::exist($this->tempDirectory . '/test2'));
+
+        $this->assertFalse(Directory::delete(null));
     }
 
     /**

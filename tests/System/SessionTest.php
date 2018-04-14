@@ -61,6 +61,7 @@ class SessionTest extends TestCase
     {
         Session::set('test', ['test']);
         $this->assertTrue(is_array(Session::get('test')));
+        $this->assertEquals([], Session::getArray('unknown'));
     }
 
     /**
@@ -159,6 +160,8 @@ class SessionTest extends TestCase
         Session::pageClear($this->namespace2);
         $this->assertNull(Session::pageGet($this->testName1, null, $this->namespace1));
         $this->assertNull(Session::pageGet($this->testName2, null, $this->namespace2));
+
+        Session::pageClear();
     }
 
     /**
@@ -225,6 +228,15 @@ class SessionTest extends TestCase
     }
 
     /**
+     * Test page set/get namespace.
+     */
+    public function testPageSetNamespace()
+    {
+        Session::pageSet('test', 'test');
+        $this->assertTrue(is_string(Session::pageGet('test')));
+    }
+
+    /**
      * Test page get array.
      */
     public function testPageGetArray()
@@ -237,6 +249,8 @@ class SessionTest extends TestCase
             $this->testName2 => $this->testValue2
         ];
         $this->assertEquals($testArray, Session::pageGetArray($this->namespace1));
+        $data = Session::pageGetArray();
+        $this->assertEquals(['test' => 'test'], $data);
     }
 
     /**
@@ -248,6 +262,7 @@ class SessionTest extends TestCase
         $this->assertFalse(Session::pageHas('test', $this->namespace1));
         Session::pageSet('test', 'test', $this->namespace1);
         $this->assertTrue(Session::pageHas('test', $this->namespace1));
+        $this->assertFalse(Session::pageHas('unknown'));
     }
 
     /**
@@ -256,9 +271,15 @@ class SessionTest extends TestCase
     public function testPageDelete()
     {
         Session::pageClear($this->namespace1);
+
         Session::pageSet('test', 'test', $this->namespace1);
         $this->assertTrue(Session::pageHas('test', $this->namespace1));
         Session::pageDelete('test', $this->namespace1);
         $this->assertFalse(Session::pageHas('test', $this->namespace1));
+
+        Session::pageSet('test', 'test');
+        $this->assertTrue(Session::pageHas('test'));
+        Session::pageDelete('test');
+        $this->assertFalse(Session::pageHas('test'));
     }
 }

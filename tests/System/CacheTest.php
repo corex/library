@@ -62,6 +62,10 @@ class CacheTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Path is not writable.');
         Cache::path($this->tempDirectory . '/test');
+
+        $path = Cache::path();
+        Cache::path($path . '1/', true);
+        $this->assertEquals($path . '1', Cache::path());
     }
 
     /**
@@ -153,6 +157,13 @@ class CacheTest extends TestCase
         $expiration = Cache::expiration('test');
         $this->assertLessThan(time() + 100, $expiration);
         $this->assertGreaterThan(time() - 100, $expiration);
+
+        $cacheFilename = Cache::path() . '/global/' . Cache::key('test');
+        if (file_exists($cacheFilename)) {
+            \CoRex\Support\System\File::delete($cacheFilename);
+        }
+        $expiration = Cache::expiration('test');
+        $this->assertNull($expiration);
     }
 
     /**

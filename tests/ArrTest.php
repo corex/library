@@ -24,6 +24,18 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test get empty key.
+     */
+    public function testGetEmptyKey()
+    {
+        $data = ['actor' => $this->actor1];
+        $this->assertEquals($this->actor1['firstname'], Arr::get($data, 'actor.firstname'));
+        $this->assertEquals($this->actor1['lastname'], Arr::get($data, 'actor.lastname'));
+        $this->assertEquals('test', Arr::get($data, 'actor.test', 'test'));
+        $this->assertEquals($data, Arr::get($data, ''));
+    }
+
+    /**
      * Test set.
      */
     public function testSet()
@@ -45,6 +57,14 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test get first null.
+     */
+    public function testGetFirstNull()
+    {
+        $this->assertNull(Arr::first([]));
+    }
+
+    /**
      * Test get last.
      */
     public function testGetLast()
@@ -52,6 +72,14 @@ class ArrTest extends TestCase
         $data = [$this->actor1, $this->actor2, $this->actor3, $this->actor4, $this->actor5];
         $this->assertEquals($this->actor5, Arr::last($data));
         $this->assertEquals($this->actor5['firstname'], Arr::last($data, 'firstname'));
+    }
+
+    /**
+     * Test get last null.
+     */
+    public function testGetLastNull()
+    {
+        $this->assertNull(Arr::last([]));
     }
 
     /**
@@ -144,6 +172,22 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test is string in list false.
+     */
+    public function testIsStringInListFalse()
+    {
+        $this->assertFalse(Arr::isStringInList([]));
+    }
+
+    /**
+     * Test index of not array.
+     */
+    public function testIndexOfNotArray()
+    {
+        $this->assertEquals(-1, Arr::indexOf('not array', 'not.existing'));
+    }
+
+    /**
      * Test index of simple.
      */
     public function testIndexOfSimple()
@@ -174,6 +218,25 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test index of object array.
+     */
+    public function testIndexOfObjectArray()
+    {
+        // Test object array.
+        $data = [];
+
+        $actor1 = new stdClass();
+        $actor1->value = 'test1';
+        $data[] = $actor1;
+
+        $actor2 = new stdClass();
+        $actor2->value = 'test2';
+        $data[] = $actor2;
+
+        $this->assertEquals(1, Arr::indexOf($data, 'test2', 'value'));
+    }
+
+    /**
      * Test index of associative associative.
      */
     public function testIndexOfAssociativeAssociative()
@@ -187,6 +250,14 @@ class ArrTest extends TestCase
             'actor5' => $this->actor5
         ];
         $this->assertEquals('actor2', Arr::indexOf($data, $this->actor2['firstname'], 'firstname'));
+    }
+
+    /**
+     * Test index of empty array.
+     */
+    public function testIndexOfEmptyArray()
+    {
+        $this->assertEquals(-1, Arr::indexOf([], 'not.existing'));
     }
 
     /**
@@ -220,6 +291,27 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test values.
+     */
+    public function testValues()
+    {
+        $check1 = md5(mt_rand(1, 100000));
+        $check2 = md5(mt_rand(1, 100000));
+        $data = [];
+        $data[4] = $check1;
+        $data[7] = $check2;
+        $this->assertEquals([$check1, $check2], Arr::values($data));
+    }
+
+    /**
+     * Test pluck not array.
+     */
+    public function testPluckNotArray()
+    {
+        $this->assertEquals([], Arr::pluck('not.array', 'dummy.key'));
+    }
+
+    /**
      * Test pluck simple associative.
      */
     public function testPluckSimpleAssociative()
@@ -241,9 +333,38 @@ class ArrTest extends TestCase
     }
 
     /**
+     * Test pluck simple object.
+     */
+    public function testPluckObject()
+    {
+        // Test object array.
+        $data = [];
+
+        $actor1 = new stdClass();
+        $actor1->value = 'test1';
+        $data[] = $actor1;
+
+        $actor2 = new stdClass();
+        $actor2->value = 'test2';
+        $data[] = $actor2;
+
+        $this->assertEquals(['test1', 'test2'], Arr::pluck($data, 'value'));
+    }
+
+    /**
+     * Test pluck.
+     */
+    public function testPluckDeepArray()
+    {
+        // Test associative array.
+        $data = ['test1' => ['test2' => ['test2' => ['test3' => 'test3']]]];
+        $this->assertEquals(['test3'], Arr::pluck($data, 'test1.test2.test3'));
+    }
+
+    /**
      * Test get line match.
      */
-    public function testGetLineMatch()
+    public function testLineMatch()
     {
         $lines = [
             '         use CoRex\Database\Command\CommandBase;                   ',
@@ -258,6 +379,20 @@ class ArrTest extends TestCase
             'CoRex\Support\System\Template'
         ];
         $this->assertEquals($linesMatch, Arr::lineMatch($lines, 'use ', ';', true, true));
+    }
+
+    /**
+     * Test get line match isHit.
+     */
+    public function testLineMatchIsHit()
+    {
+        $lines = [
+            '         use CoRex\Database\Command\CommandBase;                   ',
+            '                          use CoRex\Database\Interfaces\ConnectorInterface;                ',
+            'use CoRex\Support\System\Directory;               ',
+            '            use CoRex\Support\System\Template;       '
+        ];
+        $this->assertEquals([], Arr::lineMatch($lines, '-', '-', true, true));
     }
 
     /**

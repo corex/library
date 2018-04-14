@@ -58,7 +58,7 @@ class CollectionTest extends TestCase
     public function testConstructorOtherThanArray()
     {
         $this->expectException(TypeError::class);
-        new Collection('davs');
+        new Collection('testing');
     }
 
     /**
@@ -70,11 +70,28 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * To json.
+     */
+    public function testToJsonPrettyPrint()
+    {
+        $this->assertEquals(json_encode($this->data, JSON_PRETTY_PRINT), $this->collection->toJson(true));
+    }
+
+    /**
      * Test count.
      */
     public function testCount()
     {
         $this->assertEquals(5, $this->collection->count());
+    }
+
+    /**
+     * Test count 0.
+     */
+    public function testCountZero()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertEquals(0, $this->collection->count());
     }
 
     /**
@@ -87,11 +104,29 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test current null.
+     */
+    public function testCurrentNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertNull($this->collection->current());
+    }
+
+    /**
      * Test next.
      */
     public function testNext()
     {
         $this->testCurrent();
+    }
+
+    /**
+     * Test next null.
+     */
+    public function testNextNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertNull($this->collection->next());
     }
 
     /**
@@ -101,6 +136,15 @@ class CollectionTest extends TestCase
     {
         $this->collection->next()->next();
         $this->assertEquals(2, $this->collection->key());
+    }
+
+    /**
+     * Test key null.
+     */
+    public function testKeyNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertNull($this->collection->key());
     }
 
     /**
@@ -115,12 +159,30 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test valid null.
+     */
+    public function testValidNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertFalse($this->collection->valid());
+    }
+
+    /**
      * Test rewind.
      */
     public function testRewind()
     {
         $this->collection->next()->next()->rewind();
         $this->assertEquals($this->actor1, $this->collection->current());
+    }
+
+    /**
+     * Test rewind null.
+     */
+    public function testRewindNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertNull($this->collection->rewind());
     }
 
     /**
@@ -139,6 +201,15 @@ class CollectionTest extends TestCase
     {
         $this->collection->next()->next()->first();
         $this->assertEquals($this->actor5, $this->collection->next()->next()->last());
+    }
+
+    /**
+     * Test last.
+     */
+    public function testLastNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertNull($this->collection->last());
     }
 
     /**
@@ -170,6 +241,19 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test each.
+     *
+     * @throws Exception
+     */
+    public function testEachBreak()
+    {
+        $this->collection->each(function (&$item) {
+            return false;
+        });
+        $this->assertEquals($this->data, $this->collection->all());
+    }
+
+    /**
      * Test pluck.
      */
     public function testPluck()
@@ -182,6 +266,34 @@ class CollectionTest extends TestCase
             $this->actor5['firstname']
         ];
         $this->assertEquals($check, $this->collection->pluck('firstname')->all());
+    }
+
+    /**
+     * Test pluck object.
+     */
+    public function testPluckObject()
+    {
+        $data = [];
+
+        $actor1 = new stdClass();
+        $actor1->value = 'test1';
+        $data[] = $actor1;
+
+        $actor2 = new stdClass();
+        $actor2->value = 'test2';
+        $data[] = $actor2;
+
+        Obj::setProperty('items', $this->collection, $data);
+        $this->assertEquals(['test1', 'test2'], $this->collection->pluck('value')->all());
+    }
+
+    /**
+     * Test pluck null.
+     */
+    public function testPluckNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertNull($this->collection->pluck('firstname'));
     }
 
     /**
@@ -201,6 +313,28 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test average default value.
+     */
+    public function testAverageDefaultValue()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertEquals(0, $this->collection->average('value'));
+    }
+
+    /**
+     * Test average sum zero.
+     */
+    public function testAverageSumZero()
+    {
+        $data = [
+            ['value' => 0],
+            ['value' => 0]
+        ];
+        Obj::setProperty('items', $this->collection, $data);
+        $this->assertEquals(0, $this->collection->average('value'));
+    }
+
+    /**
      * Test max.
      */
     public function testMax()
@@ -209,11 +343,29 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test max.
+     */
+    public function testMaxNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertEquals(0, $this->collection->max('value'));
+    }
+
+    /**
      * Test min.
      */
     public function testMin()
     {
         $this->assertEquals(1, $this->collection->min('value'));
+    }
+
+    /**
+     * Test min.
+     */
+    public function testMinNull()
+    {
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertEquals(0, $this->collection->min('value'));
     }
 
     /**
@@ -249,6 +401,16 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test get default value.
+     */
+    public function testGetDefaultValue()
+    {
+        $check = md5(mt_rand(1, 100000));
+        Obj::setProperty('items', $this->collection, null);
+        $this->assertEquals($check, $this->collection->get(2, $check));
+    }
+
+    /**
      * Test has.
      */
     public function testHas()
@@ -272,7 +434,7 @@ class CollectionTest extends TestCase
     public function testSet()
     {
         $data = $this->data;
-        $data[2] = 'davs';
+        $data[2] = 'testing';
         $collection = new Collection($data);
         $collection->set(2, $this->actor3);
         $this->assertEquals($this->data, $collection->all());

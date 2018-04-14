@@ -46,6 +46,8 @@ class TokenTest extends TestCase
         // Check tokens.
         $this->assertEquals($token1, Token::get($this->test1));
         $this->assertEquals($token2, Token::get($this->test2));
+
+        $this->assertNull(Token::get('unknown'));
     }
 
     /**
@@ -84,6 +86,8 @@ class TokenTest extends TestCase
         // Validate tokens.
         $this->assertTrue(Token::isValid($this->test1, $token1));
         $this->assertFalse(Token::isValid($this->test2, $token2));
+
+        $this->assertFalse(Token::isValid('unknown', 'unknown'));
     }
 
     /**

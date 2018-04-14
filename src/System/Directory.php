@@ -72,9 +72,6 @@ class Directory
             ];
         }
         $entries = [];
-        if (substr($path, -1) == '/') {
-            $path = substr($path, 0, -1);
-        }
         if (!is_dir($path)) {
             return $entries;
         }
@@ -86,7 +83,7 @@ class Directory
             $types = [self::TYPE_DIRECTORY, self::TYPE_LINK, self::TYPE_FILE];
         }
 
-        if ($handle = opendir($path)) {
+        if ($handle = opendir(rtrim($path, '/'))) {
             while ($entryName = readdir($handle)) {
 
                 // Validate entry.
@@ -165,12 +162,12 @@ class Directory
      */
     public static function delete($path, $preserveRoot = false)
     {
-        if (!self::isDirectory($path)) {
+        // Ensure that we are not doing something stupid.
+        if (!is_string($path) || trim($path) == '' || trim($path) == '/') {
             return false;
         }
 
-        // Ensure that we are not doing something stupid.
-        if (!is_string($path) || trim($path) == '' || trim($path) == '/') {
+        if (!self::isDirectory($path)) {
             return false;
         }
 

@@ -255,6 +255,14 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test hasMethod no class.
+     */
+    public function testHasMethodNoClass()
+    {
+        $this->assertFalse(Obj::hasMethod('unknown', 'unknown'));
+    }
+
+    /**
      * Test set property.
      *
      * @throws ReflectionException
@@ -288,8 +296,8 @@ class ObjTest extends TestCase
     {
         $check = md5(microtime(true));
         $objHelperObject = new ObjHelperObject();
-        $property = Obj::getProperty('unknown', $objHelperObject, $check);
-        $this->assertEquals($check, $property);
+        $property = Obj::setProperty('unknown', $objHelperObject, $check);
+        $this->assertFalse($property);
     }
 
     /**
@@ -323,8 +331,6 @@ class ObjTest extends TestCase
 
     /**
      * Test get property found static.
-     *
-     * @throws ReflectionException
      */
     public function testGetPropertyFoundStatic()
     {
@@ -347,9 +353,18 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test get property found static null.
+     */
+    public function testGetPropertyFoundStaticNull()
+    {
+        $objHelperObject = new ObjHelperObject();
+        Obj::setProperty('property1', $objHelperObject, null);
+        $value1 = Obj::getProperty('property1', null, null, ObjHelperObject::class);
+        $this->assertNull($value1);
+    }
+
+    /**
      * Test set properties.
-     *
-     * @throws ReflectionException
      */
     public function testSetPropertiesFound()
     {
@@ -367,8 +382,6 @@ class ObjTest extends TestCase
 
     /**
      * Test set properties one not found.
-     *
-     * @throws ReflectionException
      */
     public function testSetPropertiesOneNotFound()
     {
@@ -383,9 +396,16 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test set properties empty.
+     */
+    public function testSetPropertiesEmpty()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $this->assertFalse(Obj::setProperties($objHelperObject, []));
+    }
+
+    /**
      * Test callMethod private static.
-     *
-     * @throws ReflectionException
      */
     public function testCallMethodPrivateStatic()
     {
@@ -395,9 +415,19 @@ class ObjTest extends TestCase
     }
 
     /**
+     * Test callMethod private static.
+     */
+    public function testCallMethodPrivateStaticWithArguments()
+    {
+        $method = 'privateMethod';
+        $check = Obj::callMethod($method, null, [
+            'arguments' => '.test'
+        ], ObjHelperStatic::class);
+        $this->assertEquals('(' . $method . ').test', $check);
+    }
+
+    /**
      * Test getReflectionClass by object.
-     *
-     * @throws ReflectionException
      */
     public function testGetReflectionClassByObject()
     {
@@ -408,8 +438,6 @@ class ObjTest extends TestCase
 
     /**
      * Test getReflectionClass by class.
-     *
-     * @throws ReflectionException
      */
     public function testGetReflectionClassByClass()
     {
@@ -419,8 +447,6 @@ class ObjTest extends TestCase
 
     /**
      * Test getReflectionClass by object override.
-     *
-     * @throws ReflectionException
      */
     public function testGetReflectionClassByByObjectOverride()
     {
@@ -431,13 +457,61 @@ class ObjTest extends TestCase
 
     /**
      * Test getReflectionClass by class override.
-     *
-     * @throws ReflectionException
      */
     public function testGetReflectionClassByByClassOverride()
     {
         $reflectionClass = $this->getReflectionClassFromObj(ObjHelperObjectExtended::class, ObjHelperObject::class);
         $this->assertEquals(ObjHelperObject::class, $reflectionClass->getName());
+    }
+
+    /**
+     * Test getReflectionMethod by object.
+     * @throws ReflectionException
+     */
+    public function testGetReflectionMethodByObject()
+    {
+        $objHelperObject = new ObjHelperObject();
+        $reflectionMethod = $this->getReflectionMethodFromObj('privateMethod', $objHelperObject);
+        $this->assertEquals('privateMethod', $reflectionMethod->name);
+        $this->assertEquals(ObjHelperObject::class, Obj::getProperty('class', $reflectionMethod));
+    }
+
+    /**
+     * Test getReflectionMethod by class.
+     * @throws ReflectionException
+     */
+    public function testGetReflectionMethodByClass()
+    {
+        $reflectionMethod = $this->getReflectionMethodFromObj('privateMethod', null, ObjHelperObject::class);
+        $this->assertEquals('privateMethod', $reflectionMethod->name);
+        $this->assertEquals(ObjHelperObject::class, Obj::getProperty('class', $reflectionMethod));
+    }
+
+    /**
+     * Test getReflectionMethod by object override.
+     * @throws ReflectionException
+     */
+    public function testGetReflectionMethodByByObjectOverride()
+    {
+        $objHelperObjectExtended = new ObjHelperObjectExtended();
+        $reflectionMethod = $this->getReflectionMethodFromObj(
+            'privateMethod',
+            $objHelperObjectExtended,
+            ObjHelperObject::class
+        );
+        $this->assertEquals('privateMethod', $reflectionMethod->name);
+        $this->assertEquals(ObjHelperObject::class, Obj::getProperty('class', $reflectionMethod));
+    }
+
+    /**
+     * Test getReflectionMethod by class override.
+     * @throws ReflectionException
+     */
+    public function testGetReflectionMethodByByClassOverride()
+    {
+        $reflectionMethod = $this->getReflectionMethodFromObj('privateMethod', ObjHelperObjectExtended::class);
+        $this->assertEquals('privateMethod', $reflectionMethod->name);
+        $this->assertEquals(ObjHelperObject::class, Obj::getProperty('class', $reflectionMethod));
     }
 
     /**
@@ -469,5 +543,21 @@ class ObjTest extends TestCase
         $reflectionMethod = new ReflectionMethod(Obj::class, 'getReflectionClass');
         $reflectionMethod->setAccessible(true);
         return $reflectionMethod->invokeArgs(null, [$objectOrClass, $classOverride]);
+    }
+
+    /**
+     * Get reflection method from obj.
+     *
+     * @param string $method
+     * @param object|string $objectOrClass
+     * @param string $classOverride Default null which means class from $object.
+     * @return ReflectionClass
+     * @throws ReflectionException
+     */
+    private function getReflectionMethodFromObj($method, $objectOrClass, $classOverride = null)
+    {
+        $reflectionMethod = new ReflectionMethod(Obj::class, 'getReflectionMethod');
+        $reflectionMethod->setAccessible(true);
+        return $reflectionMethod->invokeArgs(null, [$method, $objectOrClass, $classOverride]);
     }
 }

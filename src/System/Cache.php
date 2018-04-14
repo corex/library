@@ -39,11 +39,8 @@ class Cache
                 if (!is_writeable($path)) {
                     throw new \Exception('Path is not writable.');
                 }
-                if (substr($path, -1) == '/') {
-                    $path = substr($path, 0, -1);
-                }
             }
-            self::$path = $path;
+            self::$path = $path !== null ? rtrim($path, '/') : $path;
         }
         return self::$path;
     }
@@ -100,9 +97,6 @@ class Cache
         if (file_exists(self::$path . '/' . $storage . '/' . $fileKey)) {
             $content = file_get_contents(self::$path . '/' . $storage . '/' . $fileKey);
         }
-        if ($content === null) {
-            return null;
-        }
 
         // Extract expiration.
         $markerPos = strpos($content, self::$marker);
@@ -133,9 +127,6 @@ class Cache
         $content = null;
         if (file_exists(self::$path . '/' . $storage . '/' . $fileKey)) {
             $content = file_get_contents(self::$path . '/' . $storage . '/' . $fileKey);
-        }
-        if ($content === null) {
-            return null;
         }
 
         // Extract expiration.
@@ -206,9 +197,6 @@ class Cache
      */
     public static function flush($storage = 'global')
     {
-        if (!is_dir(self::$path . '/' . $storage)) {
-            return;
-        }
         $filenames = scandir(self::$path . '/' . $storage);
         if (count($filenames) > 0) {
             foreach ($filenames as $filename) {

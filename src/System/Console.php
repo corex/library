@@ -234,25 +234,33 @@ class Console
             if ($secret) {
                 self::write(' > ');
                 if (self::$testValue === null) {
+                    // @codeCoverageIgnoreStart
                     system('stty -echo');
                     $value = trim(fgets(STDIN));
                     system('stty echo');
+                    // @codeCoverageIgnoreEnd
                 } else {
                     $value = self::$testValue;
                 }
             } else {
                 if (self::$testValue === null) {
+                    // @codeCoverageIgnoreStart
                     $value = readline(' > ');
+                    // @codeCoverageIgnoreEnd
                 } else {
                     $value = self::$testValue;
                 }
             }
             if (trim($value) == '') {
+                // @codeCoverageIgnoreStart
                 $value = $defaultValue;
+                // @codeCoverageIgnoreEnd
             }
             if (trim($value) == '') {
+                // @codeCoverageIgnoreStart
                 self::writeln('');
                 self::block('[ERROR] A value is required', 'error');
+                // @codeCoverageIgnoreEnd
             }
             self::writeln('');
         }
@@ -302,9 +310,11 @@ class Console
             self::writeln('');
             self::write(' ' . $question, 'info');
             if ($defaultValue !== null) {
+                // @codeCoverageIgnoreStart
                 self::write(' [');
                 self::write((string)$defaultValue, 'comment');
                 self::write(']');
+                // @codeCoverageIgnoreEnd
             }
             self::writeln(':');
 
@@ -319,20 +329,28 @@ class Console
 
             // Input.
             if (self::$testValue === null) {
+                // @codeCoverageIgnoreStart
                 $value = readline(' > ');
+                // @codeCoverageIgnoreEnd
             } else {
                 $value = self::$testValue;
             }
             if (trim($value) == '') {
+                // @codeCoverageIgnoreStart
                 $value = $defaultValue;
+                // @codeCoverageIgnoreEnd
             }
             if (!isset($choices[intval($value) - 1])) {
+                // @codeCoverageIgnoreStart
                 self::writeln('');
                 self::block('[ERROR] Value "' . $value . '" is invalid', 'error');
                 $value = '';
+                // @codeCoverageIgnoreEnd
             } elseif (trim($value) == '') {
+                // @codeCoverageIgnoreStart
                 self::writeln('');
                 self::block('[ERROR] A value is required', 'error');
+                // @codeCoverageIgnoreEnd
             }
             self::writeln('');
         }

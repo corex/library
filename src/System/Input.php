@@ -405,7 +405,9 @@ class Input
      */
     public static function getBody()
     {
+        // @codeCoverageIgnoreStart
         return file_get_contents('php://input');
+        // @codeCoverageIgnoreEnd
     }
 
     /**

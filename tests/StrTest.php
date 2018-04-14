@@ -135,6 +135,10 @@ class StrTest extends TestCase
             $this->stringLeft . $test,
             Str::limit($this->stringLeft . $this->stringRight, 3, $test)
         );
+        $this->assertEquals(
+            'test',
+            Str::limit('test', 10, $test)
+        );
     }
 
     /**
@@ -144,6 +148,7 @@ class StrTest extends TestCase
     {
         $this->assertFalse(Str::isPrefixed($this->stringLeft . $this->stringRight, $this->stringRight));
         $this->assertTrue(Str::isPrefixed($this->stringLeft . $this->stringRight, $this->stringLeft));
+        $this->assertTrue(Str::isPrefixed('-test-', 't', '-'));
     }
 
     /**
@@ -155,6 +160,8 @@ class StrTest extends TestCase
             $this->stringRight,
             Str::stripPrefix($this->stringLeft . $this->stringRight, $this->stringLeft)
         );
+        $this->assertEquals('', Str::stripPrefix('', '-'));
+        $this->assertEquals('', Str::stripPrefix('--', '-', '-'));
     }
 
     /**
@@ -166,6 +173,8 @@ class StrTest extends TestCase
             $this->stringLeft . $this->stringRight,
             Str::forcePrefix($this->stringRight, $this->stringLeft)
         );
+        $this->assertEquals('', Str::forcePrefix('', '-'));
+        $this->assertEquals('-_test', Str::forcePrefix('_test_', '-', '_'));
     }
 
     /**
@@ -175,6 +184,7 @@ class StrTest extends TestCase
     {
         $this->assertFalse(Str::isSuffixed($this->stringLeft . $this->stringRight, $this->stringLeft));
         $this->assertTrue(Str::isSuffixed($this->stringLeft . $this->stringRight, $this->stringRight));
+        $this->assertTrue(Str::isSuffixed('-test-', 't', '-'));
     }
 
     /**
@@ -186,6 +196,8 @@ class StrTest extends TestCase
             $this->stringLeft,
             Str::stripSuffix($this->stringLeft . $this->stringRight, $this->stringRight)
         );
+        $this->assertEquals('', Str::stripSuffix('', '-'));
+        $this->assertEquals('', Str::stripSuffix('--', '-', '-'));
     }
 
     /**
@@ -197,6 +209,8 @@ class StrTest extends TestCase
             $this->stringLeft . $this->stringRight,
             Str::forceSuffix($this->stringLeft, $this->stringRight)
         );
+        $this->assertEquals('', Str::forceSuffix('', '-'));
+        $this->assertEquals('test_-', Str::forceSuffix('_test_', '-', '_'));
     }
 
     /**
@@ -259,6 +273,9 @@ class StrTest extends TestCase
     {
         $csv = '"' . $this->part1 . '","' . $this->part2 . '"';
         $this->assertEquals([$this->part1, $this->part2], Str::csvFields($csv));
+        $this->assertEquals([], Str::csvFields(''));
+        $csv = '\'' . $this->part1 . '\',\'' . $this->part2 . '\'';
+        $this->assertEquals([$this->part1, $this->part2], Str::csvFields($csv));
     }
 
     /**
@@ -289,6 +306,34 @@ class StrTest extends TestCase
         $this->assertEquals('security', $keyValues['component']);
         $this->assertEquals('user', $keyValues['controller']);
         $this->assertEquals('enable', $keyValues['action']);
+    }
+
+    /**
+     * Test split into key value.
+     */
+    public function testSplitIntoKeyValueLargerUri()
+    {
+        $uri = 'component/security/user/enable';
+        $keys = ['type', 'component', 'controller'];
+        $keyValues = Str::splitIntoKeyValue($uri, '/', $keys);
+        $this->assertEquals(3, count($keyValues));
+        $this->assertEquals('component', $keyValues['type']);
+        $this->assertEquals('security', $keyValues['component']);
+        $this->assertEquals('user', $keyValues['controller']);
+    }
+
+    /**
+     * Test split into key value.
+     */
+    public function testSplitIntoKeyValueLargerKeys()
+    {
+        $uri = 'component/security/user';
+        $keys = ['type', 'component', 'controller', 'action'];
+        $keyValues = Str::splitIntoKeyValue($uri, '/', $keys);
+        $this->assertEquals(3, count($keyValues));
+        $this->assertEquals('component', $keyValues['type']);
+        $this->assertEquals('security', $keyValues['component']);
+        $this->assertEquals('user', $keyValues['controller']);
     }
 
     /**
@@ -437,6 +482,22 @@ class StrTest extends TestCase
         $string = 'test1 test2 test3';
         $wrapped = Str::wrap($string, 8);
         $this->assertEquals(str_replace(' ', "\n", $string), $wrapped);
+    }
+
+    /**
+     * Test wrap empty.
+     */
+    public function testWrapEmpty()
+    {
+        $this->assertEquals('', Str::wrap('', 8));
+    }
+
+    /**
+     * Test wrap empty with linebreak.
+     */
+    public function testWrapEmptyLinebreak()
+    {
+        $this->assertEquals("test\n", Str::wrap("test\n", 8));
     }
 
     /**

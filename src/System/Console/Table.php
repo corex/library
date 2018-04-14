@@ -33,9 +33,6 @@ class Table
      */
     public function setHeaders(array $headers)
     {
-        if (!is_array($headers)) {
-            return;
-        }
         $columnNumber = 0;
         foreach ($headers as $header) {
             $this->updateWidth($columnNumber, $this->length($header));
@@ -53,9 +50,6 @@ class Table
      */
     public function setRows(array $rows)
     {
-        if (!is_array($rows)) {
-            return;
-        }
         foreach ($rows as $row) {
             $columnNumber = 0;
             if (!is_array($row)) {

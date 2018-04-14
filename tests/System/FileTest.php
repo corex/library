@@ -1,5 +1,6 @@
 <?php
 
+use CoRex\Support\Str;
 use CoRex\Support\System\Directory;
 use CoRex\Support\System\File;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,18 @@ class FileTest extends TestCase
     }
 
     /**
+     * Test get temp filename default temp directory.
+     */
+    public function testGetTempFilenameDefaultTempDirectory()
+    {
+        $filename = File::getTempFilename();
+        $this->assertTrue($filename != '');
+        if (File::exist($filename)) {
+            File::delete($filename);
+        }
+    }
+
+    /**
      * Test touch.
      */
     public function testTouch()
@@ -72,6 +85,20 @@ class FileTest extends TestCase
         $filename = File::getTempFilename($this->tempDirectory);
         File::put($filename, $test);
         $this->assertEquals($test, File::get($filename));
+    }
+
+    /**
+     * Test get default value.
+     */
+    public function testGetDefaultValue()
+    {
+        $filename = File::getTempFilename($this->tempDirectory);
+        if (File::exist($filename)) {
+            File::delete($filename);
+        }
+        $check = md5(mt_rand(1, 100000));
+        $checkValue = File::get($filename, $check);
+        $this->assertEquals($check, $checkValue);
     }
 
     /**
@@ -117,6 +144,20 @@ class FileTest extends TestCase
         File::put($filename, $test);
         File::prepend($filename, $test . 'X');
         $this->assertEquals($test . 'X' . $test, File::get($filename));
+    }
+
+    /**
+     * Test prepend file not exist.
+     */
+    public function testPrependFileNotExist()
+    {
+        $filename = File::getTempFilename($this->tempDirectory);
+        if (File::exist($filename)) {
+            File::delete($filename);
+        }
+        $check = md5(mt_rand(1, 100000));
+        File::prepend($filename, $check);
+        $this->assertEquals($check, File::get($filename));
     }
 
     /**
@@ -167,6 +208,14 @@ class FileTest extends TestCase
         File::putLines($filename, $lines1);
         File::prependLines($filename, $lines2);
         $this->assertEquals(array_merge($lines2, $lines1), File::getLines($filename));
+
+        // Test when file does not exists in default directory.
+        $filename = File::getTempFilename($this->tempDirectory);
+        if (File::exist($filename)) {
+            File::delete($filename);
+        }
+        File::prependLines($filename, $lines2);
+        $this->assertEquals($lines2, File::getLines($filename));
     }
 
     /**
@@ -179,7 +228,7 @@ class FileTest extends TestCase
 
         // Test when file does not exists.
         $filename = File::getTempFilename($this->tempDirectory);
-        File::prependLines($filename, $lines2);
+        File::appendLines($filename, $lines2);
         $this->assertEquals($lines2, File::getLines($filename));
 
         // Test when file exists.
@@ -187,6 +236,14 @@ class FileTest extends TestCase
         File::putLines($filename, $lines1);
         File::appendLines($filename, $lines2);
         $this->assertEquals(array_merge($lines1, $lines2), File::getLines($filename));
+
+        // Test when file does not exists.
+        $filename = File::getTempFilename($this->tempDirectory);
+        if (File::exist($filename)) {
+            File::delete($filename);
+        }
+        File::appendLines($filename, $lines2);
+        $this->assertEquals($lines2, File::getLines($filename));
     }
 
     /**
@@ -215,7 +272,15 @@ class FileTest extends TestCase
         $result = str_replace('{lastname}', 'test2', $result);
         $filename = File::getTempFilename($this->tempDirectory, '', 'tpl');
         File::put($filename, $template);
+        $filename = Str::stripSuffix($filename, 'tpl', '.');
         $this->assertEquals($result, File::getTemplate($filename, [
+            'firstname' => 'test1',
+            'lastname' => 'test2'
+        ]));
+
+        // Test default content.
+        File::delete($filename . '.tpl');
+        $this->assertEquals('', File::getTemplate($filename, [
             'firstname' => 'test1',
             'lastname' => 'test2'
         ]));
@@ -228,8 +293,21 @@ class FileTest extends TestCase
     {
         $lines = ['firstname' => 'test1', 'lastname' => 'test2'];
         $filename = File::getTempFilename($this->tempDirectory, '', 'json');
+        $filename = Str::stripSuffix($filename, 'json', '.');
         File::putJson($filename, $lines);
         $this->assertEquals($lines, File::getJson($filename));
+        File::delete($filename . '.json');
+        $this->assertEquals([], File::getJson($filename));
+    }
+
+    /**
+     * Test get json invalid json.
+     */
+    public function testGetJsonInvalidJson()
+    {
+        $filename = File::getTempFilename($this->tempDirectory, '', 'json');
+        File::put($filename, '.invalid.json');
+        $this->assertEquals([], File::getJson($filename));
     }
 
     /**
@@ -402,5 +480,8 @@ class FileTest extends TestCase
         // Check file.
         touch($path);
         $this->assertEquals('file', File::type($path));
+
+        $isFile = File::isFile($path);
+        $this->assertTrue($isFile);
     }
 }

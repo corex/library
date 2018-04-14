@@ -121,10 +121,7 @@ class Obj
      */
     public static function callMethod($name, $object, array $arguments = [], $classOverride = null)
     {
-        if ($classOverride === null) {
-            $classOverride = get_class($object);
-        }
-        $method = new ReflectionMethod($classOverride, $name);
+        $method = self::getReflectionMethod($name, $object, $classOverride);
         $method->setAccessible(true);
         if (count($arguments) > 0) {
             return $method->invokeArgs($object, $arguments);
@@ -221,5 +218,27 @@ class Obj
             }
         }
         return new ReflectionClass($class);
+    }
+
+    /**
+     * Get reflection method.
+     *
+     * @param string $method
+     * @param object|string $objectOrClass
+     * @param string $classOverride Default null which means class from $object.
+     * @return ReflectionMethod
+     * @throws \ReflectionException
+     */
+    private static function getReflectionMethod($method, $objectOrClass, $classOverride = null)
+    {
+        $class = $classOverride;
+        if ($class === null) {
+            if (is_object($objectOrClass)) {
+                $class = get_class($objectOrClass);
+            } else {
+                $class = $objectOrClass;
+            }
+        }
+        return new ReflectionMethod($class, $method);
     }
 }

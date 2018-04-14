@@ -9,9 +9,9 @@ class Bag
     /**
      * Constructor.
      *
-     * @param array $properties
+     * @param mixed $properties
      */
-    public function __construct(array $properties = [])
+    public function __construct($properties = null)
     {
         $this->clear($properties);
     }
@@ -19,9 +19,9 @@ class Bag
     /**
      * Clear.
      *
-     * @param array $properties
+     * @param mixed $properties
      */
-    public function clear(array $properties = [])
+    public function clear($properties = null)
     {
         $this->properties = [];
         if ($properties === null) {

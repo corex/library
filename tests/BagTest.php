@@ -20,7 +20,7 @@ class BagTest extends TestCase
      */
     public function testConstructorNull()
     {
-        $container = new Bag();
+        $container = new Bag(null);
         $this->assertEquals([], Obj::getProperty('properties', $container));
     }
 
@@ -48,6 +48,16 @@ class BagTest extends TestCase
     public function testClearNoData()
     {
         $container = new Bag();
+        $this->assertEquals([], $container->all());
+    }
+
+    /**
+     * Test clear null.
+     */
+    public function testClearNull()
+    {
+        $container = new Bag();
+        $container->clear(null);
         $this->assertEquals([], $container->all());
     }
 

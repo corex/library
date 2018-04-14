@@ -185,7 +185,9 @@ class Session
     public static function initialize()
     {
         if (session_status() == PHP_SESSION_NONE && php_sapi_name() != 'cli') {
+            // @codeCoverageIgnoreStart
             session_start();
+            // @codeCoverageIgnoreEnd
         }
     }
 }

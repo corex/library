@@ -198,12 +198,12 @@ class Arr
      * Index of.
      * Note: Supports array with objects.
      *
-     * @param array $array
+     * @param mixed $array
      * @param string $value
      * @param string $key Default null which means the item itself (not associative array).
      * @return integer -1 if not found.
      */
-    public static function indexOf(array $array, $value, $key = null)
+    public static function indexOf($array, $value, $key = null)
     {
         if (!is_array($array)) {
             return -1;
@@ -281,12 +281,12 @@ class Arr
     /**
      * Pluck.
      *
-     * @param array $array
+     * @param mixed $array
      * @param string $key Uses dot notation.
      * @param mixed $defaultValue Default null.
      * @return array
      */
-    public static function pluck(array $array, $key, $defaultValue = null)
+    public static function pluck($array, $key, $defaultValue = null)
     {
         $result = [];
         if (!is_array($array)) {
@@ -299,7 +299,7 @@ class Arr
 
         // Extract data.
         if ($key != '' && $key !== null) {
-            $array = self::dataByPath($array, $key);
+            $array = self::dataByPath($array, $key, false, []);
         }
         foreach ($array as $item) {
             $value = $defaultValue;

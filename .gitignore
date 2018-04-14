@@ -1,4 +1,5 @@
 .idea
+/log
 vendor/
 temp/
 composer.lock

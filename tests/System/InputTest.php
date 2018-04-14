@@ -1,6 +1,5 @@
 <?php
 
-use CoRex\Support\Str;
 use CoRex\Support\System\Input;
 use PHPUnit\Framework\TestCase;
 
@@ -102,6 +101,18 @@ class InputTest extends TestCase
     public function testGetHost()
     {
         $this->assertEquals(self::HTTP_HOST, Input::getHost());
+
+        $_SERVER['HTTP_X_FORWARDED_HOST'] = 'test1';
+        if (isset($_SERVER['HTTP_HOST'])) {
+            unset($_SERVER['HTTP_HOST']);
+        }
+        $this->assertEquals('test1', Input::getHost());
+
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            unset($_SERVER['HTTP_X_FORWARDED_HOST']);
+        }
+        $_SERVER['SERVER_NAME'] = 'test2';
+        $this->assertEquals('test2', Input::getHost());
     }
 
     /**
@@ -109,6 +120,12 @@ class InputTest extends TestCase
      */
     public function testGetHostFromSystem()
     {
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            unset($_SERVER['HTTP_X_FORWARDED_HOST']);
+        }
+        if (isset($_SERVER['SERVER_NAME'])) {
+            unset($_SERVER['SERVER_NAME']);
+        }
         if (isset($_SERVER['HTTP_HOST'])) {
             unset($_SERVER['HTTP_HOST']);
         }
@@ -125,6 +142,10 @@ class InputTest extends TestCase
 
         $_SERVER['SERVER_PORT'] = mt_rand(80, 5000);
         $this->assertEquals($_SERVER['SERVER_PORT'], Input::getPort());
+
+        $_SERVER['SERVER_PORT'] = 0;
+        $_SERVER['REQUEST_SCHEME'] = 'unknown';
+        $this->assertEquals(0, Input::getPort());
     }
 
     /**
@@ -156,6 +177,7 @@ class InputTest extends TestCase
         $this->assertEquals(80, Input::getStandardPort('http'));
         $this->assertEquals(443, Input::getStandardPort('https'));
         $this->assertEquals(21, Input::getStandardPort('ftp'));
+        $this->assertEquals(0, Input::getStandardPort('unknown'));
     }
 
     /**
@@ -225,7 +247,12 @@ class InputTest extends TestCase
      */
     public function testGetUserAgent()
     {
+        $_SERVER['HTTP_USER_AGENT'] = self::USER_AGENT;
         $this->assertEquals(self::USER_AGENT, Input::getUserAgent());
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            unset($_SERVER['HTTP_USER_AGENT']);
+        }
+        $this->assertEquals('', Input::getUserAgent());
     }
 
     /**
@@ -233,7 +260,12 @@ class InputTest extends TestCase
      */
     public function testGetRemoteIp()
     {
+        $_SERVER['REMOTE_ADDR'] = self::IP;
         $this->assertEquals(self::IP, Input::getRemoteIp());
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            unset($_SERVER['REMOTE_ADDR']);
+        }
+        $this->assertEquals('', Input::getRemoteIp());
     }
 
     /**
@@ -249,14 +281,12 @@ class InputTest extends TestCase
      */
     public function testGetPathSegments()
     {
-        $uri = 'component/security/user/enable';
-        $keys = ['type', 'component', 'controller', 'action'];
-        $keyValues = Str::splitIntoKeyValue($uri, '/', $keys);
-        $this->assertEquals(4, count($keyValues));
-        $this->assertEquals('component', $keyValues['type']);
-        $this->assertEquals('security', $keyValues['component']);
-        $this->assertEquals('user', $keyValues['controller']);
-        $this->assertEquals('enable', $keyValues['action']);
+        $this->assertEquals([
+            'segment1' => 'test1',
+            'segment2' => 'test2'
+        ], Input::getPathSegments(['segment1', 'segment2']));
+
+        $this->assertEquals([], Input::getPathSegments([]));
     }
 
     /**
@@ -333,6 +363,7 @@ class InputTest extends TestCase
     public function testGetHeader()
     {
         $this->assertEquals(self::TEST, Input::getHeader(self::TEST));
+        $this->assertEquals('', Input::getHeader('unknown'));
     }
 
     /**

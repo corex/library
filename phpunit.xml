@@ -9,6 +9,22 @@
         <ini name="error_reporting" value="-1"/>
     </php>
 
+    <logging>
+        <log type="coverage-html" target="./log/" charset="UTF-8"
+             yui="true" highlight="true" lowUpperBound="50" highLowerBound="80"
+             showUncoveredFiles="true" />
+    </logging>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+            <exclude>
+                <file>./src/helpers.php</file>
+                <file>./src/System/Console/OutputFormatterStyle.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+
     <testsuites>
         <testsuite name="Tests">
             <directory>./tests/</directory>

@@ -158,9 +158,6 @@ class Collection implements \Iterator, \Countable
      */
     public function each(callable $callable)
     {
-        if (!is_callable($callable)) {
-            throw new \Exception('Not callable.');
-        }
         foreach ($this->items as $key => $item) {
             if ($callable($item, $key) === false) {
                 break;
@@ -286,7 +283,10 @@ class Collection implements \Iterator, \Countable
      */
     public function keys()
     {
-        return array_keys($this->items);
+        if (is_array($this->items)) {
+            return array_keys($this->items);
+        }
+        return [];
     }
 
     /**

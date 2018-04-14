@@ -73,4 +73,25 @@ class BasePropertiesTest extends TestCase
         $this->assertNull($properties->getProtected());
         $this->assertEquals($testValue, $properties->publicValue);
     }
+
+    /**
+     * Test toArray().
+     */
+    public function testToArray()
+    {
+        $testValue = md5(microtime());
+
+        $data = [
+            'privateValue' => $testValue . '1',
+            'protectedValue' => $testValue . '2',
+            'publicValue' => $testValue . '3'
+        ];
+        $checkData = [
+            'protectedValue' => $testValue . '2',
+            'publicValue' => $testValue . '3'
+        ];
+
+        $properties = new BasePropertiesHelper($data);
+        $this->assertEquals($checkData, $properties->toArray());
+    }
 }

@@ -10,7 +10,7 @@ abstract class BaseProperties
      * @param mixed $data
      * @throws \ReflectionException
      */
-    public function __construct($data)
+    public function __construct($data = null)
     {
         if (!is_array($data)) {
             return;

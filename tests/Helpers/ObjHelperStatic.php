@@ -9,10 +9,12 @@ class ObjHelperStatic
 
     /**
      * Private method.
+     *
+     * @param string $arguments
      * @return string
      */
-    private static function privateMethod()
+    private static function privateMethod($arguments = '')
     {
-        return '(' . __FUNCTION__ . ')';
+        return '(' . __FUNCTION__ . ')' . $arguments;
     }
 }

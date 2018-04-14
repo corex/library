@@ -1,6 +1,7 @@
 <?php
 
 use CoRex\Support\System\Console;
+use CoRex\Support\System\Console\OutputFormatterStyle;
 use PHPUnit\Framework\TestCase;
 
 class ConsoleTest extends TestCase
@@ -460,5 +461,32 @@ class ConsoleTest extends TestCase
         $content = explode("\n", $content);
         $this->assertEquals('test1  : 1', $content[0]);
         $this->assertEquals('test22 : 22', $content[1]);
+    }
+
+    /**
+     * Test style apply wrong.
+     */
+    public function testStyleApplyWrong()
+    {
+        $string = md5(mt_rand(1, 100000));
+        $check = Console\Style::apply($string, 'unknown', 'unknown');
+        $this->assertEquals($string, $check);
+    }
+
+    /**
+     * Test style apply.
+     */
+    public function testStyleApply()
+    {
+        $string = md5(mt_rand(1, 100000));
+        Console\Style::setStyle('testing', 'yellow', 'red');
+        $check = Console\Style::apply($string, 'yellow', 'red');
+
+        $style = new OutputFormatterStyle();
+        $style->setForeground('yellow');
+        $style->setBackground('red');
+        $expected = $style->apply($string);
+
+        $this->assertEquals($expected, $check);
     }
 }
