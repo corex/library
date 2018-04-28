@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 3.2.4
+
+### Fixed
+- Refactored getting headers and check for header.
+
+
 ## 3.2.3
 
 ### Fixed
