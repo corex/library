@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 3.2.3
+
+### Fixed
+- Refactored System/Input::getHeader() to be more accurate.
+
+
 ## 3.2.2
 
 ### Fixed

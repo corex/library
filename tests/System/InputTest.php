@@ -35,23 +35,9 @@ class InputTest extends TestCase
         $_SERVER['REMOTE_ADDR'] = self::IP;
         $_SERVER['REQUEST_URI'] = self::URI;
         $_SERVER['QUERY_STRING'] = self::QUERY_STRING;
-
-        // Make sure function getallheaders() exists for tests.
-        if (!function_exists('getallheaders')) {
-            /**
-             * Get all headers.
-             *
-             * @return array
-             */
-            function getallheaders()
-            {
-                return [
-                    self::TEST => self::TEST,
-                    'Content-Type' => self::HEADER_CONTENT_TYPE,
-                    'Accept' => self::HEADER_ACCEPT
-                ];
-            }
-        }
+        $_SERVER['HTTP_CONTENT_TYPE'] = self::HEADER_CONTENT_TYPE;
+        $_SERVER['HTTP_ACCEPT'] = self::HEADER_ACCEPT;
+        $_SERVER['HTTP_' . self::TEST] = self::TEST;
     }
 
     /**
@@ -352,7 +338,7 @@ class InputTest extends TestCase
     public function testGetHeaders()
     {
         $headers = Input::getHeaders();
-        $this->assertEquals(self::TEST, $headers[self::TEST]);
+        $this->assertEquals(self::TEST, $headers[ucfirst(self::TEST)]);
         $this->assertEquals(self::HEADER_CONTENT_TYPE, $headers['Content-Type']);
         $this->assertEquals(self::HEADER_ACCEPT, $headers['Accept']);
     }
