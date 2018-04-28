@@ -348,10 +348,16 @@ class Input
     public static function getHeaders()
     {
         $headers = [];
-        foreach ($_SERVER as $name => $value) {
-            if (substr($name, 0, 5) == 'HTTP_') {
-                $header = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
-                $headers[$header] = $value;
+        if (function_exists('getallheaders')) {
+            // @codeCoverageIgnoreStart
+            $headers = getallheaders();
+            // @codeCoverageIgnoreEnd
+        } else {
+            foreach ($_SERVER as $name => $value) {
+                if (substr($name, 0, 5) == 'HTTP_') {
+                    $header = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+                    $headers[$header] = $value;
+                }
             }
         }
         return $headers;
@@ -366,10 +372,14 @@ class Input
      */
     public static function getHeader($header, $defaultValue = '')
     {
-        $header = str_replace(' ', '-', ucwords(strtolower(str_replace(['_', '-'], ' ', $header))));
+        $header = strtolower(str_replace(['_', ' '], '-', $header));
         $headers = self::getHeaders();
-        if (is_array($headers) && isset($headers[$header])) {
-            return $headers[$header];
+        if (is_array($headers)) {
+            foreach ($headers as $name => $value) {
+                if (strtolower($name) == $header) {
+                    return $value;
+                }
+            }
         }
         return $defaultValue;
     }
