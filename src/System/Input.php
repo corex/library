@@ -347,6 +347,28 @@ class Input
      */
     public static function getHeaders()
     {
+        // Make custom function if not found.
+        if (!function_exists('getallheaders')) {
+            /**
+             * Get headers.
+             *
+             * @return array
+             */
+            function getallheaders()
+            {
+                // @codeCoverageIgnoreStart
+                $headers = [];
+                foreach ($_SERVER as $name => $value) {
+                    if (substr($name, 0, 5) == 'HTTP_') {
+                        $header = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+                        $headers[$header] = $value;
+                    }
+                }
+                return $headers;
+                // @codeCoverageIgnoreEnd
+            }
+        }
+
         return getallheaders();
     }
 

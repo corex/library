@@ -1,5 +1,18 @@
 # ChangeLog
 
+## 3.2.2
+
+### Fixed
+- Fixed System/Input::getHeaders() to create base-function getallheaders() if not found.
+
+
+## 3.2.1
+
+## Fixed
+- Removed array declaration on Arr::indexOf() for broader usage.
+- Removed array declaration on Arr::pluck() for broader usage.
+
+
 ## 3.2.0
 
 ### Added
