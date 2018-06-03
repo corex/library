@@ -41,7 +41,7 @@ class Collection implements \Iterator, \Countable
      */
     public function count()
     {
-        if ($this->items !== null) {
+        if (is_array($this->items) && $this->items !== null) {
             return count($this->items);
         }
         return 0;
@@ -133,7 +133,7 @@ class Collection implements \Iterator, \Countable
      */
     public function last()
     {
-        if (count($this->items) > 0) {
+        if (is_array($this->items) && count($this->items) > 0) {
             return end($this->items);
         }
         return null;
@@ -177,7 +177,7 @@ class Collection implements \Iterator, \Countable
     public function pluck($path, $defaultValue = null)
     {
         $result = [];
-        if (count($this->items) == 0) {
+        if ($this->items === null || (is_array($this->items) && count($this->items) == 0)) {
             return null;
         }
         foreach ($this->items as $key => $item) {
@@ -212,7 +212,7 @@ class Collection implements \Iterator, \Countable
      */
     public function average($path, $defaultValue = 0)
     {
-        if (count($this->items) == 0) {
+        if ($this->items === null || (is_array($this->items) && count($this->items) == 0)) {
             return $defaultValue;
         }
         $sum = $this->sum($path, $defaultValue);
@@ -231,7 +231,7 @@ class Collection implements \Iterator, \Countable
      */
     public function max($path, $defaultValue = 0)
     {
-        if (count($this->items) == 0) {
+        if ($this->items === null || (is_array($this->items) && count($this->items) == 0)) {
             return $defaultValue;
         }
         $items = $this->pluck($path, $defaultValue);
@@ -253,7 +253,7 @@ class Collection implements \Iterator, \Countable
      */
     public function min($path, $defaultValue = 0)
     {
-        if (count($this->items) == 0) {
+        if ($this->items === null || (is_array($this->items) && count($this->items) == 0)) {
             return $defaultValue;
         }
         $items = $this->pluck($path, $defaultValue);

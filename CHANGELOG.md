@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 3.2.5
+
+### Fixed
+- Fixed Countable problem.
+- Updated phpunit config-file.
+
+
 ## 3.2.4
 
 ### Fixed
