@@ -14,6 +14,22 @@ class Obj
     const PROPERTY_PUBLIC = ReflectionProperty::IS_PUBLIC;
 
     /**
+     * Get constants.
+     *
+     * @param object|string $objectOrClass
+     * @return array
+     */
+    public static function getConstants($objectOrClass)
+    {
+        try {
+            $reflectionClass = self::getReflectionClass($objectOrClass);
+            return array_values($reflectionClass->getConstants());
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
      * Get properties.
      *
      * @param object $object

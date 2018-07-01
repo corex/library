@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 3.3.0
+
+### Added
+- Added Obj::getConstants().
+
+
 ## 3.2.5
 
 ### Fixed

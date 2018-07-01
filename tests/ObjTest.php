@@ -13,6 +13,25 @@ class ObjTest extends TestCase
     ];
 
     /**
+     * Test getConstants.
+     */
+    public function testGetConstants()
+    {
+        $this->assertEquals([
+            Constants::ACTOR_FIRSTNAME,
+            Constants::ACTOR_LASTNAME
+        ], Obj::getConstants(Constants::class));
+    }
+
+    /**
+     * Test getConstants failure.
+     */
+    public function testGetConstantsFailure()
+    {
+        $this->assertEquals([], Obj::getConstants('unknown'));
+    }
+
+    /**
      * Test get private properties from object.
      *
      * @throws ReflectionException
@@ -528,6 +547,7 @@ class ObjTest extends TestCase
         require_once(__DIR__ . '/Helpers/ObjHelperInterface.php');
         require_once(__DIR__ . '/Helpers/ObjHelperWithInterface.php');
         require_once(__DIR__ . '/Helpers/ObjHelperWithoutInterface.php');
+        require_once(__DIR__ . '/Helpers/Constants.php');
     }
 
     /**
