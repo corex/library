@@ -1,9 +1,16 @@
 # ChangeLog
 
+## 3.3.2
+
+### Fixed
+- Refactored System/Cache, System/Directory and System/File to extend corex/filesystem instead of having redundant code.
+
+
 ## 3.3.1
 
 ### Fixed
 - Refactored Arr, Bag, Obj, Str and StrList to extend corex/helpers instead of having redundant code.
+
 
 ## 3.3.0
 

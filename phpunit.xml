@@ -20,20 +20,29 @@
                 <file>./src/helpers.php</file>
                 <file>./src/System/Console/OutputFormatterStyle.php</file>
 
-                <!-- Excluded since it is tested elsewhere. -->
+                <!-- Excluded since it is tested in corex/helpers. -->
                 <file>./src/Arr.php</file>
 
-                <!-- Excluded since it is tested elsewhere. -->
+                <!-- Excluded since it is tested in corex/helpers. -->
                 <file>./src/Bag.php</file>
 
-                <!-- Excluded since it is tested elsewhere. -->
+                <!-- Excluded since it is tested in corex/helpers. -->
                 <file>./src/Obj.php</file>
 
-                <!-- Excluded since it is tested elsewhere. -->
+                <!-- Excluded since it is tested in corex/helpers. -->
                 <file>./src/Str.php</file>
 
-                <!-- Excluded since it is tested elsewhere. -->
+                <!-- Excluded since it is tested in corex/helpers. -->
                 <file>./src/StrList.php</file>
+
+                <!-- Excluded since it is tested in corex/filesystem. -->
+                <file>./src/System/Cache.php</file>
+
+                <!-- Excluded since it is tested in corex/filesystem. -->
+                <file>./src/System/Directory.php</file>
+
+                <!-- Excluded since it is tested in corex/filesystem. -->
+                <file>./src/System/File.php</file>
 
             </exclude>
         </whitelist>
