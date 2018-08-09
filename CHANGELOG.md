@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 3.3.3
+
+### Fixed
+- Refactored System/Session and System/Token to extend corex/session instead of having redundant code.
+
+
 ## 3.3.2
 
 ### Fixed

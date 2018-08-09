@@ -44,6 +44,12 @@
                 <!-- Excluded since it is tested in corex/filesystem. -->
                 <file>./src/System/File.php</file>
 
+                <!-- Excluded since it is tested in corex/session. -->
+                <file>./src/System/Session.php</file>
+
+                <!-- Excluded since it is tested in corex/session. -->
+                <file>./src/System/Token.php</file>
+
             </exclude>
         </whitelist>
     </filter>
