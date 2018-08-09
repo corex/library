@@ -1,5 +1,6 @@
 <?php
 
+use CoRex\Helpers\Bag as HelpersBag;
 use CoRex\Support\Bag;
 use CoRex\Support\Obj;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ class BagTest extends TestCase
     public function testConstructorNull()
     {
         $container = new Bag(null);
-        $this->assertEquals([], Obj::getProperty('properties', $container));
+        $this->assertEquals([], Obj::getProperty('properties', $container, null, HelpersBag::class));
     }
 
     /**
