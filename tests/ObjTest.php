@@ -18,8 +18,8 @@ class ObjTest extends TestCase
     public function testGetConstants()
     {
         $this->assertEquals([
-            Constants::ACTOR_FIRSTNAME,
-            Constants::ACTOR_LASTNAME
+            'ACTOR_FIRSTNAME' => Constants::ACTOR_FIRSTNAME,
+            'ACTOR_LASTNAME' => Constants::ACTOR_LASTNAME
         ], Obj::getConstants(Constants::class));
     }
 
