@@ -1,5 +1,10 @@
 # ChangeLog
 
+## 3.3.4
+
+### Fixed
+- Fixed broken test.
+
 ## 3.3.3
 
 ### Fixed
